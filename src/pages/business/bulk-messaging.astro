@@ -1,0 +1,233 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BizVisuals from '../../components/BizVisuals.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PriceTeaser from '../../components/PriceTeaser.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+
+// NOTE (content): drafted from the product brief. Bulk Messaging = bulk SMS and email for merchants.
+// Everything marked TODO(verify) must be confirmed against the live product: sender names/ID registration, scheduling,
+// personalisation, delivery reports and their detail, contact import, API access, limits and pricing model.
+// TODO(legal): the responsible-messaging section (consent, opt-out, data protection) must be reviewed by compliance.
+
+const s3 = [
+  ['Simple', 'Write it once and send it to everyone. SMS and email, in one place.'],
+  ['Speed', 'Reach thousands of customers in one go.'],
+  ['Secure', 'Your contacts stay yours, and every send is recorded.'], // TODO(verify)
+];
+
+const tabs = [
+  { id: 'sms', label: 'Bulk SMS', title: 'Reach any phone.', body: 'SMS lands on every phone, smartphone or not, and gets read fast. Perfect for order updates, reminders and offers.',
+    points: ['Send to a list of contacts in one go', 'Show your business name as the sender', 'Keep an eye on the length as you type'] }, // TODO(verify): sender name
+  { id: 'email', label: 'Bulk email', title: 'Say more with email.', body: 'Send newsletters, receipts and announcements to everyone on your list, with room for your brand, links and images.',
+    points: ['Send to a list of subscribers in one go', 'Add a subject, your message and a button', 'Send yourself a test first'] }, // TODO(verify): test send
+] as const;
+
+const steps = [
+  ['Add your contacts', 'Upload your list or add contacts one by one.'], // TODO(verify): import
+  ['Write your message', 'Write an SMS or email. Preview it before it goes out.'],
+  ['Choose when to send', 'Send right away, or schedule it for later.'], // TODO(verify): scheduling
+  ['Track delivery', 'See how many messages were sent and delivered.'], // TODO(verify): delivery reports
+];
+
+const features = [
+  ['SMS and email together', 'Run both channels from one place, with one login.'],
+  ['Reusable contact lists', 'Organise customers into lists and message them again and again.'], // TODO(verify)
+  ['Personal touches', 'Add each person’s name so every message feels written for them.'], // TODO(verify): merge fields
+  ['Schedule for later', 'Write now, send at the right moment.'], // TODO(verify)
+  ['Delivery reports', 'See what was sent, what arrived and what didn’t.'], // TODO(verify)
+  ['Send from the portal or by API', 'Click to send, or trigger messages from your own app.'], // TODO(verify): API
+];
+
+const uses = [
+  ['Order and payment updates', 'Tell customers their order is ready or their payment arrived.'],
+  ['Offers and promotions', 'Announce a sale and bring customers back.'],
+  ['Reminders', 'Remind people about appointments, fees and due dates.'],
+  ['Announcements', 'Keep members, parents or staff in the loop.'],
+  ['Event invitations', 'Invite your audience and share the details.'],
+  ['Thank-yous and feedback', 'Say thanks after a purchase and ask how it went.'],
+];
+
+// TODO(legal): confirm wording with compliance / data-protection counsel before launch.
+const rules = [
+  ['Message people who agreed', 'Only send to people who have said they are happy to hear from you.'],
+  ['Make it easy to opt out', 'Include a clear way to stop messages, and respect it every time.'],
+  ['Use your real business name', 'Customers should always know who a message is from.'],
+];
+
+const faqs = [
+  ['Can I send both SMS and email?', 'Yes. Bulk Messaging covers bulk SMS and bulk email from the same account.'],
+  ['How many people can I message at once?', 'You can send to your whole contact list in one go. Limits depend on your account, and we confirm them when you open it.'], // TODO(verify): limits
+  ['Can I show my business name as the sender?', 'Yes, you can send SMS from your business name. We guide you through setting it up.'], // TODO(verify): sender ID registration
+  ['Can I see if my messages were delivered?', 'Yes. Your delivery report shows how many messages were sent, delivered and not delivered.'], // TODO(verify)
+  ['Can I send messages from my own app?', 'Yes. You can send from the portal, or integrate with the Eganow API to send automatically.'], // TODO(verify)
+  ['What does it cost?', 'Pricing depends on the channel and how much you send. Talk to our team for a quote.'], // TODO(verify): pricing model
+];
+
+const campaigns = [
+  ['Weekend offer', 'SMS', '12,480', '98%', 'Sent'],
+  ['June newsletter', 'Email', '3,820', '96%', 'Sent'],
+  ['Order ready', 'SMS', '860', '99%', 'Sent'],
+  ['Fee reminder', 'SMS', '2,100', '—', 'Scheduled'],
+];
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'Bulk Messaging', item: 'https://eganow.com/business/bulk-messaging' },
+] };
+---
+<Base world="business" title="Bulk Messaging — Reach everyone. Instantly. | Eganow Business" description="Send bulk SMS and email to your customers from one place, and see what was delivered. Simple. Speed. Secure.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="Bulk Messaging" overline="Bulk Messaging" title="Reach everyone. Instantly." titleId="bm-title"
+      body="Send bulk SMS and email to your customers from one place, and see exactly what was delivered." s3={s3}>
+      <BizVisuals name="messaging" />
+    </ServiceHero>
+
+    <!-- CHANNELS -->
+    <section class="ch" aria-labelledby="ch-t">
+      <div class="wrap">
+        <p class="overline">Two channels</p>
+        <h2 id="ch-t" class="display-lg">SMS and email. One place.</h2>
+        <p class="body-lg lead">Pick the channel that fits the message. Use both for the best reach.</p>
+
+        <div class="tabs" data-tabs>
+          <div class="tablist" role="tablist" aria-label="Messaging channels">
+            {tabs.map((t, i) => (
+              <button type="button" role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{t.label}</button>
+            ))}
+          </div>
+
+          {tabs.map((t) => (
+            <div class="tabpanel" role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} tabindex="0">
+              <div class="tp__copy">
+                <h3 class="heading-2">{t.title}</h3>
+                <p class="body-lg">{t.body}</p>
+                <ul class="pts">{t.points.map((p) => <li>{p}</li>)}</ul>
+              </div>
+              <div class="tp__vis" aria-hidden="true">
+                {t.id === 'sms' ? (
+                  <div class="mock comp">
+                    <p class="t">New SMS campaign</p>
+                    <div class="field"><span>To</span><b>All customers · 1,240 contacts</b></div>
+                    <div class="field"><span>From</span><b>KenteShop</b></div>
+                    <div class="msg"><span>Message</span><p>Hi Ama, your order is ready for pickup. Thank you for shopping with us!</p><small>78 / 160 characters</small></div>
+                    <div class="two"><div class="btn btn--blue-solid">Send now</div><div class="btn btn--ghost">Schedule</div></div>
+                  </div>
+                ) : (
+                  <div class="mock comp">
+                    <p class="t">New email campaign</p>
+                    <div class="field"><span>To</span><b>Subscribers · 3,820 contacts</b></div>
+                    <div class="field"><span>Subject</span><b>Our weekend offer is here</b></div>
+                    <div class="mail"><div class="mail__bar"></div><b>Weekend offer</b><i class="ln"></i><i class="ln s"></i><span class="mail__btn">Shop now</span></div>
+                    <div class="two"><div class="btn btn--blue-solid">Send to list</div><div class="btn btn--ghost">Send test</div></div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Steps overline="How it works" title="From list to delivered in four steps." id="how-t" steps={steps} />
+
+    <!-- DELIVERY REPORT (dark) -->
+    <section class="rep" aria-labelledby="rep-t">
+      <div class="wrap rep__in">
+        <div class="rep__copy">
+          <p class="overline">Delivery reports</p>
+          <h2 id="rep-t" class="display-lg">Know it landed.</h2>
+          <p class="body-lg">See how many messages were sent, how many arrived and which ones didn’t. Learn from every campaign.</p>
+          <ul class="pts">
+            <li>Sent, delivered and not delivered, at a glance</li>
+            <li>A report for every campaign</li>
+            <li>SMS and email side by side</li>
+          </ul>
+        </div>
+
+        <div class="board" aria-hidden="true">
+          <p class="t">Campaign report · Weekend offer</p>
+          <div class="stats">
+            <div><p class="t">Sent</p><p class="amt">12,480</p></div>
+            <div><p class="t">Delivered</p><p class="amt">12,230 <small>98%</small></p></div>
+            <div><p class="t">Not delivered</p><p class="amt">250 <small>2%</small></p></div>
+          </div>
+          <div class="meter"><i></i></div>
+          <table><thead class="sr-only"><tr><th>Campaign</th><th>Channel</th><th>Sent</th><th>Delivered</th><th>Status</th></tr></thead>
+            <tbody>{campaigns.map(([n, ch, s, d, st]) => (
+              <tr><td class="nm">{n}</td><td><span class="chan"><b aria-hidden="true">{ch === 'SMS' ? '▪' : '✉'}</b>{ch}</span></td><td class="r">{s}</td><td class="r">{d}</td><td><span class:list={['st', { pend: st === 'Scheduled' }]}>{st === 'Sent' ? '✓ ' : '… '}{st}</span></td></tr>
+            ))}</tbody></table>
+        </div>
+        <p class="sr-only">Example campaign report showing 12,480 messages sent, 12,230 delivered and 250 not delivered, followed by a list of recent SMS and email campaigns with their delivery rates.</p>
+      </div>
+    </section>
+
+    <CardGrid overline="What you get" title="Everything you need to reach people." id="feat-t" items={features} />
+    <CardGrid overline="Use it for" title="Messages that move your business." id="uses-t" items={uses} />
+    <CardGrid overline="Responsible messaging" title="Message the right way." id="rules-t" items={rules} />
+    <PriceTeaser body="No surprises. Tell us what you send and how often, and we’ll show you exactly what you pay." />
+    <Faq items={faqs} />
+    <FinalCta title="Ready to reach your customers?" />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.ch, section.rep { padding: var(--space-24) 0; }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+
+  /* TABS */
+  .tabs { margin-top: var(--space-8); }
+  .tablist { display: none; gap: 6px; padding: 5px; background: var(--neutral-200); border-radius: var(--radius-full); width: max-content; max-width: 100%; }
+  .tablist button { font: 600 14px/1 var(--font-display); padding: 12px 22px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--text-muted); cursor: pointer; white-space: nowrap; min-height: 44px; }
+  .tablist button[aria-selected="true"] { background: var(--eganow-blue); color: var(--neutral-950); }
+  .tabs.ready .tablist { display: flex; }
+  .tabpanel { display: grid; gap: var(--space-8); align-items: center; padding: var(--space-8) 0; }
+  .tabs.ready .tabpanel { margin-top: var(--space-6); padding: var(--space-8); background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  .tabs.ready .tabpanel[hidden] { display: none; }
+  .tp__copy { display: grid; gap: var(--space-4); justify-items: start; }
+  .tp__vis { display: grid; place-items: center; min-height: 340px; padding: var(--space-6); border-radius: var(--radius-md); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); min-width: 0; }
+  @media (min-width: 900px) { .tabpanel { grid-template-columns: 1fr 1.05fr; } }
+  @media (max-width: 639px) { .tabs.ready .tablist { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-radius: var(--radius-md); } .tablist button { border-radius: 12px; } .tabs.ready .tabpanel { padding: var(--space-6) var(--space-4); } }
+
+  .mock { width: min(100%, 360px); background: #fff; border-radius: var(--radius-md); padding: 20px; display: grid; gap: 12px; box-shadow: 0 24px 50px -12px rgb(10 13 20 / .45); }
+  .field { display: grid; gap: 2px; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: 12px; } .field span { font-size: 12px; color: var(--text-subtle); } .field b { font: 600 14px/20px var(--font-display); }
+  .msg { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 12px; } .msg span { font-size: 12px; color: var(--text-subtle); } .msg p { margin: 0; font: 400 14px/20px var(--font-sans); } .msg small { color: var(--text-muted); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .mock .btn { justify-content: center; min-height: 44px; padding: 0 12px; font-size: 14px; }
+  .mail { display: grid; gap: 8px; padding: 14px; border-radius: 12px; background: var(--neutral-100); justify-items: start; } .mail__bar { height: 8px; width: 40%; border-radius: 4px; background: var(--eganow-blue); } .mail b { font: 600 18px/24px var(--font-display); }
+  .ln { display: block; height: 8px; width: 100%; border-radius: 4px; background: var(--neutral-300); } .ln.s { width: 65%; } .mail__btn { margin-top: 4px; padding: 8px 16px; border-radius: 99px; background: var(--neutral-950); color: #fff; font: 600 12px/16px var(--font-display); }
+
+  /* REPORT (dark) */
+  .rep { background: var(--neutral-950); color: #fff; }
+  .rep .overline { color: var(--neutral-300); } .rep .body-lg { color: var(--neutral-300); } .rep .pts li { color: var(--neutral-200); }
+  .rep__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+  .rep__copy { display: grid; gap: var(--space-4); justify-items: start; } .rep__copy .display-lg { margin-top: 0; }
+  .board { background: var(--surface-raised); color: var(--text); border-radius: var(--radius-lg); padding: 20px; display: grid; gap: 14px; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); min-width: 0; }
+  .stats { display: grid; gap: 10px; } .stats > div { padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; }
+  .amt { font: 600 24px/32px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 2px 0 0; } .amt small { font: 600 13px/16px var(--font-display); color: var(--text-muted); margin-left: 4px; }
+  .meter { height: 10px; border-radius: 99px; background: #dbeafe; overflow: hidden; } .meter i { display: block; height: 100%; width: 98%; background: var(--eganow-blue); border-radius: 99px; transform-origin: left; animation: fill 5s var(--ease-out) infinite; }
+  @keyframes fill { 0% { transform: scaleX(.1); } 50%, 100% { transform: scaleX(1); } }
+  table { width: 100%; border-collapse: collapse; font: 400 13px/20px var(--font-sans); } td { padding: 9px 4px; border-top: 1px solid var(--border); white-space: nowrap; } td.r { text-align: right; font-variant-numeric: tabular-nums; } td.nm { font-weight: 500; }
+  .chan { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-display); } .chan b { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; background: #dbeafe; color: #0b4f99; font-size: 12px; }
+  .st { font: 600 12px/16px var(--font-display); padding: 3px 10px; border-radius: 99px; background: #d7f2e6; color: #0b5b40; white-space: nowrap; } .st.pend { background: #fdf0c8; color: #6b4a00; }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .rep__in { grid-template-columns: 1fr 1.25fr; } }
+  @media (max-width: 639px) { td.nm { max-width: 100px; overflow: hidden; text-overflow: ellipsis; } td:nth-child(3) { display: none; } .board { padding: 16px; } }
+
+  @media (prefers-reduced-motion: reduce) { .meter i { animation: none; } }
+</style>
+
+<script>
+  import '../../scripts/tabs';
+</script>
