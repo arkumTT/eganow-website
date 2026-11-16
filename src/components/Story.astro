@@ -1,0 +1,165 @@
+---
+import Phone from './Phone.astro';
+import Screens from './Screens.astro';
+import Character from './Character.astro';
+---
+<main id="main">
+<section class="story" aria-labelledby="hero-title" data-story>
+  <div class="stage">
+    <div class="bg" aria-hidden="true">
+      <div class="plane plane--b"></div><div class="plane plane--a"></div>
+      <div class="lines"><i></i><i></i><i></i><i></i></div>
+      <div class="wash"></div>
+    </div>
+
+    <div class="phone-wrap" aria-hidden="true">
+      <Phone class="phone--main"><Screens name="home" /><Screens name="tx" /><Screens name="bills" /></Phone>
+    </div>
+    <div class="ega-wrap"><Character /></div>
+
+    <div class="beats">
+      <article class="beat beat--hero">
+        <p class="overline">Personal · The Eganow app</p>
+        <h1 id="hero-title" class="display-xl">Money that moves with you.</h1>
+        <p class="body-lg">Send, pay and spend in a few taps. Simple. Speed. Secure.</p>
+        <div class="cta">
+          <!-- TODO: replace with official badges + real store URLs -->
+          <a class="btn btn--dark" href="#" rel="noopener">App Store</a>
+          <a class="btn btn--dark" href="#" rel="noopener">Google Play</a>
+          <a class="btn btn--blue" href="/business"><span class="dot"></span>For business →</a>
+        </div>
+        <Phone class="phone--mini"><Screens name="home" /></Phone>
+      </article>
+
+      <article class="beat beat--tx" id="transfer">
+        <p class="overline">Money transfer · Simple</p>
+        <h2 class="display-lg">Send home. Send anywhere.</h2>
+        <p class="body-lg">Pick who. Pick how much. Done. Local or cross-border, from one screen.</p>
+        <Phone class="phone--mini"><Screens name="tx" /></Phone>
+      </article>
+
+      <article class="beat beat--bills" id="bills">
+        <p class="overline">Bill payments · Speed</p>
+        <h2 class="display-lg">Bills? Done before the kettle boils.</h2>
+        <p class="body-lg">Electricity, water, airtime, TV and more. Three taps, one receipt.</p>
+        <Phone class="phone--mini"><Screens name="bills" /></Phone>
+      </article>
+
+      <article class="beat beat--biz" id="business">
+        <p class="overline">Now meet</p>
+        <h2 class="display-lg">Eganow Business.</h2>
+        <p class="body-lg">Get paid in seconds. Collect, payout, issue cards and run your POS from one place.</p>
+        <div class="cta"><a class="btn btn--dark" href="/business">Explore Business →</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+</main>
+
+<style>
+  /* ---------- Static (no-JS / reduced-motion / data-saver) layout ---------- */
+  .story { position: relative; overflow: hidden; }
+  .stage { position: relative; }
+  .bg { position: absolute; inset: 0; pointer-events: none; }
+  .plane { position: absolute; background: var(--eganow-red); }
+  .plane--a { top: 0; right: 0; width: 62%; height: 100%; clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%); }
+  .plane--b { top: 0; right: 0; width: 70%; height: 100%; clip-path: polygon(38% 0, 100% 0, 100% 100%, 0 100%); background: #ff9aa9; opacity: .55; }
+  .lines, .wash, .phone-wrap, .ega-wrap { display: none; }
+  .beats { position: relative; display: grid; gap: var(--space-16); padding: var(--space-12) clamp(16px, 4vw, 48px) var(--space-24); max-width: 1200px; margin: 0 auto; }
+  .beat { display: grid; gap: var(--space-4); max-width: 560px; }
+  .beat :global(.phone--mini) { --pw: 220px; margin-top: var(--space-6); }
+  .cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-2); }
+  .beat--hero { padding-top: var(--space-8); }
+  .beat--biz { background: var(--eganow-blue); color: var(--neutral-950); padding: var(--space-8); border-radius: var(--radius-lg); }
+  .beat--biz .overline, .beat--biz .body-lg { color: var(--neutral-950); }
+
+  /* ---------- Live scrollytelling ---------- */
+  :global(.live) .story { height: 520vh; overflow: visible; }
+  :global(.live) .stage { position: sticky; top: var(--header-h); height: calc(100svh - var(--header-h)); overflow: hidden;
+    --pw: min(300px, calc((100svh - var(--header-h)) * .74 / 2.07)); }
+  :global(.live) .lines, :global(.live) .wash, :global(.live) .phone-wrap, :global(.live) .ega-wrap { display: block; }
+  :global(.live) .beats { position: absolute; inset: 0; display: block; padding: 0; max-width: none; }
+  :global(.live) .beat { position: absolute; left: clamp(16px, 5vw, 80px); top: 50%; translate: 0 -50%; width: min(520px, 46vw); max-width: none; opacity: 0; visibility: hidden; }
+  :global(.live) .beat--hero { opacity: 1; visibility: visible; padding: 0; }
+  :global(.live) .beat :global(.phone--mini) { display: none; }
+
+  :global(.live) .phone-wrap { position: absolute; right: clamp(24px, 12vw, 200px); top: 50%; translate: 0 -50%; perspective: 1200px; }
+  :global(.live .phone--main) { transform: rotateY(-26deg) rotateZ(7deg) scale(.9); transform-style: preserve-3d; }
+  :global(.live .phone--main .scr) { position: absolute; inset: 0; }
+  :global(.live .phone--main .scr--tx), :global(.live .phone--main .scr--bills) { clip-path: inset(100% 0 0 0); }
+
+  :global(.live) .ega-wrap { position: absolute; left: clamp(8px, 3vw, 48px); bottom: 0; width: clamp(64px, 8vw, 112px); }
+  .lines i { position: absolute; height: 3px; background: var(--neutral-950); transform-origin: left; opacity: .85; }
+  .lines i:nth-child(1) { left: 6%; top: 18%; width: 90px; } .lines i:nth-child(2) { left: 52%; top: 84%; width: 140px; }
+  .lines i:nth-child(3) { right: 4%; top: 30%; width: 70px; background: var(--eganow-red); } .lines i:nth-child(4) { right: 22%; top: 90%; width: 110px; background: var(--eganow-red); }
+  .wash { position: absolute; inset: -5% -10%; background: var(--eganow-blue); transform: translateX(110%) skewX(-12deg); }
+
+  /* Mobile: phone on top, copy underneath */
+  @media (max-width: 899px) {
+    :global(.live) .stage { --pw: min(240px, calc((100svh - var(--header-h)) * .5 / 2.07)); }
+    :global(.live) .phone-wrap { right: 50%; top: 4%; translate: 50% 0; }
+    :global(.live) .beat { left: 0; right: 0; top: auto; bottom: 0; translate: none; width: auto; padding: 20px clamp(16px, 5vw, 32px) 24px;
+      background: linear-gradient(to top, var(--surface) 70%, rgb(248 249 250 / 0)); gap: 10px; }
+    :global(.live) .beat--hero { padding-top: 20px; }
+    :global(.live) .beat .display-xl, :global(.live) .beat .display-lg { font-size: clamp(28px, 8vw, 38px); }
+    :global(.live) .beat .body-lg { font-size: 16px; line-height: 24px; }
+    :global(.live) .ega-wrap { width: 54px; left: 3%; bottom: auto; top: 34%; }
+    .plane--a { width: 100%; clip-path: polygon(0 28%, 100% 0, 100% 100%, 0 100%); } .plane--b { width: 100%; clip-path: polygon(0 36%, 100% 8%, 100% 100%, 0 100%); }
+  }
+  @media (max-width: 899px) and (max-height: 700px) { :global(.live) .beat .body-lg { display: none; } }
+  :global(.live) .beat--biz { background: transparent; border-radius: 0; }
+  :global(.live) .beat--biz .display-lg { color: #fff; }
+  @media (max-width: 899px) { :global(.live) .beat--biz { background: linear-gradient(to top, var(--eganow-blue) 70%, rgb(31 143 255 / 0)); } }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const el = document.querySelector<HTMLElement>('[data-story]');
+  if (el && root.classList.contains('live')) {
+    const start = () =>
+      Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ gsap }, { ScrollTrigger }]) => {
+        gsap.registerPlugin(ScrollTrigger);
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.out' },
+          scrollTrigger: { trigger: el, start: 'top top+=64', end: 'bottom bottom', scrub: 0.6 },
+        });
+        const beatIn = (s: string, at: number) =>
+          tl.fromTo(s, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.8 }, at);
+        const beatOut = (s: string, at: number) => tl.to(s, { autoAlpha: 0, y: -36, duration: 0.7 }, at);
+
+        gsap.set('.beat--tx, .beat--bills, .beat--biz', { autoAlpha: 0 });
+        tl.to('.phone--main', { rotateY: 0, rotateZ: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0.1)
+          .to('.plane--a', { xPercent: -8, duration: 2, ease: 'none' }, 0)
+          .to('.lines i', { scaleX: 2.2, duration: 1, stagger: 0.1, ease: 'power1.in' }, 0.2);
+        beatOut('.beat--hero', 0.7);
+
+        // Chapter 1: money transfer
+        beatIn('.beat--tx', 1.3);
+        tl.to('.scr--tx', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 1.3)
+          .to('.scr--tx .scr__cta', { autoAlpha: 0, duration: 0.2 }, 2.4)
+          .to('.scr--tx .scr__done', { opacity: 1, y: 0, duration: 0.4 }, 2.5);
+        beatOut('.beat--tx', 3.2);
+
+        // Chapter 2: bill payments
+        beatIn('.beat--bills', 3.5);
+        tl.to('.scr--bills', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 3.5);
+        beatOut('.beat--bills', 5.2);
+
+        // Bridge: red world wipes into blue; phone exits; Ega's scarf turns blue
+        tl.to('.wash', { xPercent: -110, duration: 1.1, ease: 'power3.inOut' }, 5.3)
+          .to('.phone--main', { y: 160, rotateZ: -10, autoAlpha: 0, duration: 0.9 }, 5.3)
+          .to('.ega', { '--scarf': '#1f8fff', duration: 0.4 }, 5.9)
+          .to('.plane, .lines', { autoAlpha: 0, duration: 0.4 }, 5.6);
+        beatIn('.beat--biz', 6.0);
+        tl.to({}, { duration: 0.6 }); // hold
+      });
+    ('requestIdleCallback' in window ? (window as any).requestIdleCallback(start) : setTimeout(start, 1));
+  }
+</script>
+
+<style is:global>
+  /* Static fallback: keep the planes clear of the copy column */
+  html:not(.live) .plane--a { width: 44%; }
+  html:not(.live) .plane--b { width: 52%; }
+  @media (max-width: 899px) { html:not(.live) .plane { display: none; } }
+</style>

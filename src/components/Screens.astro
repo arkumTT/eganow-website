@@ -1,0 +1,47 @@
+---
+// HTML phone screens (crisp, tiny, themeable). Illustrative content only: no real rates/fees.
+interface Props { name: 'home' | 'tx' | 'bills'; }
+const { name } = Astro.props;
+const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
+---
+{name === 'home' && <div class="scr scr--home">
+  <p class="scr__hi">Good morning, Ama</p>
+  <p class="scr__lbl">Total balance</p>
+  <p class="scr__amt">GHS 12,450.00</p>
+  <ul class="scr__acts"><li>Send</li><li>Pay</li><li>Card</li><li>Groups</li></ul>
+  <div class="scr__card"><span>Mastercard</span><b>•••• 4821</b></div>
+</div>}
+{name === 'tx' && <div class="scr scr--tx">
+  <p class="scr__title">Send money</p>
+  <div class="scr__row"><span class="av">K</span><div><b>Kofi Mensah</b><small>Accra · Mobile money</small></div></div>
+  <p class="scr__lbl">You send</p><p class="scr__amt">GHS 500.00</p>
+  <div class="scr__fx"><span>Arrives</span><b>In minutes</b></div>
+  <div class="scr__cta">Send now</div>
+  <p class="scr__done">✓ Sent</p>
+</div>}
+{name === 'bills' && <div class="scr scr--bills">
+  <p class="scr__title">Pay bills</p>
+  <ul class="scr__grid">{bills.map((b) => <li><i></i>{b}</li>)}</ul>
+  <div class="scr__row"><span class="av">⚡</span><div><b>Electricity</b><small>Meter ••• 3920</small></div></div>
+  <div class="scr__cta">Pay GHS 120.00</div>
+</div>}
+<style>
+  .scr { position: absolute; inset: 0; padding: 44px 16px 16px; background: #fff; display: flex; flex-direction: column; gap: 10px; font: 400 12px/16px var(--font-sans); color: var(--text); }
+  .scr p, .scr ul { margin: 0; } .scr ul { padding: 0; list-style: none; }
+  .scr__hi { font-weight: 500; color: var(--text-muted); } .scr__lbl { color: var(--text-subtle); margin-top: 6px; }
+  .scr__amt { font: 600 25px/32px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .scr__title { font: 600 16px/24px var(--font-display); }
+  .scr__acts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .scr__acts li { text-align: center; padding: 10px 0; background: var(--surface-sunken); border-radius: 12px; font: 500 11px/14px var(--font-display); }
+  .scr__card { margin-top: auto; height: 96px; border-radius: 16px; padding: 12px; color: #fff; display: flex; flex-direction: column; justify-content: space-between;
+    background: linear-gradient(135deg, var(--eganow-red), #7a0118); font: 500 12px/16px var(--font-display); }
+  .scr__row { display: flex; gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--border); border-radius: 14px; }
+  .scr__row small { display: block; color: var(--text-subtle); } .scr__row b { font: 600 13px/16px var(--font-display); }
+  .av { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--eganow-red); color: #fff; font: 600 13px/1 var(--font-display); }
+  .scr__fx { display: flex; justify-content: space-between; padding: 10px 12px; background: var(--surface-sunken); border-radius: 12px; }
+  .scr__cta { margin-top: auto; text-align: center; padding: 13px; border-radius: 999px; background: var(--eganow-red); color: #fff; font: 600 13px/16px var(--font-display); }
+  .scr__done { position: absolute; left: 16px; right: 16px; bottom: 16px; text-align: center; padding: 13px; border-radius: 999px; background: #12805c; color: #fff; font: 600 13px/16px var(--font-display); opacity: 0; transform: translateY(8px); }
+  .scr__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .scr__grid li { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 2px; background: var(--surface-sunken); border-radius: 12px; font: 500 10.5px/12px var(--font-display); }
+  .scr__grid i { width: 26px; height: 26px; border-radius: 50%; background: var(--eganow-red); opacity: .9; }
+</style>

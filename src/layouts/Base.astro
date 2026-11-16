@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import poppins700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2?url';
+import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+interface Props { title: string; description: string; world?: 'personal' | 'business'; }
+const { title, description, world = 'personal' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={world === 'business' ? '#1f8fff' : '#cc0229'} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="preload" href={poppins700} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <!-- Enable the scroll story only when motion is welcome and the viewport is big enough to benefit -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        var ok = !matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator.connection && navigator.connection.saveData);
+        if (ok) d.classList.add('live');
+      })();
+    </script>
+  </head>
+  <body data-world={world}>
+    <a class="skip" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

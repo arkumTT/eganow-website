@@ -1,0 +1,29 @@
+/* Eganow tokens. Colour + type from the Eganow Brand Assets design system.
+   Spacing, radius, motion and shadow are PROPOSED (not yet in the design system). */
+:root {
+  --eganow-red: #cc0229;
+  --eganow-blue: #1f8fff;
+  --neutral-0: #fff; --neutral-50: #f8f9fa; --neutral-100: #f1f3f5; --neutral-200: #e4e7eb;
+  --neutral-300: #cfd4da; --neutral-400: #9aa1ab; --neutral-500: #6b7280; --neutral-600: #4b5563;
+  --neutral-700: #374151; --neutral-800: #1f2937; --neutral-900: #111827; --neutral-950: #0a0d14;
+
+  --surface: var(--neutral-50); --surface-raised: var(--neutral-0); --surface-sunken: var(--neutral-100);
+  --surface-inverse: var(--neutral-900); --border: var(--neutral-200); --border-strong: var(--neutral-300);
+  --text: var(--neutral-900); --text-muted: var(--neutral-600); --text-subtle: var(--neutral-500);
+  --text-inverse: var(--neutral-0);
+
+  /* World accent: red = Personal, blue = Business */
+  --accent: var(--eganow-red);
+  --on-accent: var(--neutral-0);
+
+  --font-display: "Poppins", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+  --space-8: 32px; --space-12: 48px; --space-16: 64px; --space-24: 96px;
+  --radius-sm: 8px; --radius-md: 16px; --radius-lg: 24px; --radius-full: 999px;
+  --shadow-phone: 0 40px 80px -20px rgb(10 13 20 / .35), 0 12px 24px -8px rgb(10 13 20 / .2);
+  --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-inout: cubic-bezier(.65, 0, .35, 1);
+  --header-h: 64px;
+}
+[data-world="business"] { --accent: var(--eganow-blue); --on-accent: var(--neutral-950); }

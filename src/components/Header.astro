@@ -1,0 +1,27 @@
+---
+interface Props { world?: 'personal' | 'business'; }
+const { world = 'personal' } = Astro.props;
+---
+<header class="hdr">
+  <a class="logo" href="/" aria-label="Eganow home"><span class="logo__mark" aria-hidden="true">e</span>eganow</a>
+  <nav class="nav" aria-label="Main">
+    <a href="/#transfer">Features</a><a href="/pricing">Pricing</a><a href="/about">About</a><a href="/help">Help</a>
+  </nav>
+  <div class="switch" role="group" aria-label="Choose your world">
+    <a href="/" class:list={['switch__opt', { on: world === 'personal' }]} aria-current={world === 'personal' ? 'page' : undefined}>Personal</a>
+    <a href="/business" class:list={['switch__opt switch__opt--biz', { on: world === 'business' }]} aria-current={world === 'business' ? 'page' : undefined}>Business</a>
+  </div>
+</header>
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; height: var(--header-h); display: flex; align-items: center; gap: var(--space-6);
+    padding: 0 clamp(16px, 4vw, 48px); background: rgb(248 249 250 / .82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .logo { display: inline-flex; align-items: center; gap: 8px; font: 700 20px/1 var(--font-display); text-decoration: none; letter-spacing: -.02em; }
+  .logo__mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--accent); color: var(--on-accent); font-size: 20px; padding-bottom: 3px; }
+  .nav { display: none; gap: var(--space-6); margin-left: auto; font: 500 14px/20px var(--font-display); }
+  .nav a { text-decoration: none; color: var(--text-muted); } .nav a:hover { color: var(--text); }
+  .switch { margin-left: auto; display: flex; padding: 4px; background: var(--neutral-200); border-radius: var(--radius-full); font: 600 13px/1 var(--font-display); }
+  .switch__opt { padding: 9px 16px; border-radius: var(--radius-full); text-decoration: none; color: var(--text-muted); transition: background-color .25s, color .25s; }
+  .switch__opt.on { background: var(--eganow-red); color: #fff; }
+  .switch__opt--biz.on { background: var(--eganow-blue); color: var(--neutral-950); }
+  @media (min-width: 900px) { .nav { display: flex; } .switch { margin-left: 0; } }
+</style>
