@@ -19,6 +19,7 @@ const { title, description, world = 'personal' } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <slot name="head" />
     <!-- Enable the scroll story only when motion is welcome and the viewport is big enough to benefit -->
     <script is:inline>
       (function () {

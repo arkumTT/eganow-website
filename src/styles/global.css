@@ -32,3 +32,11 @@ a { color: inherit; }
 .btn--blue .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--eganow-blue); }
 .btn--red { background: var(--eganow-red); color: #fff; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+
+/* ---------- Business world (shared by every /business page) ---------- */
+/* Blue is only used for fills/icons/large text. Small text on blue/light uses dark neutrals (see design-system contrast notes). */
+[data-world="business"] .overline { color: var(--neutral-700); display: inline-flex; align-items: center; gap: 8px; }
+[data-world="business"] .overline::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--eganow-blue); }
+.btn--blue-solid { background: var(--eganow-blue); color: var(--neutral-950); }
+.btn--blue-solid:hover { box-shadow: 0 8px 24px rgb(31 143 255 / .45); }
+.btn--ghost-inv { border-color: var(--neutral-500); color: #fff; }
