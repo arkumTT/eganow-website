@@ -1,0 +1,286 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BizVisuals from '../../components/BizVisuals.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PriceTeaser from '../../components/PriceTeaser.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import CardFace from '../../components/CardFace.astro';
+
+// NOTE (content): drafted from the product brief. Card Issuing for businesses = Mastercard virtual and physical cards;
+// (a) issue cards for your organisation's expenses, or (b) apply as a re-issuer to offer cards to your members/customers,
+// from the Eganow portal or by API integration. Everything marked TODO(verify) must be confirmed against the live product:
+// limits/controls, card delivery, ATM/POS usage, programme eligibility and onboarding, fees, API shape.
+
+const s3 = [
+  ['Simple', 'Create a card in a few clicks, or by API. One dashboard for every card.'],
+  ['Speed', 'Virtual cards are ready to use as soon as you issue them.'], // TODO(verify): instant issuance
+  ['Secure', 'Set limits, freeze any card and see every transaction.'], // TODO(verify): controls
+];
+
+const steps = [
+  ['Apply', 'Tell us about your business and which programme you need: team expenses, re-issuer, or both.'],
+  ['Get verified', 'We verify your business so you can issue cards safely.'],
+  ['Set up your cards', 'Choose virtual or physical, name each card and set how much it can spend.'], // TODO(verify)
+  ['Issue and manage', 'Hand out cards, follow every transaction and freeze a card whenever you need to.'],
+];
+
+const uses = [
+  ['Marketing and ads', 'One virtual card per campaign or platform, each with its own limit.'],
+  ['Travel and field teams', 'Physical cards for people on the road, with a spending cap.'], // TODO(verify)
+  ['Suppliers and subscriptions', 'Pay tools and vendors without sharing one card number.'],
+  ['Staff allowances', 'Give every team member a card and see what it is used for.'],
+  ['Cooperatives and associations', 'Offer members their own cards under your programme.'],
+  ['Apps, fintechs and retailers', 'Embed cards for your customers with the Eganow API.'],
+];
+
+const faqs = [
+  ['What cards can my business issue?', 'Mastercard virtual cards and Mastercard physical cards, issued from the Eganow portal or by API.'],
+  ['What is the difference between the two programmes?', 'With team expenses you issue cards for your own organisation. As a re-issuer you offer cards to your members or customers under your own programme.'],
+  ['Who can become a re-issuer?', 'Businesses and organisations that want to offer cards to their members or customers. Apply and our team will guide you through eligibility and onboarding.'], // TODO(verify): eligibility
+  ['Can I set spending limits and freeze cards?', 'Yes. You can set how much each card can spend and freeze or unfreeze a card at any time from your dashboard.'], // TODO(verify)
+  ['Can I issue cards by API?', 'Yes. Use the Eganow API to create and manage cards from your own app, or use the portal if you prefer not to code.'],
+  ['What does it cost?', 'It depends on your programme and volumes. Talk to our team for a quote.'], // TODO(verify): publish rates?
+];
+
+const cards = [
+  { name: 'Marketing', kind: 'Virtual', status: 'Active', spent: 3200, limit: 5000 },
+  { name: 'Team travel', kind: 'Physical', status: 'Active', spent: 860, limit: 2000 },
+  { name: 'Supplier: Kente Co.', kind: 'Virtual', status: 'Frozen', spent: 0, limit: 1500 },
+] as const;
+const spends = [['Ad platform', 'GHS 420.00'], ['Design tools', 'GHS 95.00'], ['Ad platform', 'GHS 310.00']];
+
+const apiSnippet = `POST /v1/cards
+{
+  "type": "virtual",
+  "holder": "Ama Mensah",
+  "currency": "GHS",
+  "label": "Marketing",
+  "spend_limit": 5000.00
+}
+
+200 OK
+{
+  "id": "card_41b7",
+  "status": "active",
+  "last4": "4821"
+}`;
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'Card Issuing', item: 'https://eganow.com/business/card-issuing' },
+] };
+const fmt = (n: number) => 'GHS ' + n.toLocaleString('en-GH');
+---
+<Base world="business" title="Card Issuing — Issue cards. Control spend. | Eganow Business" description="Issue Mastercard virtual and physical cards for your team's expenses, or become a re-issuer and offer cards to your own customers. Use the Eganow portal or API.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="Card Issuing" overline="Card Issuing" title="Issue cards. Control spend." titleId="ci-title"
+      body="Mastercard virtual and physical cards for your team’s expenses, or offer cards to your own customers as a re-issuer."
+      secondary={['Become a re-issuer', '/contact?topic=reissuer']} s3={s3}>
+      <BizVisuals name="cards" />
+    </ServiceHero>
+
+    <!-- TWO WAYS -->
+    <section class="ways" aria-labelledby="ways-t">
+      <div class="wrap">
+        <p class="overline">Two ways to issue</p>
+        <h2 id="ways-t" class="display-lg">Cards for your team. Or for your customers.</h2>
+        <div class="ways__grid">
+          <article class="way" id="team">
+            <div class="way__vis" aria-hidden="true">
+              <div class="stack"><div class="stack__a"><CardFace variant="blue" type="Virtual" label="Marketing" last4="4821" /></div><div class="stack__b"><CardFace variant="dark" type="Physical" label="Team travel" last4="7305" /></div></div>
+            </div>
+            <p class="tag">Team expenses</p>
+            <h3 class="heading-2">Issue cards for your organisation.</h3>
+            <p class="body-lg">Give every team, project or supplier their own card. Keep spending separate and easy to follow.</p>
+            <ul class="pts">
+              <li>Virtual cards for ads, tools and online suppliers</li>
+              <li>Physical cards for people who spend in person</li>
+              <li>A limit on every card, and a freeze button</li>
+              <li>Every transaction in one dashboard</li>
+            </ul>
+            <div class="cta"><a class="btn btn--blue-solid" href="/contact?topic=business">Open a business account</a></div>
+          </article>
+
+          <article class="way way--alt" id="reissuer">
+            <div class="way__vis" aria-hidden="true">
+              <div class="stack stack--wide"><div class="stack__a"><CardFace variant="light" type="Member" label="Ama A." last4="2210" /></div><div class="stack__b"><CardFace variant="blue" type="Member" label="Kofi M." last4="9034" /></div><div class="stack__c"><CardFace variant="dark" type="Member" label="Efua T." last4="1096" /></div></div>
+            </div>
+            <p class="tag">Re-issuer programme</p>
+            <h3 class="heading-2">Offer cards to your members and customers.</h3>
+            <p class="body-lg">Run your own card programme on Eganow. Issue Mastercard cards to the people you serve, from the portal or by API.</p>
+            <ul class="pts">
+              <li>Issue to your members or customers</li>
+              <li>Use the portal, or integrate with the API</li>
+              <li>Eganow powers the cards behind your programme</li>
+              <li>Apply to join the programme</li>
+            </ul>
+            <div class="cta"><a class="btn btn--ghost" href="/contact?topic=reissuer">Apply as a re-issuer</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIRTUAL VS PHYSICAL -->
+    <section class="vp" aria-labelledby="vp-t">
+      <div class="wrap">
+        <p class="overline">Virtual and physical</p>
+        <h2 id="vp-t" class="display-lg">Pick the card that fits the job.</h2>
+        <div class="vp__grid">
+          <article class="vpcard">
+            <div class="vpcard__vis" aria-hidden="true"><div class="tilt"><CardFace variant="blue" type="Virtual" label="Ad platform" last4="4821" /></div></div>
+            <h3 class="heading-3">Virtual cards</h3>
+            <p>Issued digitally and ready for online spending. Make as many as you need, one for each purpose.</p>
+            <ul class="pts"><li>Great for ads, subscriptions and online suppliers</li><li>Create one card per campaign, tool or vendor</li><li>Freeze or delete a card without touching the others</li></ul>
+          </article>
+          <article class="vpcard">
+            <div class="vpcard__vis" aria-hidden="true"><div class="tilt tilt--b"><CardFace variant="dark" type="Physical" label="Team travel" last4="7305" /></div></div>
+            <h3 class="heading-3">Physical cards</h3>
+            <p>A real card in your team’s hands, for spending in person.</p>
+            <ul class="pts"><li>Great for field teams, travel and daily spend</li><li>Same limits and controls as virtual cards</li><li>Issued to your business or your members</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTROLS CONSOLE (dark) -->
+    <section class="ctl" aria-labelledby="ctl-t">
+      <div class="wrap ctl__in">
+        <div class="ctl__copy">
+          <p class="overline">Control</p>
+          <h2 id="ctl-t" class="display-lg">Spend with confidence.</h2>
+          <p class="body-lg">Know what every card is for, how much it has spent and what it is spending on.</p>
+          <ul class="pts pts--inv">
+            <li>Set a spending limit on each card</li>
+            <li>Freeze or unfreeze a card in one tap</li>
+            <li>See every transaction, by card</li>
+          </ul>
+        </div>
+
+        <div class="console" aria-hidden="true">
+          <aside class="clist">
+            <p class="t">Cards · {cards.length}</p>
+            <ul>{cards.map((c, i) => (
+              <li class:list={{ sel: i === 0 }}>
+                <div class="row"><b>{c.name}</b><span class:list={['stat', { off: c.status === 'Frozen' }]}><i></i>{c.status}</span></div>
+                <small>{c.kind}</small>
+                <div class="meter" role="presentation"><i style={`width:${Math.round((c.spent / c.limit) * 100)}%`}></i></div>
+                <small>{fmt(c.spent)} of {fmt(c.limit)}</small>
+              </li>
+            ))}</ul>
+          </aside>
+          <div class="cdetail">
+            <div class="cdetail__face"><CardFace variant="blue" type="Virtual" label="Marketing" last4="4821" /></div>
+            <div class="frz"><div><b>Freeze card</b><small>Pause spending instantly</small></div><span class="tgl"><i></i></span></div>
+            <p class="t">Recent spending</p>
+            <ul class="spend">{spends.map(([m, a]) => <li><span>{m}</span><b>{a}</b></li>)}</ul>
+          </div>
+        </div>
+        <p class="sr-only">Example card dashboard listing three cards with their status and how much of each limit has been spent, with a detail view for the selected card showing a freeze control and recent spending.</p>
+      </div>
+    </section>
+
+    <Steps overline="Get started" title="From sign-up to your first card." id="how-t" steps={steps} />
+
+    <!-- API -->
+    <section class="api" aria-labelledby="api-t">
+      <div class="wrap api__in">
+        <div class="api__copy">
+          <p class="overline">For developers</p>
+          <h2 id="api-t" class="display-lg">Issue cards from your own app.</h2>
+          <p class="body-lg">Create, fund and manage cards with the Eganow API. Perfect for re-issuers who want cards built into their product.</p>
+          <div class="cta"><a class="btn btn--blue-solid" href="/business/developers">Read the docs</a><a class="btn btn--ghost" href="/contact?topic=sandbox">Get sandbox access</a></div>
+        </div>
+        <div class="code">
+          <div class="code__bar"><span>Illustrative example</span><button type="button" data-copy="#card-snippet">Copy</button></div>
+          <pre><code id="card-snippet">{apiSnippet}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <CardGrid overline="Who it’s for" title="Cards for every team and every programme." id="uses-t" items={uses} />
+    <PriceTeaser body="No surprises. Tell us about your programme and we’ll show you exactly what you pay." />
+    <Faq items={faqs} />
+    <FinalCta title="Ready to issue your first card?" />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.ways, section.vp, section.api { padding: var(--space-24) 0; }
+  .tag { margin: 0; font: 600 12px/16px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+
+  /* TWO WAYS */
+  .ways__grid { margin-top: var(--space-12); display: grid; gap: var(--space-6); }
+  .way { display: grid; gap: var(--space-4); align-content: start; justify-items: start; padding: var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-raised); }
+  .way .cta { margin-top: var(--space-2); }
+  .way__vis { width: 100%; display: grid; place-items: center; min-height: 240px; padding: var(--space-6); border-radius: var(--radius-md); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); overflow: hidden; }
+  .way--alt .way__vis { background: linear-gradient(135deg, #123b6b, #0a0d14); }
+  .stack { position: relative; width: min(100%, 300px); aspect-ratio: 1.6 / 1.15; container-type: inline-size; }
+  .stack > div { position: absolute; width: 74%; } .stack__a { left: 0; top: 0; transform: rotate(-8deg); animation: fl 6s var(--ease-inout) infinite; } .stack__b { right: 0; bottom: 0; transform: rotate(5deg); animation: fl 6s var(--ease-inout) -3s infinite; z-index: 1; }
+  .stack--wide { width: min(100%, 340px); aspect-ratio: 1.6 / 1.35; } .stack--wide > div { width: 66%; } .stack__a { left: 0; top: 0; } .stack--wide .stack__b { right: 0; top: 18%; bottom: auto; } .stack__c { left: 16%; bottom: 0; transform: rotate(-3deg); z-index: 2; animation: fl 6s var(--ease-inout) -1.5s infinite; }
+  @keyframes fl { 50% { translate: 0 -6px; } }
+  @media (min-width: 900px) { .ways__grid { grid-template-columns: 1fr 1fr; } }
+
+  /* VIRTUAL VS PHYSICAL */
+  .vp { background: var(--surface-sunken); }
+  .vp__grid { margin-top: var(--space-12); display: grid; gap: var(--space-6); }
+  .vpcard { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-8); border-radius: var(--radius-lg); background: var(--surface-raised); border: 1px solid var(--border); } .vpcard > p { margin: 0; color: var(--text-muted); }
+  .vpcard__vis { display: grid; place-items: center; padding: var(--space-8) var(--space-4); border-radius: var(--radius-md); background: var(--neutral-100); perspective: 800px; margin-bottom: var(--space-2); }
+  .tilt { width: min(100%, 300px); transform: rotateY(-14deg) rotateX(6deg) rotateZ(-2deg); transition: transform .5s var(--ease-out); } .tilt--b { transform: rotateY(14deg) rotateX(6deg) rotateZ(2deg); }
+  .vpcard:hover .tilt, .vpcard:focus-within .tilt { transform: none; }
+  @media (min-width: 900px) { .vp__grid { grid-template-columns: 1fr 1fr; } }
+
+  /* CONTROLS (dark) */
+  .ctl { background: var(--neutral-950); color: #fff; padding: var(--space-24) 0; }
+  .ctl .overline { color: var(--neutral-300); } .ctl .body-lg { color: var(--neutral-300); } .ctl .pts li { color: var(--neutral-200); }
+  .ctl__in { display: grid; gap: var(--space-12); align-items: center; }
+  .ctl__copy { display: grid; gap: var(--space-4); justify-items: start; } .ctl__copy .display-lg { margin-top: 0; }
+  .console { display: grid; background: var(--surface-raised); color: var(--text); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); min-width: 0; }
+  .clist { padding: 18px; background: var(--neutral-100); display: grid; gap: 10px; align-content: start; border-bottom: 1px solid var(--border); }
+  .clist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .clist li { display: grid; gap: 4px; padding: 12px; border-radius: 12px; border: 1px solid transparent; font: 500 13px/18px var(--font-display); } .clist li small { color: var(--text-muted); font: 400 12px/16px var(--font-sans); }
+  .clist li.sel { background: #fff; border-color: var(--eganow-blue); box-shadow: 0 0 0 1px var(--eganow-blue); }
+  .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .stat { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-display); color: #0b5b40; white-space: nowrap; } .stat i { width: 8px; height: 8px; border-radius: 50%; background: #12805c; }
+  .stat.off { color: #7a3b00; } .stat.off i { background: transparent; box-shadow: inset 0 0 0 2px #b45309; }
+  .meter { height: 6px; border-radius: 99px; background: var(--neutral-200); overflow: hidden; } .meter i { display: block; height: 100%; background: var(--eganow-blue); border-radius: 99px; }
+  .cdetail { padding: 20px; display: grid; gap: 14px; align-content: start; min-width: 0; } .cdetail__face { width: min(100%, 300px); }
+  .frz { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; } .frz b { display: block; font: 600 14px/20px var(--font-display); } .frz small { color: var(--text-muted); font-size: 12px; }
+  .tgl { position: relative; width: 42px; height: 24px; border-radius: 99px; background: var(--neutral-300); flex: none; } .tgl i { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; animation: freeze 6s var(--ease-inout) infinite; }
+  .tgl { animation: tglbg 6s var(--ease-inout) infinite; }
+  @keyframes freeze { 0%, 35% { left: 3px; } 45%, 85% { left: 21px; } 95%, 100% { left: 3px; } } @keyframes tglbg { 0%, 35% { background: var(--neutral-300); } 45%, 85% { background: #12805c; } 95%, 100% { background: var(--neutral-300); } }
+  .spend { list-style: none; margin: 0; padding: 0; display: grid; } .spend li { display: flex; justify-content: space-between; padding: 9px 0; border-top: 1px solid var(--border); font: 400 13px/20px var(--font-sans); } .spend b { font: 600 13px/20px var(--font-display); font-variant-numeric: tabular-nums; }
+  @media (min-width: 900px) { .ctl__in { grid-template-columns: 1fr 1.3fr; } .console { grid-template-columns: 240px 1fr; } .clist { border-bottom: 0; border-right: 1px solid var(--border); } }
+
+  /* API */
+  .api__in { display: grid; gap: var(--space-8); align-items: center; } .api__copy { display: grid; gap: var(--space-4); justify-items: start; } .api__copy .display-lg { margin-top: 0; }
+  .code { background: var(--neutral-950); border: 1px solid var(--neutral-700); border-radius: var(--radius-md); overflow: hidden; min-width: 0; }
+  .code__bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--neutral-700); font-size: 12px; color: var(--neutral-400); }
+  .code__bar button { font: 600 12px/1 var(--font-display); color: #fff; background: var(--neutral-700); border: 0; border-radius: 99px; padding: 8px 14px; cursor: pointer; min-height: 32px; }
+  pre { margin: 0; padding: 16px; overflow-x: auto; font: 400 13px/21px ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #cfe5ff; }
+  @media (min-width: 900px) { .api__in { grid-template-columns: 1fr 1fr; } }
+
+  @media (prefers-reduced-motion: reduce) { .stack > div, .tgl, .tgl i { animation: none; } .tilt { transition: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const t = document.querySelector(btn.dataset.copy!)?.textContent ?? '';
+      try { await navigator.clipboard.writeText(t); btn.textContent = 'Copied'; } catch { btn.textContent = 'Press Ctrl+C'; }
+      setTimeout(() => (btn.textContent = 'Copy'), 1800);
+    });
+  });
+</script>

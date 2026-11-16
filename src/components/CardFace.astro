@@ -1,0 +1,20 @@
+---
+// Illustrative card face drawn in CSS. The "network mark" is two generic circles until Mastercard brand permission/assets are confirmed.
+interface Props { variant?: 'blue' | 'dark' | 'light'; label: string; last4: string; type?: string; }
+const { variant = 'blue', label, last4, type = '' } = Astro.props;
+---
+<div class="cfw" aria-hidden="true"><div class={`cf cf--${variant}`}>
+  <span class="net"><i></i><i></i></span>
+  <small>{type && <>{type} · </>}{label}</small>
+  <b>•••• {last4}</b>
+</div></div>
+<style>
+  .cfw { width: 100%; container-type: inline-size; }
+  .cf { position: relative; width: 100%; aspect-ratio: 1.6; border-radius: 5cqw; padding: 5cqw; display: flex; flex-direction: column; justify-content: flex-end; gap: 1cqw; color: #fff; font-family: var(--font-display); box-shadow: 0 4cqw 8cqw -2cqw rgb(0 0 0 / .45); }
+  .cf small { font-size: 4cqw; opacity: .9; font-weight: 500; } .cf b { font-size: 7cqw; letter-spacing: .08em; font-weight: 600; }
+  .cf--blue { background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); color: var(--neutral-950); } .cf--blue small, .cf--blue b { color: #fff; text-shadow: 0 1px 6px rgb(0 0 0 / .25); }
+  .cf--dark { background: linear-gradient(135deg, #2b3340, #0a0d14); }
+  .cf--light { background: linear-gradient(135deg, #fff, #cfd4da); color: var(--neutral-950); }
+  .net { position: absolute; top: 5cqw; right: 5cqw; display: flex; } .net i { width: 9cqw; height: 9cqw; border-radius: 50%; background: rgb(255 255 255 / .75); } .net i + i { margin-left: -3.6cqw; background: rgb(255 255 255 / .45); }
+  .cf--light .net i { background: rgb(10 13 20 / .55); } .cf--light .net i + i { background: rgb(10 13 20 / .3); }
+</style>
