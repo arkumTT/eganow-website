@@ -1,16 +1,16 @@
 ---
 // TODO(verify): publish public rates or "contact sales"?
-interface Props { title?: string; body?: string; href?: string; }
-const { title = 'Simple, clear pricing.', body = 'No surprises. Tell us what you need and we’ll show you exactly what you pay.', href = '/pricing#business' } = Astro.props;
+interface Props { overline?: string; title?: string; body?: string; href?: string; ctaLabel?: string; quoteLabel?: string; }
+const { overline = 'Pricing', title = 'Simple, clear pricing.', body = 'No surprises. Tell us what you need and we’ll show you exactly what you pay.', href = '/pricing#business', ctaLabel = 'See pricing', quoteLabel = 'Get a quote' } = Astro.props;
 ---
 <section class="price" aria-labelledby="price-t">
   <div class="wrap price__in">
     <div>
-      <p class="overline">Pricing</p>
+      <p class="overline">{overline}</p>
       <h2 id="price-t" class="display-lg">{title}</h2>
       <p class="body-lg">{body}</p>
     </div>
-    <div class="cta"><a class="btn btn--blue-solid" href={href}>See pricing</a><a class="btn btn--ghost-inv" href="/contact?topic=sales">Get a quote</a></div>
+    <div class="cta"><a class="btn btn--blue-solid" href={href}>{ctaLabel}</a><a class="btn btn--ghost-inv" href="/contact?topic=sales">{quoteLabel}</a></div>
   </div>
 </section>
 <style>

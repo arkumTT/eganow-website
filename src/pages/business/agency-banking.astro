@@ -1,0 +1,228 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BizVisuals from '../../components/BizVisuals.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PriceTeaser from '../../components/PriceTeaser.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import Phone from '../../components/Phone.astro';
+
+// NOTE (content): drafted from the product brief. Agency banking = cash deposits and withdrawals for customers who want
+// to transact on their mobile wallet or bank account. Everything marked TODO(verify) must be confirmed against the live
+// product: the exact deposit/withdrawal flows, float and commission model, supported wallets and banks, limits,
+// agent onboarding and training, support, and whether an agent locator is offered.
+
+const s3 = [
+  ['Simple', 'Two services, one app. Take cash in and pay cash out in a few taps.'],
+  ['Speed', 'Customers are served in moments and get a confirmation straight away.'], // TODO(verify): SMS/instant confirmation
+  ['Secure', 'Every transaction is recorded, verified and easy to trace.'], // TODO(verify): verification steps
+];
+
+const tabs = [
+  { id: 'cash-in', label: 'Cash in', title: 'Customers deposit cash.', body: 'A customer brings cash and wants it in their mobile wallet or bank account. You take the cash and send the money in seconds.',
+    steps: ['The customer hands you the cash.', 'You enter their wallet number or account.', 'You enter the amount and confirm.', 'The money lands in their wallet or account, and they get a confirmation.'] }, // TODO(verify)
+  { id: 'cash-out', label: 'Cash out', title: 'Customers withdraw cash.', body: 'A customer wants cash from their wallet or account. You check the request, confirm it and hand over the cash.',
+    steps: ['The customer starts a withdrawal or gives you their details.', 'You check the request in the app.', 'You confirm the withdrawal.', 'You hand over the cash and the customer gets a confirmation.'] }, // TODO(verify)
+] as const;
+
+const benefits = [
+  ['Bring customers through your door', 'People who need cash come to you. Many stay to shop.'],
+  ['Earn on every transaction', 'Agents earn on the cash in and cash out they process.'], // TODO(verify): commission model
+  ['Serve wallet and bank customers', 'One agent point for customers who use a mobile wallet or a bank account.'], // TODO(verify): supported wallets/banks
+  ['Run it from your phone', 'Manage your agent business in the Eganow app or the business portal.'], // TODO(verify): Egahub support for agents
+  ['See every transaction', 'Your balance, your cash in, your cash out, all in one place.'],
+  ['Help when you need it', 'Our team supports you with setup and day-to-day questions.'], // TODO(verify): support/training
+];
+
+const steps = [
+  ['Apply', 'Tell us about your shop or business and where you operate.'],
+  ['Get verified', 'We verify your business so you can serve customers safely.'],
+  ['Get set up', 'We set up your agent account and show you how it works.'], // TODO(verify): training
+  ['Start serving', 'Take cash in, pay cash out, and watch your day add up.'],
+];
+
+const uses = [
+  ['Corner shops', 'Add a service that brings people in every day.'],
+  ['Pharmacies', 'A trusted counter where customers already come.'],
+  ['Supermarkets and minimarts', 'Let customers get cash while they shop.'],
+  ['Market and kiosk operators', 'Serve your neighbourhood without a bank branch nearby.'],
+  ['Fuel stations', 'Cash services for customers on the road.'],
+  ['Cooperatives and community points', 'Help your members move money close to home.'],
+];
+
+const faqs = [
+  ['What is an agent?', 'An agent is a shop or business that helps customers put cash into, and take cash out of, their mobile wallet or bank account.'],
+  ['What can my customers do at my agent point?', 'They can deposit cash into their mobile wallet or bank account (cash in) and withdraw cash from them (cash out).'],
+  ['Which wallets and banks are supported?', 'We confirm the full list of supported wallets and banks when you apply.'], // TODO(verify)
+  ['How do agents earn?', 'Agents earn on the transactions they process. Talk to our team for the details for your business.'], // TODO(verify): commission
+  ['Do I need special equipment?', 'You manage everything from the Eganow app or business portal. We confirm what you need when you apply.'], // TODO(verify)
+  ['How do I become an agent?', 'Apply, get verified and get set up. Our team will guide you through each step.'],
+];
+
+const txs = [
+  ['10:42', 'Cash in', 'Ama A.', 'GHS 300.00', 'Done'],
+  ['10:31', 'Cash out', 'Kofi M.', 'GHS 150.00', 'Done'],
+  ['10:18', 'Cash in', 'Efua T.', 'GHS 80.00', 'Done'],
+  ['10:05', 'Cash out', 'Yaw B.', 'GHS 400.00', 'Pending'],
+];
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'Agency Banking', item: 'https://eganow.com/business/agency-banking' },
+] };
+---
+<Base world="business" title="Agency Banking — Cash in. Cash out. Anywhere. | Eganow Business" description="Become an Eganow agent. Let customers deposit and withdraw cash to their mobile wallet or bank account at your shop, and earn on every transaction.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="Agency Banking" overline="Agency Banking" title="Cash in. Cash out. Anywhere." titleId="ab-title"
+      body="Turn your shop into a service point. Let customers deposit and withdraw cash to their mobile wallet or bank account."
+      primary={['Become an agent', '/contact?topic=agent']} s3={s3}>
+      <BizVisuals name="agency" />
+    </ServiceHero>
+
+    <!-- TWO SERVICES -->
+    <section class="svc" aria-labelledby="svc-t">
+      <div class="wrap">
+        <p class="overline">Two services</p>
+        <h2 id="svc-t" class="display-lg">Cash in. Cash out. Done.</h2>
+        <p class="body-lg lead">Everything an agent does comes down to these two. Here is how each one works.</p>
+
+        <div class="tabs" data-tabs>
+          <div class="tablist" role="tablist" aria-label="Agent services">
+            {tabs.map((t, i) => (
+              <button type="button" role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{t.label}</button>
+            ))}
+          </div>
+
+          {tabs.map((t) => (
+            <div class="tabpanel" role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} tabindex="0">
+              <div class="tp__copy">
+                <h3 class="heading-2">{t.title}</h3>
+                <p class="body-lg">{t.body}</p>
+                <ol class="flow">{t.steps.map((s, k) => <li><span class="n" aria-hidden="true">{k + 1}</span>{s}</li>)}</ol>
+              </div>
+              <div class="tp__vis" aria-hidden="true">
+                <Phone class="agentphone">
+                  {t.id === 'cash-in' ? (
+                    <div class="ag">
+                      <p class="ag__t">Cash in</p>
+                      <div class="ag__f"><small>Wallet or account</small><b>024 000 0000</b></div>
+                      <div class="ag__f"><small>Amount</small><b class="big">GHS 300.00</b></div>
+                      <div class="ag__ok"><i>✓</i>Name matched: Ama A.</div>
+                      <div class="ag__btn">Confirm cash in</div>
+                    </div>
+                  ) : (
+                    <div class="ag">
+                      <p class="ag__t">Cash out</p>
+                      <div class="ag__f"><small>Customer</small><b>Kofi M.</b></div>
+                      <div class="ag__f"><small>Withdrawal request</small><b class="big">GHS 150.00</b></div>
+                      <div class="ag__ok"><i>✓</i>Request verified</div>
+                      <div class="ag__btn">Pay out GHS 150.00</div>
+                    </div>
+                  )}
+                </Phone>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <CardGrid overline="Why become an agent" title="More customers. More income." id="why-t" items={benefits} />
+
+    <Steps overline="How to start" title="Become an agent in four steps." id="how-t" steps={steps} />
+
+    <!-- FLOAT / DASHBOARD (dark) -->
+    <section class="dash" aria-labelledby="dash-t">
+      <div class="wrap dash__in">
+        <div class="dash__copy">
+          <p class="overline">Your agent dashboard</p>
+          <h2 id="dash-t" class="display-lg">Know your balance. Track every transaction.</h2>
+          <p class="body-lg">See your balance, today’s cash in and cash out, and a record of every customer you served.</p>
+          <ul class="pts">
+            <li>Your balance and today’s totals at a glance</li>
+            <li>A record of every deposit and withdrawal</li>
+            <li>Reminders to top up before you run low</li>
+          </ul>
+        </div>
+
+        <div class="board" aria-hidden="true">
+          <div class="stats">
+            <div><p class="t">Balance</p><p class="amt">GHS 12,400</p></div>
+            <div><p class="t">Cash in today</p><p class="amt">GHS 3,150</p></div>
+            <div><p class="t">Cash out today</p><p class="amt">GHS 2,480</p></div>
+          </div>
+          <div class="note"><i>!</i>Balance running low? Top up to keep serving customers.</div>
+          <table><thead class="sr-only"><tr><th>Time</th><th>Type</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>{txs.map(([tm, ty, n, a, st]) => (
+              <tr><td>{tm}</td><td><span class:list={['kind', { out: ty === 'Cash out' }]}><b aria-hidden="true">{ty === 'Cash in' ? '↓' : '↑'}</b>{ty}</span></td><td class="nm">{n}</td><td class="r">{a}</td><td><span class:list={['st', { pend: st === 'Pending' }]}>{st === 'Done' ? '✓ ' : '… '}{st}</span></td></tr>
+            ))}</tbody></table>
+        </div>
+        <p class="sr-only">Example agent dashboard showing the agent's balance, today's cash in and cash out totals, a low-balance reminder and a list of recent deposits and withdrawals with their status.</p>
+      </div>
+    </section>
+
+    <CardGrid overline="Who it’s for" title="Any counter can be an agent point." id="uses-t" items={uses} />
+    <PriceTeaser overline="Earnings" title="Earn on every transaction." body="Tell us about your shop and we’ll show you how agents earn." ctaLabel="See how agents earn" quoteLabel="Talk to our team" href="/contact?topic=agent" />
+    <Faq items={faqs} />
+    <FinalCta title="Ready to become an agent?" body="Apply in minutes, or talk to our team." primary={['Become an agent', '/contact?topic=agent']} />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.svc, section.dash { padding: var(--space-24) 0; }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+
+  /* TABS (all panels visible without JS; script turns them into tabs) */
+  .tabs { margin-top: var(--space-8); }
+  .tablist { display: none; gap: 6px; padding: 5px; background: var(--neutral-200); border-radius: var(--radius-full); width: max-content; max-width: 100%; }
+  .tablist button { font: 600 14px/1 var(--font-display); padding: 12px 22px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--text-muted); cursor: pointer; white-space: nowrap; min-height: 44px; }
+  .tablist button[aria-selected="true"] { background: var(--eganow-blue); color: var(--neutral-950); }
+  .tabs.ready .tablist { display: flex; }
+  .tabpanel { display: grid; gap: var(--space-8); align-items: center; padding: var(--space-8) 0; }
+  .tabs.ready .tabpanel { margin-top: var(--space-6); padding: var(--space-8); background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  .tabs.ready .tabpanel[hidden] { display: none; }
+  .tp__copy { display: grid; gap: var(--space-4); justify-items: start; }
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: f; }
+  .flow li { position: relative; padding-left: 44px; min-height: 32px; display: flex; align-items: center; font-size: 16px; line-height: 24px; }
+  .n { position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--eganow-blue); color: var(--neutral-950); font: 700 14px/1 var(--font-display); }
+  .tp__vis { display: grid; place-items: center; min-height: 340px; padding: var(--space-6); border-radius: var(--radius-md); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); }
+  .tp__vis :global(.agentphone) { --pw: 220px; }
+  .ag { position: absolute; inset: 0; padding: 40px 14px 14px; display: flex; flex-direction: column; gap: 9px; font: 400 11px/15px var(--font-sans); color: var(--text); }
+  .ag p { margin: 0; } .ag__t { font: 600 15px/20px var(--font-display); }
+  .ag__f { display: grid; gap: 1px; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 10px; } .ag__f small { color: var(--text-subtle); font-size: 10px; } .ag__f b { font: 600 12.5px/16px var(--font-display); } .ag__f b.big { font-size: 17px; line-height: 22px; }
+  .ag__ok { display: flex; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 10px; background: #d7f2e6; color: #0b5b40; font: 600 10.5px/14px var(--font-display); } .ag__ok i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: #12805c; color: #fff; font-style: normal; font-size: 10px; }
+  .ag__btn { margin-top: auto; text-align: center; padding: 11px; border-radius: 99px; background: var(--eganow-blue); color: var(--neutral-950); font: 600 12px/16px var(--font-display); }
+  @media (min-width: 900px) { .tabpanel { grid-template-columns: 1.1fr 1fr; } }
+  @media (max-width: 639px) { .tabs.ready .tablist { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-radius: var(--radius-md); } .tablist button { border-radius: 12px; } .tabs.ready .tabpanel { padding: var(--space-6) var(--space-4); } }
+
+  /* DASHBOARD (dark) */
+  .dash { background: var(--neutral-950); color: #fff; }
+  .dash .overline { color: var(--neutral-300); } .dash .body-lg { color: var(--neutral-300); } .dash .pts li { color: var(--neutral-200); }
+  .dash__in { display: grid; gap: var(--space-12); align-items: center; }
+  .dash__copy { display: grid; gap: var(--space-4); justify-items: start; } .dash__copy .display-lg { margin-top: 0; max-width: 16ch; }
+  .board { background: var(--surface-raised); color: var(--text); border-radius: var(--radius-lg); padding: 20px; display: grid; gap: 14px; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); min-width: 0; }
+  .stats { display: grid; gap: 12px; } .stats > div { padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; }
+  .amt { font: 600 24px/32px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 2px 0 0; }
+  .note { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fdf0c8; color: #6b4a00; font: 500 13px/18px var(--font-display); } .note i { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #b45309; color: #fff; font-style: normal; font-weight: 700; font-size: 12px; flex: none; }
+  table { width: 100%; border-collapse: collapse; font: 400 13px/20px var(--font-sans); } td { padding: 9px 4px; border-top: 1px solid var(--border); white-space: nowrap; } td.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .kind { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-display); } .kind b { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #d7f2e6; color: #0b5b40; font-size: 12px; } .kind.out b { background: #dbeafe; color: #0b4f99; }
+  .st { font: 600 12px/16px var(--font-display); padding: 3px 10px; border-radius: 99px; background: #d7f2e6; color: #0b5b40; white-space: nowrap; } .st.pend { background: #fdf0c8; color: #6b4a00; }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .dash__in { grid-template-columns: 1fr 1.25fr; } }
+  @media (max-width: 639px) { td.nm { display: none; } }
+</style>
+
+<script>
+  import '../../scripts/tabs';
+</script>

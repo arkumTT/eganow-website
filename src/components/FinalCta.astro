@@ -1,11 +1,11 @@
 ---
-interface Props { title?: string; body?: string; }
-const { title = 'Ready to get started?', body = 'Open an account in minutes, or talk to our team.' } = Astro.props;
+interface Props { title?: string; body?: string; primary?: [string, string]; secondary?: [string, string]; }
+const { title = 'Ready to get started?', body = 'Open an account in minutes, or talk to our team.', primary = ['Open a business account', '/contact?topic=business'], secondary = ['Talk to sales', '/contact?topic=sales'] } = Astro.props;
 ---
 <section class="final">
   <h2 class="display-lg">{title}</h2>
   <p class="body-lg">{body}</p>
-  <div class="cta"><a class="btn btn--blue-solid" href="/contact?topic=business">Open a business account</a><a class="btn btn--ghost" href="/contact?topic=sales">Talk to sales</a></div>
+  <div class="cta"><a class="btn btn--blue-solid" href={primary[1]}>{primary[0]}</a><a class="btn btn--ghost" href={secondary[1]}>{secondary[0]}</a></div>
   <a class="swap" href="/business">← Explore all Business services</a>
 </section>
 <style>
