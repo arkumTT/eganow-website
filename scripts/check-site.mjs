@@ -2,6 +2,7 @@
 //   npm run build && npm run check          (exit code 1 on failures; warnings never fail)
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const DIST = 'dist';
 const known = JSON.parse(readFileSync('scripts/known-missing.json', 'utf8'));
@@ -63,7 +64,13 @@ for (const [file, h] of html) {
   const imgsNoAlt = (h.match(/<img\b(?![^>]*\balt=)[^>]*>/gi) || []).length;
   const lang = /<html[^>]+lang=/i.test(h);
   const og = /<meta[^>]+property=["']og:title["']/i.test(h);
-  const ogImg = /<meta[^>]+property=["']og:image["']/i.test(h);
+  const ogImg = h.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["']/i)?.[1];
+  let ogProblem = '';
+  if (ogImg) {
+    const file = join(DIST, new URL(ogImg).pathname);
+    if (!existsSync(file)) ogProblem = `og:image file missing (${new URL(ogImg).pathname})`;
+    else { const b = readFileSync(file); const ok = b.length > 24 && b.readUInt32BE(16) === 1200 && b.readUInt32BE(20) === 630; if (!ok) ogProblem = `og:image is not 1200x630 (${new URL(ogImg).pathname})`; }
+  }
   const errs = [], warns = [];
   if (!lang) errs.push('missing <html lang>');
   if (!title) errs.push('missing <title>'); else if (title.length > 70) warns.push(`title is ${title.length} chars (>70)`);
@@ -73,7 +80,8 @@ for (const [file, h] of html) {
   if (!noindex) {
     if (!canon) errs.push('indexable page without canonical');
     if (!og) warns.push('no og:title');
-    if (!ogImg) warns.push('no og:image (link previews will have no picture)');
+    if (!ogImg) errs.push('indexable page without og:image (link previews would have no picture)');
+    else if (ogProblem) errs.push(ogProblem);
   }
   if (errs.length || warns.length) seo.push({ url, noindex, errs, warns });
 }

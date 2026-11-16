@@ -2,8 +2,11 @@
 import '../styles/global.css';
 import poppins700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2?url';
 import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import { ogSlugFor, OG_SIZE } from '../data/og-cards.mjs';
 interface Props { title: string; description: string; world?: 'personal' | 'business'; noindex?: boolean; }
 const { title, description, world = 'personal', noindex = false } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(`/og/${ogSlugFor(Astro.url.pathname)}.png`, Astro.site).href;
 ---
 <!doctype html>
 <html lang="en">
@@ -21,9 +24,20 @@ const { title, description, world = 'personal', noindex = false } = Astro.props;
     {!noindex && <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />}
     <link rel="preload" href={poppins700} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+    <meta property="og:site_name" content="Eganow" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content={String(OG_SIZE.width)} />
+    <meta property="og:image:height" content={String(OG_SIZE.height)} />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <slot name="head" />
     <!-- Enable the scroll story only when motion is welcome and the viewport is big enough to benefit -->
     <script is:inline>
