@@ -1,6 +1,6 @@
 ---
 // HTML phone screens (crisp, tiny, themeable). Illustrative content only: no real rates/fees.
-interface Props { name: 'home' | 'tx' | 'bills' | 'cards' | 'groups'; }
+interface Props { name: 'home' | 'tx' | 'bills' | 'cards' | 'groups' | 'trust' | 'download'; }
 const { name } = Astro.props;
 const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
 ---
@@ -40,6 +40,22 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   <div class="scr__fx"><span>Raised so far</span><b>GHS 6,800</b></div>
   <div class="scr__cta">Contribute</div>
 </div>}
+{name === 'trust' && <div class="scr scr--trust">
+  <p class="scr__title">Security</p>
+  <div class="shield"><svg viewBox="0 0 48 56" aria-hidden="true"><path d="M24 2 4 9v17c0 13 8.6 23.7 20 28 11.4-4.3 20-15 20-28V9z" fill="#cc0229"/><path d="m15 28 7 7 12-14" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg><b>You're protected</b></div>
+  <ul class="sec">
+    <li><i>✓</i><div><b>Licensed</b><small>Bank of Ghana regulated</small></div></li>
+    <li><i>✓</i><div><b>PIN &amp; fingerprint</b><small>Only you can sign in</small></div></li>
+    <li><i>✓</i><div><b>Instant freeze</b><small>Lock your card in one tap</small></div></li>
+    <li><i>✓</i><div><b>Encrypted</b><small>Every transaction, end to end</small></div></li>
+  </ul>
+</div>}
+{name === 'download' && <div class="scr scr--download">
+  <div class="splash__mark">e</div>
+  <p class="splash__name">eganow</p>
+  <ul class="splash__3s"><li>Simple.</li><li>Speed.</li><li>Secure.</li></ul>
+  <div class="splash__btn">Get started</div>
+</div>}
 <style>
   /* Screens are laid out at a fixed 252px design width and scaled to whatever phone size holds them */
   :global(.phone__screen:has(> .scr)) { container-type: size; }
@@ -73,4 +89,13 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   .ring > div { width: 100px; height: 100px; border-radius: 50%; background: #fff; display: grid; place-content: center; text-align: center; } .ring b { font: 700 24px/28px var(--font-display); } .ring small { color: var(--text-subtle); font-size: 10px; }
   .avs { display: flex; justify-content: center; } .avs li { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; margin-left: -6px; display: grid; place-items: center; font: 600 11px/1 var(--font-display); background: var(--eganow-red); color: #fff; }
   .avs li:nth-child(2) { background: var(--neutral-800); } .avs li:nth-child(3) { background: #ff6b81; } .avs li:nth-child(4) { background: var(--neutral-200); color: var(--neutral-800); }
+  .shield { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 0 6px; } .shield svg { width: 56px; height: 64px; } .shield b { font: 600 15px/20px var(--font-display); }
+  .sec { display: grid; gap: 8px; } .sec li { display: flex; gap: 10px; align-items: center; padding: 9px 10px; border: 1px solid var(--border); border-radius: 12px; }
+  .sec i { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #12805c; color: #fff; font-style: normal; font-size: 12px; flex: none; }
+  .sec b { display: block; font: 600 12.5px/16px var(--font-display); } .sec small { color: var(--text-subtle); font-size: 10.5px; }
+  .scr--download { background: linear-gradient(160deg, #cc0229 10%, #7a0118); color: #fff; align-items: center; justify-content: center; text-align: center; gap: 12px; }
+  .splash__mark { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 22px; background: #fff; color: #cc0229; font: 700 54px/1 var(--font-display); padding-bottom: 8px; box-shadow: 0 14px 30px rgb(0 0 0 / .3); }
+  .splash__name { font: 700 28px/32px var(--font-display); letter-spacing: -.02em; }
+  .splash__3s { display: grid; gap: 2px; font: 600 15px/20px var(--font-display); opacity: .92; }
+  .splash__btn { position: absolute; left: 16px; right: 16px; bottom: 20px; padding: 13px; border-radius: 99px; background: #fff; color: #cc0229; font: 600 13px/16px var(--font-display); }
 </style>
