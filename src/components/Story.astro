@@ -142,7 +142,8 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   :global(.live .phone--main .scr) { position: absolute; left: 0; top: 0; }
   :global(.live .phone--main .scr--tx), :global(.live .phone--main .scr--bills), :global(.live .phone--main .scr--cards), :global(.live .phone--main .scr--groups), :global(.live .phone--main .scr--trust), :global(.live .phone--main .scr--download) { clip-path: inset(100% 0 0 0); }
 
-  :global(.live) .ega-wrap { position: absolute; left: clamp(8px, 3vw, 48px); bottom: 0; width: clamp(64px, 8vw, 112px); }
+  :global(.live) .ega-wrap { position: absolute; left: 45vw; bottom: 0; width: clamp(140px, 16.5vw, 250px); }
+  @media (min-width: 900px) and (max-width: 1099px) { :global(.live) .ega-wrap { left: auto; right: 1.5vw; width: 14vw; } }
   .lines i { position: absolute; height: 3px; background: var(--neutral-950); transform-origin: left; opacity: .85; }
   .lines i:nth-child(1) { left: 6%; top: 18%; width: 90px; } .lines i:nth-child(2) { left: 52%; top: 84%; width: 140px; }
   .lines i:nth-child(3) { right: 4%; top: 30%; width: 70px; background: var(--eganow-red); } .lines i:nth-child(4) { right: 22%; top: 90%; width: 110px; background: var(--eganow-red); }
@@ -157,7 +158,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
     :global(.live) .beat--hero { padding-top: 20px; }
     :global(.live) .beat .display-xl, :global(.live) .beat .display-lg { font-size: clamp(28px, 8vw, 38px); }
     :global(.live) .beat .body-lg { font-size: 16px; line-height: 24px; }
-    :global(.live) .ega-wrap { width: 54px; left: 3%; bottom: auto; top: 34%; }
+    :global(.live) .ega-wrap { width: 70px; left: 2px; right: auto; bottom: auto; top: 28%; }
     .plane--a { width: 100%; clip-path: polygon(0 28%, 100% 0, 100% 100%, 0 100%); } .plane--b { width: 100%; clip-path: polygon(0 36%, 100% 8%, 100% 100%, 0 100%); }
   }
   @media (max-width: 899px) and (max-height: 700px) { :global(.live) .beat .body-lg { display: none; } }
@@ -232,7 +233,8 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
         // Bridge: red world wipes into blue; phone exits; Ega's scarf turns blue
         tl.to('.wash', { xPercent: -110, duration: 1.1, ease: 'power3.inOut' }, 13.4)
           .to('.phone--main', { y: 160, rotateZ: -10, autoAlpha: 0, duration: 0.9 }, 13.4)
-          .to('.ega', { '--scarf': '#1f8fff', duration: 0.4 }, 14.0)
+          .to('.ega__img--personal', { autoAlpha: 0, duration: 0.5 }, 13.9)
+          .to('.ega__img--business', { opacity: 1, duration: 0.5 }, 13.9)
           .to('.plane, .lines', { autoAlpha: 0, duration: 0.4 }, 13.7);
         beatIn('.beat--biz', 14.1);
         tl.to({}, { duration: 0.6 }); // hold

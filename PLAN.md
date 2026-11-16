@@ -103,6 +103,8 @@ It's a stock mobile-app promo template. What to borrow (not copy): **bold diagon
 ### 5.2 The character
 A single friendly guide ("**Ega**", working name — confirm) who travels both worlds: red scarf/outfit accents in Personal, blue in Business. Rendered as a **Rive or Lottie 2D vector rig** (small, interactive, ~50–150 KB) — not video, not 3D — with 4–6 poses/loops (walk, point, hold phone, tap, celebrate, hand-over to merchant). Alternatives to evaluate in week 1: stylised 3D character baked to a sprite sequence (heavier) or a faceless flat-illustration style (cheapest, most consistent). **Decision needed** — see §13.
 
+**Decision (v2):** the guide is a **photographic studio cut-out of an African woman** (not a cartoon), generated with Magnific as a transparent WebP (24 KB at 420 px, 54 KB at 832 px). One photo, two scarf colours: red for Personal, blue (`#1f8fff`) for Business, crossfaded at the hand-over. She is decorative (`alt=""`); every chapter states its message in text. **Open items:** confirm AI-generated-likeness policy/usage rights with Eganow legal, consider a real photoshoot with additional poses (pointing, celebrating, handing over a POS), and decide whether a second person is wanted.
+
 ### 5.3 Scrollytelling mechanics
 - Pin the phone; scrub a timeline with scroll (GSAP ScrollTrigger, `scrub: 0.6`). Each chapter = one scroll "page" (≈100–150 vh).
 - Phone screens are **HTML/CSS screens inside a CSS frame** (crisp, tiny, accessible) or short **WebM/AV1+MP4 loops** for complex UI; swap with crossfade/clip-path.

@@ -1,20 +1,21 @@
 ---
-// Placeholder flat-vector "Ega" (final character to be commissioned, see PLAN.md 5.2).
+// "Ega": photographic guide (African woman, studio cut-out) who walks both worlds.
+// Personal = red scarf, Business = blue scarf. The two files are the same photo; the story crossfades them.
+// Generated with Magnific; confirm usage rights/likeness policy before launch (see PLAN.md 5.2).
+const sizes = '(max-width: 899px) 70px, 250px';
 ---
-<svg class="ega" viewBox="0 0 160 260" role="img" aria-label="Ega, the Eganow guide, holding a phone" xmlns="http://www.w3.org/2000/svg">
-  <ellipse cx="80" cy="252" rx="46" ry="6" fill="#0a0d14" opacity=".15"/>
-  <rect x="52" y="168" width="22" height="80" rx="11" fill="#1f2937"/><rect x="86" y="168" width="22" height="80" rx="11" fill="#111827"/>
-  <rect x="40" y="86" width="80" height="100" rx="30" fill="#f8f9fa" stroke="#0a0d14" stroke-width="3"/>
-  <g class="ega__arm"><rect x="104" y="96" width="14" height="62" rx="7" fill="#f8f9fa" stroke="#0a0d14" stroke-width="3" transform="rotate(-28 110 100)"/>
-    <rect x="124" y="58" width="22" height="38" rx="5" fill="#0a0d14" transform="rotate(14 135 77)"/><rect x="127" y="62" width="16" height="28" rx="3" fill="var(--scarf)" transform="rotate(14 135 77)"/></g>
-  <rect x="34" y="104" width="14" height="60" rx="7" fill="#f8f9fa" stroke="#0a0d14" stroke-width="3"/>
-  <circle cx="80" cy="54" r="34" fill="#8a5a3c"/><path d="M46 50c2-24 20-34 36-32 20 2 32 16 30 34-8-14-22-18-34-16-12 2-24 6-32 14z" fill="#0a0d14"/>
-  <circle cx="68" cy="58" r="3.4" fill="#0a0d14"/><circle cx="92" cy="58" r="3.4" fill="#0a0d14"/><path d="M70 70q10 8 20 0" fill="none" stroke="#0a0d14" stroke-width="3" stroke-linecap="round"/>
-  <path d="M46 92q34 22 68 0l4 20q-38 22-76 0z" fill="var(--scarf)"/>
-</svg>
+<div class="ega" aria-hidden="true">
+  <img class="ega__img ega__img--personal" src="/images/ega-personal-420.webp" srcset="/images/ega-personal-420.webp 420w, /images/ega-personal-832.webp 832w" sizes={sizes}
+    width="420" height="630" alt="" decoding="async" fetchpriority="low" />
+  <img class="ega__img ega__img--business" src="/images/ega-business-420.webp" srcset="/images/ega-business-420.webp 420w, /images/ega-business-832.webp 832w" sizes={sizes}
+    width="420" height="630" alt="" decoding="async" loading="lazy" />
+</div>
 <style>
-  .ega { --scarf: var(--eganow-red); width: 100%; height: auto; overflow: visible; }
-  :global(.live) .ega { animation: bob 3.2s var(--ease-inout) infinite; transform-origin: 50% 100%; }
-  @keyframes bob { 50% { transform: translateY(-8px) rotate(-1.2deg); } }
+  .ega { position: relative; width: 100%; aspect-ratio: 2 / 3; transform-origin: 50% 100%; }
+  .ega::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: -1.5%; height: 4%; border-radius: 50%; background: rgb(10 13 20 / .35); filter: blur(6px); z-index: -1; }
+  .ega__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 18px rgb(10 13 20 / .3)); }
+  .ega__img--business { opacity: 0; }
+  :global(.live) .ega { animation: breathe 4.2s var(--ease-inout) infinite; }
+  @keyframes breathe { 50% { transform: translateY(-4px) scale(1.01); } }
   @media (prefers-reduced-motion: reduce) { :global(.live) .ega { animation: none; } }
 </style>
