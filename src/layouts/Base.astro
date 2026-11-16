@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
+import poppins600 from '@fontsource/poppins/files/poppins-latin-600-normal.woff2?url';
 import poppins700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2?url';
 import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import inter500 from '@fontsource/inter/files/inter-latin-500-normal.woff2?url';
 import { ogSlugFor, OG_SIZE } from '../data/og-cards.mjs';
 interface Props { title: string; description: string; world?: 'personal' | 'business'; noindex?: boolean; }
 const { title, description, world = 'personal', noindex = false } = Astro.props;
@@ -22,8 +24,10 @@ const ogImage = new URL(`/og/${ogSlugFor(Astro.url.pathname)}.png`, Astro.site).
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content={world === 'business' ? '#1f8fff' : '#cc0229'} />
     {!noindex && <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />}
+    <link rel="preload" href={poppins600} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={poppins700} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
     <meta property="og:site_name" content="Eganow" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

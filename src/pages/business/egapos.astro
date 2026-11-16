@@ -240,7 +240,7 @@ const sales = [['10:42', 'Card', 'GHS 120.00', 'Paid'], ['10:38', 'Mobile money'
       if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
     });
-    sync();
+    requestAnimationFrame(sync); // not sync(): the 'ready' class above changed layout, and reading it now would force a reflow
 
     // Pointer parallax: gentle 3D tilt (mouse only, never with reduced motion)
     if (!reduce && matchMedia('(pointer: fine)').matches) {

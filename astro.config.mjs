@@ -6,7 +6,8 @@ const site = 'https://eganow.com';
 export default defineConfig({
   site,
   output: 'static',
-  build: { inlineStylesheets: 'auto' },
+  // Page CSS is only a few KB, so inline it all: no render-blocking stylesheet requests.
+  build: { inlineStylesheets: 'always' },
   prefetch: { prefetchAll: false },
   integrations: [launchFiles({ site })],
 });
