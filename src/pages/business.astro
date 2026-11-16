@@ -50,6 +50,10 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
     <!-- SERVICE STORY -->
     <section class="biz" data-biz aria-label="Eganow Business services">
       <div class="stage">
+        <div class="bg" aria-hidden="true">
+          <div class="plane plane--b"></div><div class="plane plane--a"></div>
+          <div class="lines"><i></i><i></i><i></i><i></i></div>
+        </div>
         {services.map((s, i) => (
           <article class="panel" id={s.id} data-theme={s.theme} aria-labelledby={`${s.id}-t`}>
             <div class="copy">
@@ -143,23 +147,48 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
   .panel[data-theme="blue"] .vis::before { background: rgb(255 255 255 / .22); }
   .vis { isolation: isolate; }
   @media (min-width: 900px) { .panel { grid-template-columns: 1fr 1fr; } }
+  .bg { display: none; }
 
   /* LIVE: pinned stage with wiping panels */
   :global(.live) .biz { height: 640vh; }
   :global(.live) .stage { position: sticky; top: var(--header-h); height: calc(100svh - var(--header-h)); overflow: hidden; --sh: calc(100svh - var(--header-h)); }
   :global(.live) .panel { position: absolute; inset: 0; padding: 0 clamp(72px, 9vw, 130px) 0 clamp(16px, 5vw, 80px); }
-  :global(.live) .panel:not(:first-of-type) { clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); }
-  :global(.live) .vis { width: min(100%, 560px, calc(var(--sh) * .82)); }
+  :global(.live) .vis { width: min(100%, 480px, calc(var(--sh) * .78)); }
+  /* The blue world is one full-stage shape the timeline morphs and flips left/right for every service; copy sits on the white, the visual on the blue */
+  :global(.live) .stage { background: var(--surface); }
+  :global(.live) .bg { display: block; position: absolute; inset: 0; pointer-events: none; }
+  .plane { position: absolute; inset: 0; background: var(--eganow-blue); }
+  .plane--a { clip-path: polygon(58% 0%, 100% 0%, 100% 100%, 46% 100%); }
+  .plane--b { background: #9fd0ff; opacity: .6; clip-path: polygon(52% 0%, 100% 0%, 100% 100%, 38% 100%); }
+  .lines { position: absolute; inset: 0; }
+  .lines i { position: absolute; height: 3px; background: var(--neutral-950); transform-origin: left; opacity: .85; }
+  .lines i:nth-child(1) { left: 6%; top: 17%; width: 90px; } .lines i:nth-child(2) { left: 46%; top: 88%; width: 140px; }
+  .lines i:nth-child(3) { right: 4%; top: 28%; width: 70px; background: var(--eganow-blue); } .lines i:nth-child(4) { right: 20%; top: 92%; width: 110px; background: var(--eganow-blue); }
+  /* every panel uses the same light look in the live story (white copy side, blue shape behind the visual) */
+  :global(.live) .panel[data-theme] { background: transparent; color: var(--text); }
+  :global(.live) .panel[data-theme] .display-lg { color: var(--text); }
+  :global(.live) .panel[data-theme] .overline { color: var(--neutral-700); }
+  :global(.live) .panel[data-theme] .overline::before { background: var(--eganow-blue); }
+  :global(.live) .panel[data-theme] .body-lg { color: var(--text-muted); }
+  :global(.live) .panel .vis::before { display: none; }
+  @media (min-width: 900px) {
+    /* odd services: visual on the left (blue), copy on the right (white) */
+    :global(.live) .panel:nth-of-type(even) .vis { order: -1; }
+    :global(.live) .panel:nth-of-type(even) .copy { justify-self: end; }
+  }
   :global(.live) .rail { display: block; position: absolute; right: clamp(8px, 2vw, 28px); top: 50%; translate: 0 -50%; z-index: 5; }
   .rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   .rail a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; text-decoration: none; font: 600 12px/16px var(--font-display); color: var(--neutral-500); padding: 6px 4px; mix-blend-mode: normal; }
   .rail a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .rail a b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px solid currentColor; font-size: 11px; background: var(--surface); transition: background-color .25s, color .25s, border-color .25s; }
   .rail a.on b { background: var(--eganow-blue); border-color: var(--eganow-blue); color: var(--neutral-950); }
-  .rail a:hover span, .rail a:focus-visible span, .rail a.on span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+  .rail a:hover span, .rail a:focus-visible span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
   .rail a span { color: var(--neutral-900); background: var(--surface); padding: 3px 8px; border-radius: 6px; }
   @media (max-width: 899px) {
     :global(.live) .panel { padding: 0 clamp(16px, 5vw, 32px); grid-template-columns: 1fr; grid-template-rows: 44% 1fr; gap: 0; align-items: start; }
     :global(.live) .panel .vis { order: -1; align-self: center; width: min(100%, 340px, calc(var(--sh) * .4)); }
+    :global(.live) .lines { display: none; }
+    :global(.live) .plane--a { clip-path: polygon(0% 0%, 100% 0%, 100% 32%, 0% 40%); }
+    :global(.live) .plane--b { clip-path: polygon(0% 0%, 100% 0%, 100% 36%, 0% 44%); }
     :global(.live) .panel .copy { gap: 10px; padding-top: 8px; align-self: start; }
     :global(.live) .panel .display-lg { font-size: clamp(26px, 7.4vw, 34px); }
     :global(.live) .panel .body-lg { font-size: 15px; line-height: 22px; }
@@ -206,7 +235,26 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
         const panels = Array.from(el.querySelectorAll<HTMLElement>('.panel'));
         const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('.rail a'));
         const N = panels.length;
-        const FULL = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+        const P = (...pts: number[][]) => 'polygon(' + pts.map(([x, y]) => `${x}% ${y}%`).join(',') + ')';
+        // Blue shape per service: desktop alternates side (right/left) and slant; phones keep the visual on top and flip the slant
+        const wide = [
+          { a: P([58, 0], [100, 0], [100, 100], [46, 100]), b: P([52, 0], [100, 0], [100, 100], [38, 100]) },
+          { a: P([0, 0], [44, 0], [50, 100], [0, 100]), b: P([0, 0], [48, 0], [54, 100], [0, 100]) },
+          { a: P([46, 0], [100, 0], [100, 100], [58, 100]), b: P([40, 0], [100, 0], [100, 100], [52, 100]) },
+          { a: P([0, 0], [50, 0], [44, 100], [0, 100]), b: P([0, 0], [54, 0], [48, 100], [0, 100]) },
+          { a: P([52, 0], [100, 0], [100, 100], [52, 100]), b: P([46, 0], [100, 0], [100, 100], [46, 100]) },
+          { a: P([0, 0], [46, 0], [46, 100], [0, 100]), b: P([0, 0], [52, 0], [52, 100], [0, 100]) },
+        ];
+        const tall = [
+          { a: P([0, 0], [100, 0], [100, 32], [0, 40]), b: P([0, 0], [100, 0], [100, 36], [0, 44]) },
+          { a: P([0, 0], [100, 0], [100, 40], [0, 30]), b: P([0, 0], [100, 0], [100, 44], [0, 34]) },
+          { a: P([0, 0], [100, 0], [100, 28], [0, 40]), b: P([0, 0], [100, 0], [100, 32], [0, 44]) },
+          { a: P([0, 0], [100, 0], [100, 40], [0, 32]), b: P([0, 0], [100, 0], [100, 44], [0, 36]) },
+          { a: P([0, 0], [100, 0], [100, 36], [0, 36]), b: P([0, 0], [100, 0], [100, 40], [0, 40]) },
+          { a: P([0, 0], [100, 0], [100, 32], [0, 40]), b: P([0, 0], [100, 0], [100, 36], [0, 44]) },
+        ];
+        const narrow = window.matchMedia('(max-width: 899px)');
+        const shape = (k: number) => (narrow.matches ? tall : wide)[k];
         const seen = new Set<number>();
         const setActive = (i: number) => {
           if (!seen.has(i)) { seen.add(i); if (i > 0) track('service_panel_viewed', { service: panels[i].id }); } // panel 0 is simply the page view
@@ -216,19 +264,34 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
         setActive(0);
 
         const tl = gsap.timeline({ defaults: { ease: 'power2.out' }, paused: true });
+        gsap.set(panels.slice(1), { autoAlpha: 0 });
         panels.forEach((p, i) => {
           const items = p.querySelectorAll('[data-in]');
           const vis = p.querySelector('.vis');
+          // dir: which way this panel's visual enters from (it sits on the blue side: right for even panels, left for odd)
+          const dir = i % 2 ? -1 : 1;
           if (i > 0) {
-            tl.to(p, { clipPath: FULL, duration: 0.55, ease: 'power2.inOut' }, i - 0.3);
-            tl.fromTo(items, { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.4, stagger: 0.05 }, i - 0.05);
-            tl.fromTo(vis, { scale: 0.9, rotate: -3, autoAlpha: 0 }, { scale: 1, rotate: 0, autoAlpha: 1, duration: 0.6 }, i - 0.15);
+            // Resting "before" state, set on the timeline itself so it survives a resize refresh
+            tl.set(items, { x: -dir * 50, autoAlpha: 0 }, 0).set(vis, { x: dir * 90, scale: 0.92, rotate: dir * 4, autoAlpha: 0 }, 0);
+            // The blue shape morphs to the new service's layout, the old content leaves, the new copy and visual arrive on their own sides
+            tl.to('.plane--a', { clipPath: () => shape(i).a, duration: 0.7, ease: 'power3.inOut' }, i - 0.4)
+              .to('.plane--b', { clipPath: () => shape(i).b, duration: 0.8, ease: 'power3.inOut' }, i - 0.35)
+              .to('.lines', { scaleX: i % 2 ? -1 : 1, duration: 0.7, ease: 'power3.inOut' }, i - 0.4)
+              .fromTo('.lines i', { scaleX: 0.2 }, { scaleX: 1.6, duration: 0.6, stagger: 0.06, ease: 'power2.out' }, i - 0.4)
+              .set(p, { autoAlpha: 1 }, i - 0.3)
+              .to(items, { x: 0, autoAlpha: 1, duration: 0.4, stagger: 0.05 }, i - 0.1)
+              .to(vis, { x: 0, scale: 1, rotate: 0, autoAlpha: 1, duration: 0.6 }, i - 0.2);
+          }
+          if (i < N - 1) {
+            tl.to(items, { x: -dir * 50, autoAlpha: 0, duration: 0.3, stagger: 0.03, ease: 'power2.in' }, i + 1 - 0.55)
+              .to(vis, { x: dir * 90, autoAlpha: 0, duration: 0.35, ease: 'power2.in' }, i + 1 - 0.55)
+              .set(p, { autoAlpha: 0 }, i + 1 - 0.2);
           }
         });
         tl.to({}, { duration: 0.75 }, N - 0.75); // hold so the timeline is exactly N long
 
         const st = ScrollTrigger.create({
-          trigger: el, start: 'top top+=64', end: 'bottom bottom', animation: tl, scrub: 0.6,
+          trigger: el, start: 'top top+=64', end: 'bottom bottom', animation: tl, scrub: 0.6, invalidateOnRefresh: true,
           onUpdate: (self) => setActive(Math.min(N - 1, Math.max(0, Math.floor(self.progress * N + 0.3)))),
         });
 
