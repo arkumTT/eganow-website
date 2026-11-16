@@ -1,0 +1,292 @@
+---
+import QRCode from 'qrcode';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BizVisuals from '../../components/BizVisuals.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import Phone from '../../components/Phone.astro';
+import CardFace from '../../components/CardFace.astro';
+
+// NOTE (content): drafted from the product brief. Egahub = a mobile app version of the merchant portal, with all the
+// portal's features (BizCollect, EgaPOS, Card Issuing, Agency Banking, Bulk Messaging) for merchants on mobile.
+// Everything marked TODO(verify) must be confirmed against the live product: platforms and store links, which portal
+// features are in the app today, sign-in method, notifications, shared login with the portal, pricing.
+
+// TODO: real store URLs and an OS-aware smart link (App Store on iOS, Play on Android).
+const APP_STORE_URL = '#';
+const PLAY_STORE_URL = '#';
+const SMART_LINK = 'https://eganow.com/egahub'; // TODO(verify)
+const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#0a0d14', light: '#ffffff' } });
+
+const s3 = [
+  ['Simple', 'The whole portal, shaped for your phone. Everything is a tap away.'],
+  ['Speed', 'Check a payment, send a payout or message a customer in moments.'],
+  ['Secure', 'Your business account, protected on your phone.'], // TODO(verify): PIN/biometrics
+];
+
+const modules = [
+  { id: 'collect', label: 'Collect', title: 'Get paid anywhere.', body: 'Request a payment, share a Payment Link and see what came in, all from your phone.', points: ['Create and share a Payment Link', 'See payments as they arrive', 'Follow every transaction'], link: ['Learn about BizCollect', '/business/bizcollect'] },
+  { id: 'payouts', label: 'Payouts', title: 'Pay out in a few taps.', body: 'Send money to suppliers, staff or customers without going back to your desk.', points: ['Pay one person or many at once', 'Check the total before you send', 'Keep a record of every payout'], link: ['Learn about BizCollect', '/business/bizcollect'] },
+  { id: 'pos', label: 'POS', title: 'Watch every terminal.', body: 'See which EgaPOS devices are online and what each one has sold today.', points: ['Every device and branch in one list', 'Sales by terminal, live', 'Spot an offline device quickly'], link: ['Learn about EgaPOS', '/business/egapos'] },
+  { id: 'cards', label: 'Cards', title: 'Control your cards.', body: 'Issue, freeze and manage your Mastercard cards from wherever you are.', points: ['Freeze or unfreeze in one tap', 'Check limits and spending', 'Issue virtual cards on the go'], link: ['Learn about Card Issuing', '/business/card-issuing'] }, // TODO(verify)
+  { id: 'agency', label: 'Agency', title: 'Serve customers as an agent.', body: 'Take cash in and pay cash out right from your phone.', points: ['Cash in to a wallet or account', 'Cash out with a quick confirmation', 'See your day’s totals'], link: ['Learn about Agency Banking', '/business/agency-banking'] }, // TODO(verify)
+  { id: 'messages', label: 'Messages', title: 'Message your customers.', body: 'Send bulk SMS and email without opening your laptop.', points: ['Write once, send to a whole list', 'Pick SMS, email or both', 'Check delivery afterwards'], link: ['Learn about Bulk Messaging', '/business/bulk-messaging'] }, // TODO(verify)
+] as const;
+
+const why = [
+  ['One account', 'Sign in to Egahub with the same business account you use on the portal.'], // TODO(verify)
+  ['Know when you’re paid', 'Get notified the moment a payment arrives.'], // TODO(verify): push notifications
+  ['Quick, safe sign-in', 'Open the app with a PIN or your fingerprint.'], // TODO(verify)
+  ['Built for the shop floor', 'Big buttons and clear screens, made for use on the move.'],
+  ['Nothing left behind', 'Collections, payouts, POS, cards, agency and messaging, all in one app.'], // TODO(verify): feature parity
+  ['Help when you need it', 'Our team is here if you get stuck.'], // TODO(verify)
+];
+
+const steps = [
+  ['Open a business account', 'Register your business and get verified.'],
+  ['Download Egahub', 'Get the app for your phone from the App Store or Google Play.'], // TODO(verify): platforms
+  ['Sign in', 'Use your business account to log in.'],
+  ['Start running your business', 'Collect, pay out and manage everything from your pocket.'],
+];
+
+const faqs = [
+  ['What is Egahub?', 'Egahub is the Eganow Business app. It puts the merchant portal on your phone, so you can run your business from anywhere.'],
+  ['Which services can I use in the app?', 'Collections and payouts, POS management, card issuing, agency banking and bulk messaging. The app brings the portal’s features to your phone.'], // TODO(verify): exact feature set
+  ['Do I need a separate account?', 'No. Use the same business account you use on the Eganow portal.'], // TODO(verify)
+  ['Is it on iPhone and Android?', 'Egahub is available on the App Store and Google Play.'], // TODO(verify)
+  ['Is it safe to run my business from my phone?', 'Your business account is protected, and every transaction is recorded. Keep your phone secure and never share your PIN.'], // TODO(verify)
+  ['Does Egahub cost anything?', 'Talk to our team about pricing for your business.'], // TODO(verify)
+];
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'Egahub', item: 'https://eganow.com/business/egahub' },
+] };
+const bars = [34, 52, 41, 66, 58, 82, 71, 90, 63, 77];
+---
+<Base world="business" title="Egahub — Your business, in your pocket | Eganow Business" description="Egahub is the Eganow Business app. Collect, pay out, manage POS terminals, issue cards, serve customers as an agent and send bulk messages, all from your phone.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="Egahub" overline="Egahub" title="Your business, in your pocket." titleId="eh-title"
+      body="The Eganow Business app. Collect, pay out and manage everything from your phone."
+      primary={['Get the app', '#download']} s3={s3}>
+      <BizVisuals name="hub" />
+    </ServiceHero>
+
+    <!-- SHOWCASE -->
+    <section class="show" aria-labelledby="show-t">
+      <div class="wrap">
+        <p class="overline">Inside the app</p>
+        <h2 id="show-t" class="display-lg">The whole portal. In your hand.</h2>
+        <p class="body-lg lead">Everything you do on the Eganow portal, shaped for your phone. Tap through to see it.</p>
+
+        <div class="tabs" data-tabs>
+          <div class="tablist" role="tablist" aria-label="Egahub features">
+            {modules.map((m, i) => (
+              <button type="button" role="tab" id={`tab-${m.id}`} aria-controls={`panel-${m.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{m.label}</button>
+            ))}
+          </div>
+
+          {modules.map((m) => (
+            <div class="tabpanel" role="tabpanel" id={`panel-${m.id}`} aria-labelledby={`tab-${m.id}`} tabindex="0">
+              <div class="tp__copy">
+                <h3 class="heading-2">{m.title}</h3>
+                <p class="body-lg">{m.body}</p>
+                <ul class="pts">{m.points.map((p) => <li>{p}</li>)}</ul>
+                <a class="more" href={m.link[1]}>{m.link[0]} <span aria-hidden="true">→</span></a>
+              </div>
+              <div class="tp__vis" aria-hidden="true">
+                <Phone class="appphone">
+                  <div class="ap">
+                    {m.id === 'collect' && (<>
+                      <p class="ap__t">Collect</p>
+                      <div class="f"><small>Amount</small><b class="big">GHS 250.00</b></div>
+                      <ul class="chips"><li class="on">Mobile money</li><li>Card</li><li>Bank</li></ul>
+                      <div class="ok"><i>✓</i>Payment received · Kofi M.</div>
+                      <div class="btn">Share payment link</div>
+                    </>)}
+                    {m.id === 'payouts' && (<>
+                      <p class="ap__t">Payouts</p>
+                      <ul class="rows"><li><span class="av">A</span>Ama A.<b>GHS 1,200.00</b></li><li><span class="av">K</span>Kofi M.<b>GHS 800.00</b></li><li><span class="av">E</span>Efua T.<b>GHS 450.00</b></li></ul>
+                      <div class="tot"><span>Total</span><b>GHS 2,450.00</b></div>
+                      <div class="btn">Send payouts</div>
+                    </>)}
+                    {m.id === 'pos' && (<>
+                      <p class="ap__t">Terminals</p>
+                      <ul class="rows rows--t"><li><span><b>Accra Mall · Till 1</b><em class="on">● Online</em></span><b>GHS 3,420</b></li><li><span><b>Kumasi · Till 2</b><em class="on">● Online</em></span><b>GHS 1,780</b></li><li><span><b>Tema · Till 1</b><em class="off">○ Offline</em></span><b>GHS 0</b></li></ul>
+                      <div class="f"><small>Sales today</small><b class="big">GHS 5,200.00</b></div>
+                    </>)}
+                    {m.id === 'cards' && (<>
+                      <p class="ap__t">Cards</p>
+                      <div class="cardwrap"><CardFace variant="blue" type="Virtual" label="Marketing" last4="4821" /></div>
+                      <div class="sw"><span><b>Freeze card</b><small>Pause spending</small></span><i class="tg"></i></div>
+                      <div class="f"><small>Monthly limit</small><b>GHS 5,000</b></div>
+                    </>)}
+                    {m.id === 'agency' && (<>
+                      <p class="ap__t">Agent</p>
+                      <div class="seg"><span class="on">Cash in</span><span>Cash out</span></div>
+                      <div class="f"><small>Wallet or account</small><b>024 000 0000</b></div>
+                      <div class="f"><small>Amount</small><b class="big">GHS 300.00</b></div>
+                      <div class="btn">Confirm cash in</div>
+                    </>)}
+                    {m.id === 'messages' && (<>
+                      <p class="ap__t">New message</p>
+                      <div class="seg"><span class="on">SMS</span><span>Email</span></div>
+                      <div class="f"><small>To</small><b>All customers · 1,240</b></div>
+                      <div class="f"><small>Message</small><b class="msg">Hi Ama, your order is ready for pickup.</b></div>
+                      <div class="btn">Send to 1,240</div>
+                    </>)}
+                  </div>
+                </Phone>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ONE ACCOUNT (dark) -->
+    <section class="duo" aria-labelledby="duo-t">
+      <div class="wrap duo__in">
+        <div class="duo__copy">
+          <p class="overline">Portal and app</p>
+          <h2 id="duo-t" class="display-lg">One account. Every screen.</h2>
+          <p class="body-lg">Start on your laptop and carry on from your phone. Your balance, payments and settings are the same everywhere.</p>
+          <ul class="pts">
+            <li>Use the portal at your desk</li>
+            <li>Use Egahub when you’re out and about</li>
+            <li>See the same information on both</li>
+          </ul>
+        </div>
+
+        <div class="devices" aria-hidden="true">
+          <div class="laptop">
+            <div class="laptop__scr">
+              <div class="lp__bar"><i></i><i></i><i></i></div>
+              <div class="lp__body">
+                <div class="lp__side"><b></b><b></b><b></b><b></b></div>
+                <div class="lp__main"><p class="t">Collected this month</p><p class="amt">GHS 48,200</p><div class="lp__bars">{bars.map((h, i) => <i style={`--h:${h}%;--d:${i * 0.1}s`}></i>)}</div></div>
+              </div>
+            </div>
+            <div class="laptop__base"></div>
+          </div>
+          <div class="duo__phone">
+            <Phone class="duophone"><div class="dp"><p class="ap__t">Egahub</p><p class="t">Collected this month</p><p class="dp__amt">GHS 48,200</p><div class="dp__bars">{bars.slice(0, 7).map((h, i) => <i style={`--h:${h}%;--d:${i * 0.1}s`}></i>)}</div></div></Phone>
+          </div>
+        </div>
+        <p class="sr-only">A laptop showing the Eganow portal and a phone showing the Egahub app, both displaying the same collected amount for the month.</p>
+      </div>
+    </section>
+
+    <CardGrid overline="Why Egahub" title="Run your business from anywhere." id="why-t" items={why} />
+    <Steps overline="Get started" title="From sign-up to your pocket." id="how-t" steps={steps} />
+
+    <!-- DOWNLOAD -->
+    <section class="dl" id="download" aria-labelledby="dl-t">
+      <div class="wrap dl__in">
+        <div class="dl__copy">
+          <p class="overline">Get Egahub</p>
+          <h2 id="dl-t" class="display-lg">Download the app.</h2>
+          <p class="body-lg">Get Egahub for iPhone or Android and take your business with you.</p>
+          <div class="cta">
+            <!-- TODO: replace with official store badges and real URLs -->
+            <a class="btn btn--dark" href={APP_STORE_URL} rel="noopener">App Store</a>
+            <a class="btn btn--dark" href={PLAY_STORE_URL} rel="noopener">Google Play</a>
+          </div>
+          <figure class="qr">
+            <div class="qr__code" set:html={qr} role="img" aria-label="QR code to download Egahub"></div>
+            <figcaption>Scan with your phone camera</figcaption>
+          </figure>
+          <p class="note">Don’t have a business account yet? <a href="/contact?topic=business">Open one here</a>.</p>
+        </div>
+        <div class="dl__vis" aria-hidden="true"><div class="vis"><BizVisuals name="hub" /></div></div>
+      </div>
+    </section>
+
+    <Faq items={faqs} />
+    <FinalCta title="Take your business with you." body="Open an account in minutes, then get the app." />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.show, section.duo, section.dl { padding: var(--space-24) 0; }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+
+  /* TABS */
+  .tabs { margin-top: var(--space-8); }
+  .tablist { display: none; gap: 6px; padding: 5px; background: var(--neutral-200); border-radius: var(--radius-full); width: max-content; max-width: 100%; }
+  .tablist button { font: 600 14px/1 var(--font-display); padding: 12px 18px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--text-muted); cursor: pointer; white-space: nowrap; min-height: 44px; }
+  .tablist button[aria-selected="true"] { background: var(--eganow-blue); color: var(--neutral-950); }
+  .tabs.ready .tablist { display: flex; }
+  .tabpanel { display: grid; gap: var(--space-8); align-items: center; padding: var(--space-8) 0; }
+  .tabs.ready .tabpanel { margin-top: var(--space-6); padding: var(--space-8); background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  .tabs.ready .tabpanel[hidden] { display: none; }
+  .tp__copy { display: grid; gap: var(--space-4); justify-items: start; }
+  .tp__vis { display: grid; place-items: center; min-height: 420px; padding: var(--space-6); border-radius: var(--radius-md); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); }
+  .tp__vis :global(.appphone) { --pw: 230px; }
+  @media (min-width: 900px) { .tabpanel { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 639px) { .tabs.ready .tablist { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; border-radius: var(--radius-md); } .tablist button { border-radius: 12px; padding: 12px 6px; } .tabs.ready .tabpanel { padding: var(--space-6) var(--space-4); } }
+
+  /* in-phone screens (laid out for the fixed 230px phone) */
+  .ap { position: absolute; inset: 0; padding: 38px 13px 13px; display: flex; flex-direction: column; gap: 9px; font: 400 11px/15px var(--font-sans); color: var(--text); }
+  .ap p, .ap ul { margin: 0; } .ap ul { padding: 0; list-style: none; } .ap__t { font: 600 15px/20px var(--font-display); }
+  .f { display: grid; gap: 1px; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 10px; } .f small { color: var(--text-subtle); font-size: 10px; } .f b { font: 600 12.5px/16px var(--font-display); } .f b.big { font-size: 17px; line-height: 22px; } .f b.msg { font: 400 12px/16px var(--font-sans); }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; } .chips li { padding: 5px 9px; border-radius: 99px; background: var(--neutral-100); font: 500 10.5px/14px var(--font-display); } .chips li.on { background: var(--eganow-blue); color: var(--neutral-950); }
+  .ok { display: flex; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 10px; background: #d7f2e6; color: #0b5b40; font: 600 10.5px/14px var(--font-display); } .ok i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: #12805c; color: #fff; font-style: normal; font-size: 10px; flex: none; }
+  .ap .btn { margin-top: auto; text-align: center; padding: 11px; border-radius: 99px; background: var(--eganow-blue); color: var(--neutral-950); font: 600 12px/16px var(--font-display); }
+  .rows { display: grid; gap: 8px; } .rows li { display: flex; align-items: center; gap: 8px; font: 500 11.5px/16px var(--font-display); } .rows li > b { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .av { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--neutral-800); color: #fff; font: 600 11px/1 var(--font-display); flex: none; }
+  .tot { display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--border); font: 600 12.5px/16px var(--font-display); }
+  .rows--t li { padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; } .rows--t li > span { display: grid; gap: 2px; } .rows--t em { font: 600 10.5px/14px var(--font-display); font-style: normal; } .rows--t .on { color: #0b5b40; } .rows--t .off { color: #7a3b00; }
+  .cardwrap { width: 100%; } .sw { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; } .sw span { display: grid; } .sw b { font: 600 12px/16px var(--font-display); } .sw small { color: var(--text-muted); font-size: 10px; }
+  .tg { position: relative; width: 34px; height: 20px; border-radius: 99px; background: #12805c; } .tg::after { content: ""; position: absolute; top: 3px; left: 17px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+  .seg { display: flex; padding: 3px; background: var(--neutral-100); border-radius: 99px; } .seg span { flex: 1; text-align: center; padding: 6px; border-radius: 99px; font: 500 11px/14px var(--font-display); } .seg .on { background: var(--eganow-blue); color: var(--neutral-950); font-weight: 600; }
+
+  /* ONE ACCOUNT (dark) */
+  .duo { background: var(--neutral-950); color: #fff; }
+  .duo .overline { color: var(--neutral-300); } .duo .body-lg { color: var(--neutral-300); } .duo .pts li { color: var(--neutral-200); }
+  .duo__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+  .duo__copy { display: grid; gap: var(--space-4); justify-items: start; } .duo__copy .display-lg { margin-top: 0; }
+  .devices { position: relative; container-type: inline-size; width: 100%; aspect-ratio: 1.45; }
+  .laptop { position: absolute; left: 0; top: 4%; width: 88%; }
+  .laptop__scr { background: #fff; color: var(--text); border: 1.2cqw solid #2b3340; border-bottom-width: 1.6cqw; border-radius: 2.4cqw 2.4cqw 0 0; aspect-ratio: 1.6; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+  .lp__bar { display: flex; gap: 1cqw; padding: 1.4cqw 2cqw; background: var(--neutral-100); } .lp__bar i { width: 1.4cqw; height: 1.4cqw; border-radius: 50%; background: var(--neutral-300); }
+  .lp__body { display: grid; grid-template-columns: 15% 1fr; } .lp__side { background: var(--neutral-50); border-right: 1px solid var(--border); padding: 2cqw 1.4cqw; display: grid; gap: 1.4cqw; align-content: start; } .lp__side b { height: 1.6cqw; border-radius: 1cqw; background: var(--neutral-200); } .lp__side b:first-child { background: var(--eganow-blue); }
+  .lp__main { padding: 2.4cqw 3cqw; display: grid; align-content: start; gap: .6cqw; } .lp__main .t { font-size: 1.7cqw; } .lp__main .amt { font: 600 4.6cqw/1.1 var(--font-display); margin: 0; font-variant-numeric: tabular-nums; }
+  .lp__bars { display: flex; align-items: flex-end; gap: 1cqw; height: 11cqw; margin-top: 1.4cqw; } .lp__bars i { flex: 1; height: var(--h); background: var(--eganow-blue); border-radius: .6cqw; transform-origin: bottom; animation: gr 4s var(--ease-out) var(--d) infinite; }
+  .laptop__base { height: 1.8cqw; background: linear-gradient(#cfd4da, #9aa1ab); border-radius: 0 0 3cqw 3cqw; margin: 0 -3%; }
+  .duo__phone { position: absolute; right: 2%; bottom: 0; --pw: 26cqw; }
+  .duo__phone :global(.duophone) { transform: rotate(4deg); }
+  .dp { position: absolute; inset: 0; padding: 18% 7% 7%; font: 400 1.9cqw/1.3 var(--font-sans); color: var(--text); display: grid; align-content: start; gap: 1cqw; } .dp .ap__t { font: 600 2.8cqw/1.2 var(--font-display); } .dp .t { font-size: 1.5cqw; } .dp__amt { font: 600 3.4cqw/1.1 var(--font-display); margin: 0; font-variant-numeric: tabular-nums; }
+  .dp__bars { display: flex; align-items: flex-end; gap: .9cqw; height: 9cqw; margin-top: 1cqw; } .dp__bars i { flex: 1; height: var(--h); background: var(--eganow-blue); border-radius: .5cqw; transform-origin: bottom; animation: gr 4s var(--ease-out) var(--d) infinite; }
+  @keyframes gr { 0% { transform: scaleY(.2); } 35%, 85% { transform: scaleY(1); } 100% { transform: scaleY(.2); } }
+  @media (min-width: 900px) { .duo__in { grid-template-columns: 1fr 1.2fr; } }
+
+  /* DOWNLOAD */
+  .dl__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+  .dl__copy { display: grid; gap: var(--space-4); justify-items: start; } .dl__copy .display-lg { margin-top: 0; } .dl__copy .cta { margin-top: var(--space-2); }
+  .qr { margin: 0; display: flex; align-items: center; gap: var(--space-3); padding: 10px 14px 10px 10px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .qr__code { width: 96px; height: 96px; } .qr__code :global(svg) { width: 100%; height: 100%; } .qr figcaption { max-width: 110px; font: 500 13px/18px var(--font-display); color: var(--text-muted); }
+  @media (max-width: 899px), (pointer: coarse) { .qr { display: none; } }
+  .note { margin: 0; font-size: 14px; color: var(--text-muted); } .note a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .dl__vis { position: relative; display: grid; place-items: center; padding: var(--space-8) var(--space-4); border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); overflow: hidden; }
+  .vis { position: relative; width: min(100%, 460px); aspect-ratio: 1; container-type: inline-size; }
+  @media (min-width: 900px) { .dl__in { grid-template-columns: 1fr 1fr; } }
+
+  @media (prefers-reduced-motion: reduce) { .lp__bars i, .dp__bars i { animation: none; } }
+</style>
+
+<script>
+  import '../../scripts/tabs';
+</script>
