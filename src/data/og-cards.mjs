@@ -6,7 +6,7 @@ export const OG_SIZE = { width: 1200, height: 630 };
 
 export const OG_CARDS = [
   { slug: 'default',        path: null,                         world: 'personal', label: 'Eganow',            headline: 'Simple. Speed. Secure.',          sub: 'Send, pay, collect and spend money.' },
-  { slug: 'home',           path: '/',                          world: 'personal', label: 'The Eganow app',    headline: 'Money that moves with you.',      sub: 'Send, pay and spend in a few taps.' },
+  { slug: 'home',           path: '/',                          world: 'personal', label: 'The Eganow app',    headline: 'Move money the way you move.',     sub: 'Send, pay and spend in a few taps.' },
   { slug: 'business',       path: '/business',                  world: 'business', label: 'Eganow Business',   headline: 'Business, made simple.',          sub: 'Collect. Pay out. Issue cards. Accept at the counter.' },
   { slug: 'bizcollect',     path: '/business/bizcollect',       world: 'business', label: 'BizCollect',        headline: 'Get paid in seconds.',            sub: 'API, Hosted Checkout, Payment Links and USSD.' },
   { slug: 'egapos',         path: '/business/egapos',           world: 'business', label: 'EgaPOS',            headline: 'Tap. Paid.',                      sub: 'POS devices and one platform to manage them.' },

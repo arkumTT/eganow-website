@@ -51,7 +51,7 @@ Primary goals: (1) app installs (Personal), (2) merchant sign-ups / sales leads 
 
 ### 3.1 Personal landing `/` — "A day in the life" scrollytelling
 
-**Hero.** Headline (display-xl): *"Money that moves with you."* Sub: *Send, pay, spend and save. Simple, fast, secure.* Buttons: **App Store**, **Google Play**, and a secondary pill **"For business →"** (blue). The **character** (see §5) stands between two worlds: a red-lit phone world on the left, a blue-lit storefront/dashboard world on the right. Scrolling begins the story.
+**Hero.** Headline (display-xl): *"Move money the way you move."* Sub: *Send, pay, spend and save. Simple, fast, secure.* Buttons: **App Store**, **Google Play**, and a secondary pill **"For business →"** (blue). The **character** (see §5) stands between two worlds: a red-lit phone world on the left, a blue-lit storefront/dashboard world on the right. Scrolling begins the story.
 
 **Story chapters** (pinned phone, screens swap on scroll; the character walks through each):
 
