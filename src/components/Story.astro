@@ -130,10 +130,18 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   :global(.live) .stage { position: sticky; top: var(--header-h); height: calc(100svh - var(--header-h)); overflow: hidden;
     --pw: min(300px, calc((100svh - var(--header-h)) * .74 / 2.07)); }
   :global(.live) .lines, :global(.live) .wash, :global(.live) .phone-wrap { display: block; }
+  /* The red world is one full-stage shape per layer; the timeline morphs its outline and flips it left/right per chapter */
+  :global(.live) .plane--a { width: 100%; clip-path: polygon(59% 0%, 100% 0%, 100% 100%, 38% 100%); }
+  :global(.live) .plane--b { width: 100%; clip-path: polygon(52% 0%, 100% 0%, 100% 100%, 30% 100%); }
+  :global(.live) .lines { position: absolute; inset: 0; }
   :global(.live) .beats { position: absolute; inset: 0; display: block; padding: 0; max-width: none; }
   :global(.live) .beat { position: absolute; left: clamp(16px, 5vw, 80px); top: 50%; translate: 0 -50%; width: min(520px, 46vw); max-width: none; opacity: 0; visibility: hidden; }
   :global(.live) .beat--hero { opacity: 1; visibility: visible; padding: 0; }
   :global(.live) .beat :global(.phone--mini) { display: none; }
+  /* Chapters where the red (and phone) sit on the left put the copy on the white, right */
+  @media (min-width: 900px) {
+    :global(.live) .beat--tx, :global(.live) .beat--cards, :global(.live) .beat--trust { left: auto; right: clamp(16px, 5vw, 80px); }
+  }
 
   :global(.live) .phone-wrap { position: absolute; right: clamp(24px, 12vw, 200px); top: 50%; translate: 0 -50%; perspective: 1200px; }
   :global(.live .phone--main) { transform: rotateY(-26deg) rotateZ(7deg) scale(.9); transform-style: preserve-3d; }
@@ -148,13 +156,18 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   /* Mobile: phone on top, copy underneath */
   @media (max-width: 899px) {
     :global(.live) .stage { --pw: min(240px, calc((100svh - var(--header-h)) * .5 / 2.07)); }
-    :global(.live) .phone-wrap { right: 50%; top: 4%; translate: 50% 0; }
+    /* centred with a margin (not a CSS translate) so the timeline can slide it sideways without losing the centring */
+    :global(.live) .phone-wrap { right: auto; left: 50%; margin-left: calc(var(--pw) / -2); top: 4%; translate: none; }
     :global(.live) .beat { left: 0; right: 0; top: auto; bottom: 0; translate: none; width: auto; padding: 20px clamp(16px, 5vw, 32px) 24px;
       background: linear-gradient(to top, var(--surface) calc(100% - 28px), rgb(248 249 250 / 0)); gap: 10px; }
     :global(.live) .beat--hero { padding-top: 20px; }
     :global(.live) .beat .display-xl, :global(.live) .beat .display-lg { font-size: clamp(28px, 8vw, 38px); }
     :global(.live) .beat .body-lg { font-size: 16px; line-height: 24px; }
       .plane--a { width: 100%; clip-path: polygon(0 28%, 100% 0, 100% 100%, 0 100%); } .plane--b { width: 100%; clip-path: polygon(0 36%, 100% 8%, 100% 100%, 0 100%); }
+  }
+  @media (max-width: 899px) {
+    :global(.live) .plane--a { clip-path: polygon(0% 28%, 100% 0%, 100% 100%, 0% 100%); }
+    :global(.live) .plane--b { clip-path: polygon(0% 36%, 100% 8%, 100% 100%, 0% 100%); }
   }
   @media (max-width: 899px) and (max-height: 700px) { :global(.live) .beat .body-lg { display: none; } }
   :global(.live) .beat--biz { background: transparent; border-radius: 0; }
@@ -176,6 +189,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
         const tl = gsap.timeline({
           defaults: { ease: 'power2.out' },
           scrollTrigger: {
+            invalidateOnRefresh: true,
             trigger: el, start: 'top top+=64', end: 'bottom bottom', scrub: 0.6,
             // Which chapter is on screen? Announce each new, further chapter once (analytics only hears this after consent).
             onUpdate: (self) => {
@@ -185,15 +199,57 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
             },
           },
         });
+        // The red world: a different shape and side for every chapter. Desktop flips the slab (and the phone) left/right with
+        // alternating slants; phones keep the phone on top and flip the slant. Layer b is the paler sliver behind layer a.
+        const P = (...pts: number[][]) => 'polygon(' + pts.map(([x, y]) => `${x}% ${y}%`).join(',') + ')';
+        const wide: { a: string; b: string }[] = [
+          { a: P([59, 0], [100, 0], [100, 100], [38, 100]), b: P([52, 0], [100, 0], [100, 100], [30, 100]) },   // hero: red right
+          { a: P([0, 0], [38, 0], [46, 100], [0, 100]), b: P([0, 0], [45, 0], [53, 100], [0, 100]) },           // transfer: red left
+          { a: P([46, 0], [100, 0], [100, 100], [62, 100]), b: P([40, 0], [100, 0], [100, 100], [56, 100]) },   // bills: right, opposite slant
+          { a: P([0, 0], [46, 0], [36, 100], [0, 100]), b: P([0, 0], [53, 0], [43, 100], [0, 100]) },           // cards: left, opposite slant
+          { a: P([56, 0], [100, 0], [100, 100], [56, 100]), b: P([46, 0], [100, 0], [100, 100], [46, 100]) },   // groups: right, straight with a wide sliver
+          { a: P([0, 0], [42, 0], [42, 100], [0, 100]), b: P([0, 0], [52, 0], [52, 100], [0, 100]) },           // trust: left, straight
+          { a: P([64, 0], [100, 0], [100, 100], [42, 100]), b: P([58, 0], [100, 0], [100, 100], [34, 100]) },   // download: right, steep
+        ];
+        const tall: { a: string; b: string }[] = [
+          { a: P([0, 28], [100, 0], [100, 100], [0, 100]), b: P([0, 36], [100, 8], [100, 100], [0, 100]) },
+          { a: P([0, 0], [100, 20], [100, 100], [0, 100]), b: P([0, 8], [100, 28], [100, 100], [0, 100]) },
+          { a: P([0, 24], [100, 0], [100, 100], [0, 100]), b: P([0, 32], [100, 6], [100, 100], [0, 100]) },
+          { a: P([0, 4], [100, 26], [100, 100], [0, 100]), b: P([0, 12], [100, 34], [100, 100], [0, 100]) },
+          { a: P([0, 28], [100, 0], [100, 100], [0, 100]), b: P([0, 36], [100, 8], [100, 100], [0, 100]) },
+          { a: P([0, 0], [100, 20], [100, 100], [0, 100]), b: P([0, 8], [100, 28], [100, 100], [0, 100]) },
+          { a: P([0, 24], [100, 0], [100, 100], [0, 100]), b: P([0, 32], [100, 6], [100, 100], [0, 100]) },
+        ];
+        const narrow = window.matchMedia('(max-width: 899px)');
+        const stage = el.querySelector<HTMLElement>('.stage')!;
+        const wrap = el.querySelector<HTMLElement>('.phone-wrap')!;
+        const shape = (k: number) => (narrow.matches ? tall : wide)[k];
+        // Horizontal offset of the phone for chapter k (even chapters = home position, odd = mirrored to the other side)
+        const phoneX = (k: number) => {
+          const w = stage.clientWidth;
+          if (narrow.matches) return (k % 2 ? -1 : 1) * w * 0.12;
+          const home = wrap.offsetLeft + wrap.offsetWidth / 2;
+          return k % 2 ? w - 2 * home : 0;
+        };
+        const morph = (k: number, at: number) => {
+          tl.to('.plane--a', { clipPath: () => shape(k).a, duration: 0.9, ease: 'power3.inOut' }, at)
+            .to('.plane--b', { clipPath: () => shape(k).b, duration: 1.05, ease: 'power3.inOut' }, at + 0.05)
+            .to('.phone-wrap', { x: () => phoneX(k), duration: 0.9, ease: 'power3.inOut' }, at)
+            .to('.phone--main', { rotateY: k % 2 ? 20 : -20, duration: 0.45, ease: 'power2.in' }, at)
+            .to('.phone--main', { rotateY: 0, duration: 0.5, ease: 'power3.out' }, at + 0.45)
+            .to('.lines', { scaleX: k % 2 ? -1 : 1, duration: 0.9, ease: 'power3.inOut' }, at)
+            .fromTo('.lines i', { scaleX: 0.2 }, { scaleX: 1.6, duration: 0.7, stagger: 0.08, ease: 'power2.out' }, at);
+        };
+
         const beatIn = (s: string, at: number) =>
           tl.fromTo(s, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.8 }, at);
         const beatOut = (s: string, at: number) => tl.to(s, { autoAlpha: 0, y: -36, duration: 0.7 }, at);
 
         gsap.set('.beat--tx, .beat--bills, .beat--cards, .beat--groups, .beat--trust, .beat--dl, .beat--biz', { autoAlpha: 0 });
-        tl.to('.phone--main', { rotateY: 0, rotateZ: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0.1)
-          .to('.plane--a', { xPercent: -8, duration: 2, ease: 'none' }, 0)
-          .to('.lines i', { scaleX: 2.2, duration: 1, stagger: 0.1, ease: 'power1.in' }, 0.2);
+        tl.set('.phone-wrap', { x: () => phoneX(0) }, 0)
+          .to('.phone--main', { rotateY: 0, rotateZ: 0, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.1);
         beatOut('.beat--hero', 0.7);
+        morph(1, 0.9);
 
         // Chapter 1: money transfer
         beatIn('.beat--tx', 1.3);
@@ -201,11 +257,13 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
           .to('.scr--tx .scr__cta', { autoAlpha: 0, duration: 0.2 }, 2.4)
           .to('.scr--tx .scr__done', { opacity: 1, y: 0, duration: 0.4 }, 2.5);
         beatOut('.beat--tx', 3.2);
+        morph(2, 3.2);
 
         // Chapter 2: bill payments
         beatIn('.beat--bills', 3.5);
         tl.to('.scr--bills', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 3.5);
         beatOut('.beat--bills', 5.2);
+        morph(3, 5.2);
 
         // Chapter 3: cards. The card flips in, then the freeze toggle switches on
         beatIn('.beat--cards', 5.5);
@@ -214,6 +272,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
           .to('.scr--cards .tgl', { backgroundColor: '#cc0229', duration: 0.25 }, 6.7)
           .to('.scr--cards .tgl i', { x: 16, duration: 0.25 }, 6.7);
         beatOut('.beat--cards', 7.2);
+        morph(4, 7.2);
 
         // Chapter 4: groups. The progress ring fills
         beatIn('.beat--groups', 7.5);
@@ -221,6 +280,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
           .fromTo('.phone--main .ring', { '--p': 0 }, { '--p': 68, duration: 1.1, ease: 'power2.inOut' }, 7.9)
           .fromTo('.phone--main .avs li', { scale: 0 }, { scale: 1, duration: 0.3, stagger: 0.1, ease: 'back.out(2)' }, 8.2);
         beatOut('.beat--groups', 9.2);
+        morph(5, 9.2);
 
         // Chapter 5: trust. The shield lands, then each safeguard ticks in
         beatIn('.beat--trust', 9.5);
@@ -228,6 +288,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
           .fromTo('.phone--main .shield svg', { scale: 0.4, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.5, ease: 'back.out(1.8)' }, 9.9)
           .fromTo('.phone--main .sec li', { x: -16, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.3, stagger: 0.15 }, 10.2);
         beatOut('.beat--trust', 11.2);
+        morph(6, 11.2);
 
         // Chapter 6: download. The app splash opens and the 3S words land one by one
         beatIn('.beat--dl', 11.5);
