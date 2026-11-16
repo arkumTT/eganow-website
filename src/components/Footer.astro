@@ -4,12 +4,12 @@ const cols = [
   ['Personal', [['Money transfer', '/#transfer'], ['Bill payments', '/#bills'], ['Cards', '/#cards'], ['Groups', '/#groups']]],
   ['Business', [['BizCollect', '/business#bizcollect'], ['EgaPOS', '/business#egapos'], ['Card issuing', '/business#card-issuing'], ['Agency banking', '/business#agency-banking'], ['Bulk messaging', '/business#bulk-messaging'], ['Egahub', '/business#egahub']]],
   ['Company', [['About', '/about'], ['Security', '/security'], ['Help', '/help'], ['Contact', '/contact']]],
-  ['Legal', [['Terms', '/legal/terms'], ['Privacy', '/legal/privacy'], ['Cookies', '/legal/cookies'], ['Complaints', '/legal/complaints']]],
+  ['Legal', [['Terms', '/legal/terms'], ['Privacy', '/legal/privacy'], ['Cookies', '/legal/cookies'], ['AML and KYC', '/legal/aml-policy'], ['Complaints', '/legal/complaints']]],
 ] as const;
 ---
 <footer class="ft">
   <div class="ft__in">
-    <div class="ft__brand"><p class="ft__logo">eganow</p><p>Simple. Speed. Secure.</p></div>
+    <div class="ft__brand"><img class="ft__logo" src="/brand/eganow-wordmark-white.svg" alt="Eganow" width="118" height="34" /><p>Simple. Speed. Secure.</p></div>
     {cols.map(([h, links]) => (
       <nav aria-label={h}><h2>{h}</h2><ul>{links.map(([t, href]) => <li><a href={href}>{t}</a></li>)}</ul></nav>
     ))}
@@ -20,7 +20,7 @@ const cols = [
 <style>
   .ft { background: var(--neutral-950); color: var(--neutral-300); padding: var(--space-16) clamp(16px, 4vw, 48px) var(--space-8); }
   .ft__in { max-width: 1200px; margin: 0 auto; display: grid; gap: var(--space-8); grid-template-columns: repeat(2, 1fr); }
-  .ft__brand { grid-column: 1 / -1; } .ft__logo { font: 700 28px/1 var(--font-display); color: #fff; letter-spacing: -.02em; margin-bottom: 8px; }
+  .ft__brand { grid-column: 1 / -1; } .ft__logo { display: block; height: 34px; width: auto; margin-bottom: 12px; }
   h2 { font: 600 12px/16px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--neutral-400); margin: 0 0 var(--space-3); }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; } a { text-decoration: none; font-size: 14px; } a:hover { color: #fff; text-decoration: underline; }
   .ft__legal { max-width: 1200px; margin: var(--space-12) auto 0; padding-top: var(--space-6); border-top: 1px solid var(--neutral-700); font-size: 12px; line-height: 16px; color: var(--neutral-400); }

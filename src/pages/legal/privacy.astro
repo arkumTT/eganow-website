@@ -1,0 +1,75 @@
+---
+import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+
+// DRAFT for legal review. Structured around Ghana's Data Protection Act, 2012 (Act 843) [[counsel to confirm applicable law and bases]].
+// Every [[placeholder]] must be completed by Eganow, and the whole document approved by counsel, before publication.
+const sections: LegalSection[] = [
+  { id: 'who', title: 'Who we are', paras: [
+    "[[Eganow legal entity name]] (“Eganow”, “we”, “us”) is responsible for your personal data as described in this policy. Our registered office is [[registered address]].",
+    "Our data protection contact is [[name or team]], at [[data protection email address]]. We are registered with the Data Protection Commission under number [[registration number]].",
+  ] },
+  { id: 'collect', title: 'What we collect', paras: ["Depending on how you use Eganow, we may collect:"], list: [
+    "**Identity and contact details:** name, phone number, email, address, date of birth, ID documents and a photo or selfie for verification [[confirm exactly what is collected]].",
+    "**Account and transaction details:** wallet, account and card references (we show only the last four digits of a card), balances, transactions, recipients and the purpose of payments.",
+    "**Business details:** business name and registration, owners and directors, agents, devices and terminals, and the cards or messages you send through our services.",
+    "**Device and usage data:** IP address, device type, operating system, app version and logs, and approximate location where you allow it [[confirm]].",
+    "**Communications:** messages you send us, including through our contact form, and notes about calls or chats with support.",
+    "**Information from others:** identity-verification providers, banks, mobile money operators, and fraud and sanctions screening services.",
+  ] },
+  { id: 'use', title: 'How we use your data', paras: ["We use personal data to:"], list: [
+    "provide the Services, such as processing payments and issuing cards;",
+    "verify your identity and meet legal duties on anti-money-laundering, sanctions and reporting;",
+    "detect and prevent fraud, and keep the Services and your account secure;",
+    "answer your questions and send important service messages;",
+    "improve and develop the Services; and",
+    "send you offers and news where the law allows and, where required, you have agreed. You can opt out at any time.",
+  ] },
+  { id: 'bases', title: 'Why we may use your data', paras: [
+    "We rely on one or more of: your consent; our contract with you; our legal obligations; and our legitimate interests in running a secure and reliable service [[counsel to confirm the legal bases and how they map to each purpose]].",
+  ] },
+  { id: 'sharing', title: 'Who we share data with', paras: ["We share personal data only where we need to, with:"], list: [
+    "banks, mobile money operators and payment partners, to complete your transactions;",
+    "card networks such as Mastercard and card production partners, for card services;",
+    "identity-verification and fraud-prevention providers;",
+    "SMS and email delivery providers, for Bulk Messaging;",
+    "service providers that host our systems or support our customer care, including the provider that processes our contact form [[confirm provider and role]];",
+    "regulators, law enforcement and courts, where the law requires it;",
+    "professional advisers, and any buyer or partner in a business transfer, under suitable safeguards.",
+  ], after: ["We do not sell your personal data [[confirm]]."] },
+  { id: 'international', title: 'Sending data abroad', paras: [
+    "Some payments, including cross-border transfers, and some of our providers involve sending data outside Ghana. Where we do, we take steps to protect it [[describe safeguards, such as contracts and security measures — confirm]].",
+  ] },
+  { id: 'retention', title: 'How long we keep your data', paras: [
+    "We keep personal data for as long as we need it for the purposes above and to meet legal duties. For example, identity and transaction records usually have to be kept for a set period after an account is closed [[retention periods under applicable law — confirm]].",
+  ] },
+  { id: 'security', title: 'How we protect your data', paras: [
+    "We use technical and organisational measures to protect personal data, such as encryption in transit, access controls and monitoring [[confirm specifics]]. No system is perfectly secure, so please keep your PIN, password and one-time codes private.",
+  ] },
+  { id: 'rights', title: 'Your rights', paras: ["You have rights over your personal data, including to:"], list: [
+    "ask what data we hold about you and get a copy;",
+    "ask us to correct data that is wrong or incomplete;",
+    "object to certain uses, including direct marketing;",
+    "ask us to delete data, unless we must keep it by law;",
+    "withdraw consent you have given, at any time; and",
+    "complain to the Data Protection Commission.",
+  ], after: ["To use your rights, contact us at [[data protection email address]] or through our [contact form — /contact]. We may need to confirm who you are first."] },
+  { id: 'children', title: 'Children', paras: [
+    "The Services are not meant for people under [[minimum age, expected 18 — confirm]]. We do not knowingly collect their personal data.",
+  ] },
+  { id: 'marketing', title: 'Messages and marketing', paras: [
+    "We will send you service messages, such as confirmations and security alerts. We will only send marketing where the law allows, and you can opt out at any time using the link or instructions in the message, or in the app [[confirm opt-out methods]].",
+  ] },
+  { id: 'cookies', title: 'Cookies', paras: [
+    "Our [Cookie Policy — /legal/cookies] explains how this website uses cookies and similar technologies.",
+  ] },
+  { id: 'changes', title: 'Changes to this policy', paras: [
+    "We may update this policy. We will post the new version here and tell you about important changes [[notice period]].",
+  ] },
+  { id: 'contact', title: 'Contact us', paras: [
+    "For any question about this policy or your data, contact [[data protection email address]] or use our [contact form — /contact].",
+  ] },
+];
+---
+<LegalDoc slug="privacy" title="Privacy Policy" description="What personal data Eganow collects, why we use it, who we share it with, and the choices you have."
+  intro="Your money and your information are personal. This policy explains what we collect, why, and the choices you have."
+  sections={sections} />

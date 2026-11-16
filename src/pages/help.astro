@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { HELP, HELP_DRAFT } from '../data/help';
+
+// Guard: unresolved [[placeholders]] must never ship.
+if (!HELP_DRAFT && JSON.stringify(HELP).includes('[[')) throw new Error('Help content still contains [[placeholders]]. Confirm every answer, then clear them before setting HELP_DRAFT = false.');
+const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const fmt = (t: string) => esc(t).replace(/\[\[(.+?)\]\]/g, '<mark class="todo">$1</mark>');
+const personal = HELP.filter((c) => c.world === 'personal');
+const business = HELP.filter((c) => c.world === 'business');
+---
+<Base title="Help centre | Eganow" description="Find answers about the Eganow app and Eganow Business, or get in touch with our team.">
+  <Header world="neutral" />
+  <main id="main">
+    <section class="top" aria-labelledby="h-t">
+      <div class="top__in">
+        <p class="overline">Help centre</p>
+        <h1 id="h-t" class="display-lg">How can we help?</h1>
+        <form class="search" id="hs" role="search" hidden>
+          <label for="hq">Search the Help centre</label>
+          <div class="search__row">
+            <input id="hq" type="search" placeholder="Try “freeze card” or “payment link”" autocomplete="off" spellcheck="false" aria-controls="hlist" />
+            <button type="button" id="hclear" hidden>Clear</button>
+          </div>
+        </form>
+        <p class="status" id="hstatus" role="status" aria-live="polite"></p>
+        <p class="safe"><b>Stay safe.</b> Eganow will never ask for your PIN, password or one-time codes.</p>
+      </div>
+    </section>
+
+    <section class="jump" aria-label="Help topics">
+      <div class="jump__in">
+        <div class="grp" data-world="personal"><p class="grp__t">Eganow app</p><ul>{personal.map((c) => <li><a href={`#${c.id}`}>{c.title}</a></li>)}</ul></div>
+        <div class="grp" data-world="business"><p class="grp__t">Eganow Business</p><ul>{business.map((c) => <li><a href={`#${c.id}`}>{c.title}</a></li>)}</ul></div>
+      </div>
+    </section>
+
+    <div class="list" id="hlist">
+      {HELP.map((c) => (
+        <section class="cat" id={c.id} data-cat data-world={c.world} aria-labelledby={`${c.id}-h`}>
+          <div class="cat__in">
+            <header><p class="overline">{c.world === 'personal' ? 'Eganow app' : 'Eganow Business'}</p><h2 id={`${c.id}-h`}>{c.title}</h2><p>{c.blurb}</p></header>
+            <div class="qs">
+              {c.items.map((it) => (
+                <details data-q>
+                  <summary>{it.q}</summary>
+                  <div class="a"><p set:html={fmt(it.a)} />{it.link && <a class="lnk" href={it.link[1]}>{it.link[0]} <span aria-hidden="true">→</span></a>}</div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section class="none" id="hnone" hidden>
+      <div class="none__in"><h2>We couldn’t find that.</h2><p>Try different words, or ask our team directly.</p><a class="btn btn--red" href="/contact?topic=support">Contact support</a></div>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-t">
+      <div class="cta__in">
+        <h2 id="cta-t" class="display-lg">Still need help?</h2>
+        <p class="body-lg">Our team is here. Choose a topic and we’ll send your message to the right place.</p>
+        <div class="cta__btns"><a class="btn btn--red" href="/contact?topic=support">Contact support</a><a class="btn btn--ghost" href="/contact?topic=complaint">Make a complaint</a><a class="btn btn--blue" href="/contact?topic=sales"><span class="dot"></span>Talk to sales</a></div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .top { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .top__in { max-width: 860px; margin: 0 auto; padding: var(--space-16) clamp(16px, 4vw, 48px) var(--space-8); display: grid; gap: var(--space-4); }
+  .top__in .display-lg { margin-top: 0; max-width: none; }
+  .search label { display: block; font: 600 14px/20px var(--font-display); margin-bottom: 8px; }
+  .search__row { display: flex; gap: 8px; }
+  input[type="search"] { flex: 1; min-width: 0; min-height: 56px; padding: 0 18px; border: 2px solid var(--border-strong); border-radius: var(--radius-full); font: 400 17px/24px var(--font-sans); background: #fff; color: var(--text); }
+  input[type="search"]:focus-visible { outline: 3px solid var(--neutral-950); outline-offset: 2px; border-color: var(--neutral-700); }
+  #hclear { min-height: 56px; padding: 0 20px; border: 2px solid var(--border-strong); border-radius: var(--radius-full); background: #fff; font: 600 14px/1 var(--font-display); cursor: pointer; }
+  .status { margin: 0; min-height: 24px; font: 500 14px/24px var(--font-display); color: var(--text-muted); }
+  .safe { margin: 0; padding: 12px 16px; border-radius: 12px; background: #fff1f2; border: 1px solid #fecdd3; color: #7f1d1d; font-size: 14px; line-height: 20px; }
+
+  .jump { background: var(--surface-sunken); border-bottom: 1px solid var(--border); }
+  .jump__in { max-width: 1200px; margin: 0 auto; padding: var(--space-6) clamp(16px, 4vw, 48px); display: grid; gap: var(--space-4); }
+  .grp { display: grid; gap: 8px; } .grp__t { margin: 0; font: 600 12px/16px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+  .grp ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .grp a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 2px solid var(--accent); border-radius: var(--radius-full); background: #fff; font: 600 14px/20px var(--font-display); text-decoration: none; color: var(--text); transition: background-color .2s; }
+  .grp a:hover { background: var(--accent); color: var(--on-accent); }
+  @media (min-width: 900px) { .jump__in { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
+
+  .cat { padding: var(--space-12) 0; border-bottom: 1px solid var(--border); }
+  .cat__in { max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: grid; gap: var(--space-6); align-items: start; }
+  .cat header { display: grid; gap: 6px; } .cat h2 { margin: 0; font: 600 28px/36px var(--font-display); letter-spacing: -.01em; } .cat header p:last-child { margin: 0; color: var(--text-muted); }
+  .qs { display: grid; gap: 10px; }
+  details { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); }
+  summary { cursor: pointer; list-style: none; padding: 16px 20px; font: 600 16px/24px var(--font-display); display: flex; justify-content: space-between; gap: 16px; min-height: 44px; }
+  summary::-webkit-details-marker { display: none; } summary::after { content: "+"; font-size: 24px; line-height: 24px; color: var(--neutral-700); flex: none; } details[open] summary::after { content: "–"; }
+  .a { padding: 0 20px 18px; display: grid; gap: 10px; justify-items: start; } .a p { margin: 0; color: var(--text-muted); max-width: 62ch; }
+  .lnk { font: 600 15px/22px var(--font-display); text-decoration: underline; text-underline-offset: 4px; }
+  :global(mark.todo) { background: #fde68a; color: #422d00; padding: 0 4px; border-radius: 4px; font-weight: 600; }
+  @media (min-width: 900px) { .cat__in { grid-template-columns: 1fr 1.7fr; gap: var(--space-12); } .cat header { position: sticky; top: calc(var(--header-h) + var(--space-6)); } }
+
+  .none { padding: var(--space-16) clamp(16px, 4vw, 48px); } .none__in { max-width: 520px; margin: 0 auto; text-align: center; display: grid; gap: var(--space-3); justify-items: center; } .none h2 { margin: 0; font: 600 24px/32px var(--font-display); } .none p { margin: 0; color: var(--text-muted); }
+  .cta { background: var(--surface); padding: var(--space-24) clamp(16px, 4vw, 48px); } .cta__in { max-width: 760px; margin: 0 auto; text-align: center; display: grid; gap: var(--space-4); justify-items: center; } .cta__in .display-lg { margin: 0; max-width: none; }
+  .cta__btns { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; margin-top: var(--space-2); }
+  @media (prefers-reduced-motion: reduce) { .grp a { transition: none; } }
+</style>
+
+<script>
+  const form = document.getElementById('hs') as HTMLFormElement;
+  const input = document.getElementById('hq') as HTMLInputElement;
+  const clear = document.getElementById('hclear') as HTMLButtonElement;
+  const status = document.getElementById('hstatus')!;
+  const none = document.getElementById('hnone')!;
+  const jump = document.querySelector<HTMLElement>('.jump')!;
+  const cats = Array.from(document.querySelectorAll<HTMLElement>('[data-cat]'));
+  const items = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-q]'));
+  const text = new Map(items.map((d) => [d, (d.textContent ?? '').toLowerCase()]));
+  form.hidden = false; // search needs JS; without it every answer is simply listed
+  form.addEventListener('submit', (e) => e.preventDefault());
+
+  const run = () => {
+    const q = input.value.trim().toLowerCase();
+    const terms = q.split(/\s+/).filter(Boolean);
+    clear.hidden = !q;
+    let shown = 0;
+    items.forEach((d) => {
+      const ok = !terms.length || terms.every((t) => text.get(d)!.includes(t));
+      d.hidden = !ok; if (ok) shown++;
+      if (terms.length && ok) d.open = true; else if (!terms.length) d.open = false;
+    });
+    cats.forEach((c) => (c.hidden = !c.querySelector('[data-q]:not([hidden])')));
+    jump.hidden = !!q;
+    none.hidden = !q || shown > 0;
+    status.textContent = !q ? '' : shown ? `${shown} answer${shown === 1 ? '' : 's'} found` : `No answers found for “${input.value.trim()}”.`;
+    const u = new URL(location.href); q ? u.searchParams.set('q', input.value.trim()) : u.searchParams.delete('q'); history.replaceState(null, '', u);
+  };
+  input.addEventListener('input', run);
+  clear.addEventListener('click', () => { input.value = ''; run(); input.focus(); });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Escape' && input.value) { input.value = ''; run(); } });
+  const initial = new URLSearchParams(location.search).get('q'); if (initial) { input.value = initial; run(); }
+</script>

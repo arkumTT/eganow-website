@@ -1,0 +1,37 @@
+---
+import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+
+// DRAFT for legal review. Response times and escalation routes are regulatory commitments: Eganow's compliance team
+// must supply the real figures and Bank of Ghana references. Nothing here promises a timeframe until they are filled in.
+const sections: LegalSection[] = [
+  { id: 'hear', title: 'We want to hear from you', paras: [
+    "If something has gone wrong, or you are not happy with how we have handled something, please tell us. Complaints help us fix problems and do better.",
+  ] },
+  { id: 'how', title: 'How to complain', paras: ["You can reach us by:"], list: [
+    "our [contact form — /contact?topic=complaint], choosing “Make a complaint”;",
+    "email: [[complaints email address]];",
+    "phone: [[complaints phone number and opening hours]]; or",
+    "post: [[postal address for complaints]].",
+  ], after: [
+    "To help us look into it quickly, please tell us your name and contact details, the phone number or email on your account, what happened and when, and what you would like us to do. Please never include your PIN, password or full card number.",
+  ] },
+  { id: 'next', title: 'What happens next', paras: ["When you complain, we will:"], list: [
+    "acknowledge your complaint within [[number]] working days;",
+    "have someone who was not involved look into it fairly;",
+    "tell you the outcome within [[number]] working days; and",
+    "if we need more time, tell you why and when to expect an answer.",
+  ] },
+  { id: 'escalate', title: 'If you are not satisfied', paras: [
+    "If you are still unhappy after our reply, you can take your complaint further to [[Bank of Ghana consumer-recourse contact details and process — confirm]]. For concerns about how we use your personal data, you can contact the Data Protection Commission [[contact details]].",
+  ] },
+  { id: 'fraud', title: 'Fraud, scams and unauthorised transactions', paras: [
+    "If you think someone has used your account without your permission, or you have been tricked into sending money, tell us immediately. Keep any messages or receipts as evidence. Contact us through [[urgent fraud contact]], and do not share your PIN or one-time codes with anyone.",
+  ] },
+  { id: 'data', title: 'How we use your complaint', paras: [
+    "We keep a record of every complaint so that we can resolve it and improve our services. We treat what you tell us as confidential and handle it as described in our [Privacy Policy — /legal/privacy].",
+  ] },
+];
+---
+<LegalDoc slug="complaints" title="Complaints" description="How to complain to Eganow, what happens next, and where to go if you are not satisfied."
+  intro="Tell us when something goes wrong. Here’s how to reach us, what we’ll do, and where you can go next."
+  sections={sections} />

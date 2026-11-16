@@ -1,0 +1,45 @@
+---
+import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+
+// DRAFT for legal review. A public-facing summary of Eganow's AML/CFT approach, not the internal compliance programme.
+// Counsel and Eganow's compliance officer must confirm the laws cited, thresholds, retention periods and reporting body.
+const sections: LegalSection[] = [
+  { id: 'commitment', title: 'Our commitment', paras: [
+    "Eganow is committed to preventing money laundering, terrorist financing, fraud and sanctions evasion. As a business licensed by the Bank of Ghana as [[licence type]], we follow the laws and regulatory requirements that apply to us [[list the key laws and directives, for example the Anti-Money Laundering Act, 2020 (Act 1044) and the Payment Systems and Services Act, 2019 (Act 987) — counsel to confirm]].",
+  ] },
+  { id: 'why', title: 'Why we verify your identity', paras: [
+    "Knowing who our customers are protects you, protects other customers and keeps the financial system safe. It is also a legal requirement. We cannot open or keep an account for someone we cannot identify.",
+  ] },
+  { id: 'what', title: 'What we may ask for', paras: ["For individuals we may ask for:"], list: [
+    "your full name, date of birth, address and phone number;",
+    "a government-issued ID document [[list accepted documents]]; and",
+    "a photo or selfie to match you to your ID [[confirm]].",
+  ], after: [
+    "For businesses we may also ask for registration documents, details of owners and directors, proof of address, the nature of your business and, where relevant, the source of your funds. Agents, re-issuers and other higher-risk activities may need extra checks.",
+  ] },
+  { id: 'levels', title: 'Verification levels and limits', paras: [
+    "The more fully you are verified, the higher the limits we can offer. If you reach a limit, we will tell you what we need to raise it [[confirm tiered-limit model]].",
+  ] },
+  { id: 'monitoring', title: 'How we monitor transactions', paras: [
+    "We monitor transactions to spot unusual or suspicious activity and we screen customers and payments against sanctions lists. Sometimes we need to ask you a question, or to delay, hold or refuse a transaction while we check. We know this can be frustrating, and we will tell you what we can.",
+  ] },
+  { id: 'reporting', title: 'Reporting suspicious activity', paras: [
+    "The law requires us to report suspicious activity to the authorities [[name of the relevant authority — confirm]]. In some cases we are not allowed to tell you that we have done so.",
+  ] },
+  { id: 'records', title: 'Keeping records', paras: [
+    "We keep identity and transaction records for the period the law requires, even after an account is closed [[retention period — confirm]]. See our [Privacy Policy — /legal/privacy] for how we protect this data.",
+  ] },
+  { id: 'you', title: 'What we ask of you', paras: ["Please help us keep Eganow safe by:"], list: [
+    "giving us accurate and up-to-date information;",
+    "telling us promptly if your details change;",
+    "never letting anyone else use your account; and",
+    "telling us about anything that looks like fraud or a scam.",
+  ] },
+  { id: 'contact', title: 'Questions', paras: [
+    "If you have a question about verification, or you think a check was handled wrongly, use our [contact form — /contact] or see how to [make a complaint — /legal/complaints].",
+  ] },
+];
+---
+<LegalDoc slug="aml-policy" title="AML and KYC" description="How Eganow verifies identity and helps prevent money laundering, fraud and other financial crime."
+  intro="We check who our customers are and watch for suspicious activity. Here’s what that means for you, and why we do it."
+  sections={sections} />

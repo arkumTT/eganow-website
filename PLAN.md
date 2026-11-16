@@ -105,6 +105,12 @@ A single friendly guide ("**Ega**", working name — confirm) who travels both w
 
 **Decision (v2):** the guide is a **photographic studio cut-out of an African woman** (not a cartoon), generated with Magnific as a transparent WebP (24 KB at 420 px, 54 KB at 832 px). One photo, two scarf colours: red for Personal, blue (`#1f8fff`) for Business, crossfaded at the hand-over. She is decorative (`alt=""`); every chapter states its message in text. **Open items:** confirm AI-generated-likeness policy/usage rights with Eganow legal, consider a real photoshoot with additional poses (pointing, celebrating, handing over a POS), and decide whether a second person is wanted.
 
+**Decision (v3, current): no character on the Personal page.** The photographic guide was removed after review ("not working for me"); the Personal story is now copy on the left and the phone on the right. The component and images were deleted and remain in git history (commit "Replace cartoon guide with a photographic African woman cut-out") if the idea is revisited. If a human guide is wanted later, a real photoshoot with several poses is recommended over AI-generated cut-outs.
+
+**Brand logo:** the real Eganow logo from the design system is used everywhere: red wordmark in the header, white wordmark on dark footers and the in-phone splash, the icon as favicon/app icons (SVG + 32/180/192/512 px PNG) and in `manifest.webmanifest`. Files live in `public/brand/` and are byte-identical to the design-system originals (SHA-256 verified).
+
+**Legal and Help (drafts):** `/legal/*` and `/help` exist as structured drafts. Eganow-specific facts are `[[highlighted placeholders]]`. Two switches (`src/data/legal-status.ts` and `src/data/help.ts`) keep them `noindex` and bannered; turning a switch off while any placeholder remains **fails the build**. Counsel must approve legal text and support must confirm help answers before launch.
+
 ### 5.3 Scrollytelling mechanics
 - Pin the phone; scrub a timeline with scroll (GSAP ScrollTrigger, `scrub: 0.6`). Each chapter = one scroll "page" (≈100–150 vh).
 - Phone screens are **HTML/CSS screens inside a CSS frame** (crisp, tiny, accessible) or short **WebM/AV1+MP4 loops** for complex UI; swap with crossfade/clip-path.

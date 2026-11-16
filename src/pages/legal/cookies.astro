@@ -1,0 +1,37 @@
+---
+import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+
+// DRAFT for legal review. The "today" section reflects how the site is built now: it sets no cookies of its own.
+// Update it (and add a consent banner) BEFORE adding analytics, a chat widget, advertising or any other tracking tool.
+const sections: LegalSection[] = [
+  { id: 'what', title: 'What cookies are', paras: [
+    "Cookies are small text files that a website stores on your device. Similar technologies, such as local storage and tracking pixels, do the same kind of job. Websites use them to work properly, remember your choices and understand how they are used.",
+  ] },
+  { id: 'today', title: 'What this website uses today', paras: [
+    "At the time of writing, this website does not set analytics, advertising or tracking cookies, and it does not use them to follow you around the internet [[confirm with a technical audit before launch]].",
+    "If we add tools that use cookies, such as analytics or live chat, we will update this page and, where the law requires, ask for your consent first.",
+  ] },
+  { id: 'types', title: 'The types of cookies we may use', paras: ["If we use cookies in future, they will fall into these groups:"], list: [
+    "**Strictly necessary:** needed for the site to work or to keep it secure. These do not need your consent.",
+    "**Preferences:** remember choices you make, such as language or region.",
+    "**Analytics:** help us understand how the site is used so we can improve it. We will use these only with your consent where required.",
+    "**Marketing:** used to show relevant offers. We will use these only with your consent.",
+  ] },
+  { id: 'third-parties', title: 'Third-party services on this site', paras: [
+    "Our contact form is handled by a third-party provider [[confirm provider]]. When you send the form, the details you type are passed to that provider, and the provider’s own pages and cookies may apply once you are on them.",
+    "App Store and Google Play links take you to those companies’ sites, which have their own cookie policies.",
+  ] },
+  { id: 'manage', title: 'Managing cookies', paras: [
+    "You can control or delete cookies in your browser settings. Blocking some cookies can stop parts of a website from working. If we add a consent banner, you will be able to change your choices there at any time.",
+  ] },
+  { id: 'privacy', title: 'Your personal data', paras: [
+    "How we handle personal data more generally is explained in our [Privacy Policy — /legal/privacy].",
+  ] },
+  { id: 'changes', title: 'Changes and contact', paras: [
+    "We may update this policy as our site changes. Questions? Use our [contact form — /contact] or write to [[data protection email address]].",
+  ] },
+];
+---
+<LegalDoc slug="cookies" title="Cookie Policy" description="How the Eganow website uses cookies and similar technologies, and how you can control them."
+  intro="This page explains what cookies are, whether this website uses them, and how you stay in control."
+  sections={sections} />

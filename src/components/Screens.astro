@@ -51,8 +51,8 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   </ul>
 </div>}
 {name === 'download' && <div class="scr scr--download">
-  <div class="splash__mark">e</div>
-  <p class="splash__name">eganow</p>
+  <div class="splash__mark"><img src="/brand/eganow-icon.svg" alt="" width="48" height="48" /></div>
+  <img class="splash__name" src="/brand/eganow-wordmark-white.svg" alt="Eganow" width="104" height="30" />
   <ul class="splash__3s"><li>Simple.</li><li>Speed.</li><li>Secure.</li></ul>
   <div class="splash__btn">Get started</div>
 </div>}
@@ -94,8 +94,8 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   .sec i { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #12805c; color: #fff; font-style: normal; font-size: 12px; flex: none; }
   .sec b { display: block; font: 600 12.5px/16px var(--font-display); } .sec small { color: var(--text-subtle); font-size: 10.5px; }
   .scr--download { background: linear-gradient(160deg, #cc0229 10%, #7a0118); color: #fff; align-items: center; justify-content: center; text-align: center; gap: 12px; }
-  .splash__mark { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 22px; background: #fff; color: #cc0229; font: 700 54px/1 var(--font-display); padding-bottom: 8px; box-shadow: 0 14px 30px rgb(0 0 0 / .3); }
-  .splash__name { font: 700 28px/32px var(--font-display); letter-spacing: -.02em; }
+  .splash__mark { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 22px; background: #fff; box-shadow: 0 14px 30px rgb(0 0 0 / .3); } .splash__mark img { width: 48px; height: 48px; }
+  .splash__name { display: block; width: 104px; height: auto; }
   .splash__3s { display: grid; gap: 2px; font: 600 15px/20px var(--font-display); opacity: .92; }
   .splash__btn { position: absolute; left: 16px; right: 16px; bottom: 20px; padding: 13px; border-radius: 99px; background: #fff; color: #cc0229; font: 600 13px/16px var(--font-display); }
 </style>

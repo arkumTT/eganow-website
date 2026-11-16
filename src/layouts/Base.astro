@@ -13,6 +13,10 @@ const { title, description, world = 'personal', noindex = false } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content={world === 'business' ? '#1f8fff' : '#cc0229'} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="preload" href={poppins700} as="font" type="font/woff2" crossorigin />

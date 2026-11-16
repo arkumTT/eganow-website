@@ -1,0 +1,85 @@
+---
+import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+
+// DRAFT for legal review. Plain-language structure only. Every [[placeholder]] must be completed by Eganow,
+// and the whole document approved by qualified counsel, before it is published (see src/data/legal-status.ts).
+const sections: LegalSection[] = [
+  { id: 'about', title: 'About these terms', paras: [
+    "These Terms of Use (the “Terms”) explain the rules for using the Eganow website, mobile apps and services (together, the “Services”). They are an agreement between you and [[Eganow legal entity name]] (“Eganow”, “we” or “us”).",
+    "By creating an account or using the Services you agree to these Terms. If you do not agree, please do not use the Services.",
+    "Some services have extra terms, such as a merchant agreement for Eganow Business or card terms. Where extra terms conflict with these Terms for that service, the extra terms apply.",
+  ] },
+  { id: 'who', title: 'Who we are', paras: [
+    "[[Eganow legal entity name]] is registered in [[country of registration]] under number [[registration number]], with its registered office at [[registered address]]. Eganow is licensed by the Bank of Ghana as [[licence type and number]].",
+  ] },
+  { id: 'eligibility', title: 'Eligibility and your account', paras: ["To use the Services you must:"], list: [
+    "be at least [[minimum age, expected 18 — confirm]] years old, or a business authorised to act through an adult representative;",
+    "give us accurate, complete and current information, and keep it up to date;",
+    "complete the identity checks we ask for (see our [AML and KYC — /legal/aml-policy] page);",
+    "keep one account only, unless we agree otherwise [[confirm]]; and",
+    "if you open a business account, have the authority to bind that business.",
+  ] },
+  { id: 'services', title: 'What we offer', paras: [
+    "For individuals, the Eganow app offers money transfers (local and cross-border), bill payments, virtual and physical Mastercard cards, and Groups for private and public contributions.",
+    "For businesses, Eganow Business offers BizCollect (collections, payouts and a transactions dashboard), EgaPOS (POS devices and a management platform), card issuing for organisations and re-issuers, agency banking for cash deposits and withdrawals, bulk SMS and email, and the Egahub mobile app.",
+    "Features can vary by country, device and verification level, and we may not offer every feature to every customer.",
+  ] },
+  { id: 'fees', title: 'Fees, exchange rates and limits', paras: [
+    "Fees and, for cross-border transfers, the exchange rate are shown before you confirm a transaction [[confirm]]. Pricing for Eganow Business is agreed with you or published on our pricing page.",
+    "Transaction limits apply and may depend on how fully your identity has been verified [[confirm]]. Banks, mobile money operators and other third parties may charge their own fees.",
+  ] },
+  { id: 'payments', title: 'Payments, transfers and cards', paras: [
+    "Check every detail before you confirm a payment. Once a payment is confirmed it may not be possible to cancel or reverse it [[confirm reversal and refund policy]].",
+    "We may delay, hold or refuse a payment for security, fraud-prevention or legal reasons, or where a receiving bank, operator or card network does not complete it.",
+    "Mastercard cards are issued under licence and are also subject to the card terms and the rules of the card network [[link to cardholder terms]].",
+  ] },
+  { id: 'security', title: 'Keeping your account safe', paras: ["You are responsible for protecting your account. You must:"], list: [
+    "keep your PIN, password and one-time codes secret, and never share them with anyone — including anyone who says they are from Eganow;",
+    "use a phone or device you control, and keep it secure;",
+    "tell us straight away if your phone, card or credentials are lost, stolen or used without your permission; and",
+    "change your credentials if we ask you to.",
+  ], after: ["We will never ask for your PIN or password."] },
+  { id: 'acceptable', title: 'Acceptable use', paras: ["You must not use the Services to:"], list: [
+    "break the law, including fraud, money laundering, terrorist financing or sanctions evasion;",
+    "give false or misleading information, or pretend to be someone else;",
+    "buy, sell or collect payments for goods or services we prohibit [[prohibited and restricted activities list]];",
+    "attack, probe, scrape, reverse-engineer or overload the Services; or",
+    "resell or white-label the Services without our written permission.",
+  ] },
+  { id: 'business', title: 'Eganow Business', paras: [
+    "Businesses that use BizCollect, EgaPOS, Card Issuing, Agency Banking, Bulk Messaging or Egahub also agree to a merchant agreement [[name and link of merchant agreement]].",
+    "If you use Bulk Messaging, you are responsible for having permission from the people you message and for honouring opt-out requests. If you are an agent, you are responsible for how you and your staff serve customers. If you issue cards as a re-issuer, you are responsible for your members’ and customers’ use of those cards, as set out in your programme agreement [[confirm]].",
+  ] },
+  { id: 'third-parties', title: 'Third-party services and links', paras: [
+    "Many parts of the Services rely on third parties, such as banks, mobile money operators, card networks and SMS and email carriers. We are not responsible for services they provide, or for websites and apps we link to.",
+  ] },
+  { id: 'ip', title: 'Our content and intellectual property', paras: [
+    "The Eganow name, logo, apps and content belong to us or our licensors. We give you a limited, personal, non-transferable permission to use the Services as these Terms allow. Please do not copy or use our logo or brand without permission [[link to brand guidelines, if public]].",
+  ] },
+  { id: 'availability', title: 'Availability and changes to the Services', paras: [
+    "We work to keep the Services available, but they may be interrupted for maintenance, technical problems or events outside our control. We may change or withdraw features, and will give notice where it is reasonable to do so.",
+  ] },
+  { id: 'liability', title: 'Our responsibility to you', paras: [
+    "Nothing in these Terms limits any liability that cannot lawfully be limited, including liability for fraud or for death or personal injury caused by negligence.",
+    "Subject to that, and to consumer-protection laws that apply to you, we are not responsible for losses that were not reasonably foreseeable, for events outside our reasonable control, or for losses caused by you not keeping your credentials safe [[counsel to confirm the scope and any financial limit of liability]].",
+  ] },
+  { id: 'suspension', title: 'Suspending or closing your account', paras: [
+    "We may suspend, restrict or close an account where the law requires it, where we suspect fraud or misuse, or where these Terms are broken. You can close your account at any time by contacting us, after settling any amounts owed. We will tell you what happens to any remaining balance [[confirm process]].",
+  ] },
+  { id: 'changes', title: 'Changes to these Terms', paras: [
+    "We may update these Terms. We will tell you about important changes [[notice period]] before they take effect. If you keep using the Services after that, you accept the updated Terms.",
+  ] },
+  { id: 'complaints', title: 'Complaints', paras: [
+    "If something goes wrong, please tell us. Our [Complaints page — /legal/complaints] explains how, and what happens next.",
+  ] },
+  { id: 'law', title: 'Governing law and disputes', paras: [
+    "These Terms are governed by [[governing law — expected: the laws of Ghana; counsel to confirm]]. [[Courts or dispute-resolution process]].",
+  ] },
+  { id: 'contact', title: 'Contact us', paras: [
+    "Questions about these Terms? Use our [contact form — /contact] or write to [[legal or support email address]].",
+  ] },
+];
+---
+<LegalDoc slug="terms" title="Terms of Use" description="The rules for using Eganow’s website, mobile apps and services."
+  intro="These terms explain how you can use Eganow, what you can expect from us, and what we expect from you. We’ve kept them as clear as we can."
+  sections={sections} />
