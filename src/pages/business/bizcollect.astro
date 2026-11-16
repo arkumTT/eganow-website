@@ -109,7 +109,7 @@ const txs = [
                 <p class="body-lg">{t.body}</p>
                 <a class="more" href={t.cta[1]}>{t.cta[0]} <span aria-hidden="true">→</span></a>
               </div>
-              <div class="tp__vis" aria-hidden="true">
+              <div class="tp__vis" aria-hidden={t.id === 'api' ? undefined : 'true'}>
                 {t.id === 'api' && (
                   <div class="code">
                     <div class="code__bar"><span>Illustrative example</span><button type="button" data-copy="#api-snippet">Copy</button></div>
@@ -189,7 +189,7 @@ const txs = [
 </Base>
 
 <style>
-  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-600); margin: 0; }
   .amt { font: 600 32px/40px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 2px 0 0; }
 
   section.ways, section.ops { padding: var(--space-24) 0; }

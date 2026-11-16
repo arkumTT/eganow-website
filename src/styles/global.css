@@ -5,7 +5,9 @@
 @import "./tokens.css";
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* Author display rules (grid/flex) must never defeat the hidden attribute */
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); }
 body { margin: 0; font: 400 16px/24px var(--font-sans); color: var(--text); background: var(--surface); overflow-x: clip; }
 h1, h2, h3, p { margin: 0; }
 img, svg { display: block; max-width: 100%; }

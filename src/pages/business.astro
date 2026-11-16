@@ -63,7 +63,7 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
           </article>
         ))}
         <nav class="rail" aria-label="Services">
-          <ol>{services.map((s, i) => <li><a href={`#${s.id}`} data-i={i} aria-label={s.name}><b>{s.n}</b><span>{s.name}</span></a></li>)}</ol>
+          <ol>{services.map((s, i) => <li><a href={`#${s.id}`} data-i={i}><b>{s.n}</b> <span>{s.name}</span></a></li>)}</ol>
         </nav>
       </div>
     </section>
@@ -153,9 +153,9 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
   :global(.live) .rail { display: block; position: absolute; right: clamp(8px, 2vw, 28px); top: 50%; translate: 0 -50%; z-index: 5; }
   .rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   .rail a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; text-decoration: none; font: 600 12px/16px var(--font-display); color: var(--neutral-500); padding: 6px 4px; mix-blend-mode: normal; }
-  .rail a span { display: none; } .rail a b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px solid currentColor; font-size: 11px; background: var(--surface); transition: background-color .25s, color .25s, border-color .25s; }
+  .rail a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .rail a b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 2px solid currentColor; font-size: 11px; background: var(--surface); transition: background-color .25s, color .25s, border-color .25s; }
   .rail a.on b { background: var(--eganow-blue); border-color: var(--eganow-blue); color: var(--neutral-950); }
-  .rail a:hover span, .rail a.on span { display: inline; }
+  .rail a:hover span, .rail a:focus-visible span, .rail a.on span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
   .rail a span { color: var(--neutral-900); background: var(--surface); padding: 3px 8px; border-radius: 6px; }
   @media (max-width: 899px) {
     :global(.live) .panel { padding: 0 clamp(16px, 5vw, 32px); grid-template-columns: 1fr; grid-template-rows: 44% 1fr; gap: 0; align-items: start; }
@@ -165,7 +165,7 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
     :global(.live) .panel .body-lg { font-size: 15px; line-height: 22px; }
     :global(.live) .panel .tags { display: none; }
     :global(.live) .rail { right: 4px; top: 12px; translate: none; }
-    :global(.live) .rail ol { gap: 4px; } .rail a b { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .rail a span { display: none !important; }
+    :global(.live) .rail ol { gap: 4px; } .rail a b { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .rail a span, .rail a:hover span, .rail a.on span, .rail a:focus-visible span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   }
   @media (max-width: 899px) and (max-height: 700px) { :global(.live) .panel .body-lg { display: none; } }
 

@@ -1,0 +1,251 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// Submissions go to the existing Zoho form (same endpoint and field names as the legacy form in /legacy/zoho-form).
+// Zoho only accepts: Name_First, Name_Last, Email, PhoneNumber_countrycode, MultiLine (+ zf_redirect_url).
+// So the chosen topic and business name are folded into the message text by the script before the native POST.
+// TODO(verify): confirm Zoho honours zf_redirect_url for this domain; if not, set the redirect in the Zoho form settings.
+// TODO(verify): add Cloudflare Turnstile (or Zoho CAPTCHA) for spam protection; a honeypot is in place meanwhile.
+// TODO(legal): confirm the privacy wording and that sending data to Zoho is covered in the privacy policy.
+const ZOHO_ACTION = 'https://forms.zohopublic.com/egapassdevopsgm1/form/Contactwithphone/formperma/MjIApxhL1f9tmI2slJD96tvzD102v0u811Ft3yjea2k/htmlRecords/submit';
+const DEFAULT_REDIRECT = 'https://eganow.com/contact/thanks'; // JS replaces this with the current origin
+
+const topics = [
+  { id: 'general', label: 'General question', world: 'personal', hint: 'Ask us anything about Eganow.',
+    next: ['We read your message and send it to the right team.', 'We reply by email.', 'For quick answers, try the Help centre.'] },
+  { id: 'support', label: 'I need help', world: 'personal', hint: 'Tell us what went wrong and, if you can, when it happened.',
+    next: ['Share what happened and the phone number or email on your account.', 'Our support team looks into it.', 'We reply by email. Never share your PIN or password with anyone.'] },
+  { id: 'business', label: 'Open a business account', world: 'business', hint: 'Tell us about your business and what you want to collect, pay out or issue.',
+    next: ['Tell us about your business.', 'Our team gets back to you to start verification.', 'Once verified, you can start using Eganow Business.'] },
+  { id: 'sales', label: 'Talk to sales', world: 'business', hint: 'Tell us which services you’re interested in and roughly how much you expect to process.',
+    next: ['Tell us what you need.', 'A member of our team contacts you to understand your business.', 'We prepare a quote for you.'] },
+  { id: 'reissuer', label: 'Become a re-issuer', world: 'business', hint: 'Tell us about the members or customers you’d like to offer cards to.',
+    next: ['Tell us about your organisation and who the cards are for.', 'Our team reviews your programme.', 'We guide you through eligibility and onboarding.'] },
+  { id: 'agent', label: 'Become an agent', world: 'business', hint: 'Tell us about your shop or business and where you operate.',
+    next: ['Tell us about your shop and location.', 'Our team gets back to you to start verification.', 'We set you up and show you how it works.'] },
+  { id: 'sandbox', label: 'Get sandbox access', world: 'business', hint: 'Tell us what you’re building so we can set you up with the right access.',
+    next: ['Tell us about your integration.', 'Our team sets up your sandbox access.', 'Test your integration, then go live when you’re ready.'] },
+] as const;
+const bizIds = topics.filter((t) => t.world === 'business').map((t) => t.id);
+---
+<Base world="personal" title="Contact Eganow — Let’s talk" description="Questions, sales, support or partnerships. Choose a topic and we’ll send your message to the right team.">
+  <Header world="neutral" />
+  <main id="main">
+    <section class="top" aria-labelledby="ct-title">
+      <div class="top__in">
+        <p class="overline">Contact</p>
+        <h1 id="ct-title" class="display-xl">Let’s talk.</h1>
+        <p class="body-lg">Questions, sales, support or just hello. Pick a topic and we’ll send your message to the right team.</p>
+      </div>
+    </section>
+
+    <section class="body" aria-label="Contact form">
+      <div class="body__in">
+        <form class="card" id="contact-form" action={ZOHO_ACTION} method="POST" enctype="multipart/form-data" accept-charset="UTF-8" novalidate data-biz={bizIds.join(',')}>
+          <input type="hidden" name="zf_referrer_name" value="" />
+          <input type="hidden" name="zf_redirect_url" value={DEFAULT_REDIRECT} />
+          <input type="hidden" name="zc_gad" value="" />
+
+          <div class="err-sum" id="err-sum" role="alert" tabindex="-1" hidden>
+            <p><b>Please fix the following</b></p><ul id="err-list"></ul>
+          </div>
+
+          <fieldset class="topics">
+            <legend>What can we help with?</legend>
+            <div class="pills">
+              {topics.map((t, i) => (
+                <div class="pill">
+                  <input type="radio" name="topic" id={`topic-${t.id}`} value={t.id} checked={i === 0} data-world={t.world} data-label={t.label} />
+                  <label for={`topic-${t.id}`}>{t.label}</label>
+                </div>
+              ))}
+            </div>
+            <p class="hint" id="topic-hint" aria-live="polite">{topics[0].hint}</p>
+          </fieldset>
+
+          <div class="grid2">
+            <div class="fld"><label for="first">First name <span class="req" aria-hidden="true">*</span></label>
+              <input id="first" name="Name_First" type="text" autocomplete="given-name" maxlength="255" required aria-describedby="first-e" /><p class="e" id="first-e" hidden></p></div>
+            <div class="fld"><label for="last">Last name <span class="req" aria-hidden="true">*</span></label>
+              <input id="last" name="Name_Last" type="text" autocomplete="family-name" maxlength="255" required aria-describedby="last-e" /><p class="e" id="last-e" hidden></p></div>
+          </div>
+          <div class="grid2">
+            <div class="fld"><label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input id="email" name="Email" type="email" inputmode="email" autocomplete="email" maxlength="255" required aria-describedby="email-e" /><p class="e" id="email-e" hidden></p></div>
+            <div class="fld"><label for="phone">Phone <span class="opt">(optional)</span></label>
+              <input id="phone" name="PhoneNumber_countrycode" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" aria-describedby="phone-e" /><p class="e" id="phone-e" hidden></p></div>
+          </div>
+          <div class="fld" id="biz-row" hidden>
+            <label for="biz">Business name <span class="opt">(optional)</span></label>
+            <input id="biz" name="BusinessName" type="text" autocomplete="organization" maxlength="120" />
+          </div>
+          <div class="fld">
+            <label for="msg">Message <span class="opt">(optional)</span></label>
+            <textarea id="msg" name="MultiLine" rows="5" maxlength="5000" aria-describedby="msg-h"></textarea>
+            <p class="h" id="msg-h">Please don’t include your PIN, password or full card number.</p>
+          </div>
+
+          <!-- Honeypot: real people never see or fill this -->
+          <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+
+          <div class="send">
+            <button class="btn btn--accent" type="submit" id="send">Send message</button>
+            <p class="priv">By sending this you agree to us using your details to reply. See our <a href="/legal/privacy">Privacy Policy</a>.</p>
+          </div>
+        </form>
+
+        <aside class="side" aria-label="What happens next">
+          <div class="next card">
+            <p class="overline">What happens next</p>
+            {topics.map((t, i) => (
+              <ol class="steps" data-next={t.id} hidden={i !== 0}>{t.next.map((s) => <li>{s}</li>)}</ol>
+            ))}
+          </div>
+          <div class="more card">
+            <p class="overline">Looking for something else?</p>
+            <ul>
+              <li><a href="/help">Help centre <span aria-hidden="true">→</span></a></li>
+              <li><a href="/business/developers">Developer docs <span aria-hidden="true">→</span></a></li>
+              <li><a href="/security">Security <span aria-hidden="true">→</span></a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .top { position: relative; overflow: hidden; background: var(--surface); }
+  .top::before { content: ""; position: absolute; top: 0; right: 0; width: 44%; height: 100%; background: var(--accent); clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%); transition: background-color .4s var(--ease-out); }
+  .top::after { content: ""; position: absolute; top: 0; right: 0; width: 52%; height: 100%; background: var(--accent); opacity: .22; clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); transition: background-color .4s var(--ease-out); }
+  .top__in { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: var(--space-16) clamp(16px, 4vw, 48px) var(--space-12); display: grid; gap: var(--space-4); max-width: 1240px; }
+  .top__in > * { max-width: 560px; }
+  [data-world="business"] .top .overline { color: var(--neutral-700); }
+  /* On phones the copy spans the full width, so keep the accent shape faint behind it */
+  @media (max-width: 639px) { .top::before { opacity: .16; } .top::after { display: none; } }
+
+  .body { background: var(--surface); padding: 0 0 var(--space-24); }
+  .body__in { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+  .card { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-8); box-shadow: 0 20px 40px -24px rgb(10 13 20 / .25); }
+  @media (min-width: 640px) { .card { padding: var(--space-12); } }
+  @media (min-width: 960px) { .body__in { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } .side { position: sticky; top: calc(var(--header-h) + var(--space-6)); } }
+  @media (max-width: 639px) { .card { padding: var(--space-6) var(--space-4); } }
+
+  /* form */
+  form { display: grid; gap: var(--space-6); }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  legend { font: 600 18px/28px var(--font-display); margin-bottom: var(--space-3); padding: 0; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { position: relative; }
+  .pill input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; width: 100%; height: 100%; }
+  .pill label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 2px solid var(--border-strong); border-radius: var(--radius-full); font: 500 14px/20px var(--font-display); background: #fff; cursor: pointer; transition: background-color .2s, border-color .2s; }
+  .pill input:hover + label { border-color: var(--accent); }
+  .pill input:checked + label { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .pill input:focus-visible + label { outline: 3px solid var(--neutral-950); outline-offset: 2px; }
+  .hint { margin: var(--space-3) 0 0; color: var(--text-muted); font-size: 14px; line-height: 20px; min-height: 40px; }
+  .grid2 { display: grid; gap: var(--space-6); } @media (min-width: 640px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+  .fld { display: grid; gap: 6px; min-width: 0; }
+  .fld label { font: 600 14px/20px var(--font-display); } .req { color: var(--eganow-red); } .opt { font: 400 13px/20px var(--font-sans); color: var(--text-subtle); }
+  input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; min-height: 48px; padding: 12px 14px; border: 1.5px solid var(--border-strong); border-radius: 12px; font: 400 16px/24px var(--font-sans); color: var(--text); background: #fff; }
+  textarea { resize: vertical; min-height: 140px; }
+  input:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; border-color: var(--neutral-700); }
+  [data-world="business"] input:focus-visible, [data-world="business"] textarea:focus-visible { outline-color: var(--neutral-950); }
+  input[aria-invalid="true"] { border-color: #b42318; background: #fff6f5; }
+  .e { margin: 0; color: #b42318; font: 500 13px/18px var(--font-sans); } .e::before { content: "⚠ "; }
+  .h { margin: 0; color: var(--text-subtle); font-size: 13px; line-height: 18px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .err-sum { padding: 14px 16px; border: 2px solid #b42318; border-radius: 12px; background: #fff6f5; color: #7a1a12; } .err-sum p { margin: 0 0 6px; } .err-sum ul { margin: 0; padding-left: 20px; } .err-sum a { color: inherit; font-weight: 600; }
+  .send { display: grid; gap: var(--space-3); justify-items: start; }
+  .btn--accent { background: var(--accent); color: var(--on-accent); border: 0; cursor: pointer; transition: background-color .3s, transform .2s var(--ease-out), box-shadow .2s; }
+  .btn--accent:hover { box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent); }
+  .btn--accent[disabled] { opacity: .6; cursor: progress; transform: none; }
+  .priv { margin: 0; font-size: 13px; line-height: 18px; color: var(--text-muted); } .priv a { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* aside */
+  .side { display: grid; gap: var(--space-4); }
+  .side .card { padding: var(--space-6); box-shadow: none; }
+  .steps { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: 14px; counter-reset: s; }
+  .steps li { position: relative; padding-left: 40px; counter-increment: s; font-size: 15px; line-height: 22px; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: -1px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font: 700 13px/1 var(--font-display); transition: background-color .3s; }
+  .side .overline { margin: 0; }
+  .more ul { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: 4px; } .more a { display: block; padding: 10px 0; font: 600 15px/22px var(--font-display); text-decoration: none; border-bottom: 1px solid var(--border); } .more a:hover { text-decoration: underline; } .more li:last-child a { border-bottom: 0; }
+  @media (prefers-reduced-motion: reduce) { .top::before, .top::after, .btn--accent, .pill label { transition: none; } }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const bizIds = (form.dataset.biz ?? '').split(',');
+    const radios = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="topic"]'));
+    const hintEl = document.getElementById('topic-hint')!;
+    const bizRow = document.getElementById('biz-row')!;
+    const hints: Record<string, string> = JSON.parse(document.getElementById('hints-json')?.textContent ?? '{}');
+    const sum = document.getElementById('err-sum')!;
+    const list = document.getElementById('err-list')!;
+    const send = document.getElementById('send') as HTMLButtonElement;
+
+    // ---- topic routing: ?topic=sales, theme, hints, "what happens next"
+    const apply = (id: string, updateUrl: boolean) => {
+      const r = radios.find((x) => x.value === id) ?? radios[0];
+      r.checked = true;
+      document.body.dataset.world = r.dataset.world ?? 'personal';
+      bizRow.hidden = !bizIds.includes(r.value);
+      document.querySelectorAll<HTMLElement>('[data-next]').forEach((el) => (el.hidden = el.dataset.next !== r.value));
+      hintEl.textContent = hints[r.value] ?? '';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', r.dataset.world === 'business' ? '#1f8fff' : '#cc0229');
+      if (updateUrl) { const u = new URL(location.href); u.searchParams.set('topic', r.value); history.replaceState(null, '', u); }
+    };
+    apply(new URLSearchParams(location.search).get('topic') ?? 'general', false);
+    radios.forEach((r) => r.addEventListener('change', () => apply(r.value, true)));
+
+    // ---- validation
+    const rules: Array<[string, (v: string) => string]> = [
+      ['first', (v) => (v.trim() ? '' : 'Enter your first name.')],
+      ['last', (v) => (v.trim() ? '' : 'Enter your last name.')],
+      ['email', (v) => (!v.trim() ? 'Enter your email address.' : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Enter a valid email address, like name@example.com.')],
+      ['phone', (v) => (!v.trim() || /^[+()\d][\d\s()+\-]{5,19}$/.test(v.trim()) ? '' : 'Enter a valid phone number, or leave it blank.')],
+    ];
+    const labelOf = (id: string) => (document.querySelector(`label[for="${id}"]`)?.firstChild?.textContent ?? id).trim();
+    const setErr = (id: string, msg: string) => {
+      const input = document.getElementById(id) as HTMLInputElement, e = document.getElementById(id + '-e')!;
+      e.hidden = !msg; e.textContent = msg;
+      if (msg) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+    };
+    rules.forEach(([id, fn]) => document.getElementById(id)!.addEventListener('blur', (ev) => { if ((ev.target as HTMLInputElement).value || document.getElementById(id)!.hasAttribute('aria-invalid')) setErr(id, fn((ev.target as HTMLInputElement).value)); }));
+    rules.forEach(([id, fn]) => document.getElementById(id)!.addEventListener('input', () => { if (document.getElementById(id)!.hasAttribute('aria-invalid')) setErr(id, fn((document.getElementById(id) as HTMLInputElement).value)); }));
+
+    form.addEventListener('submit', (e) => {
+      const problems: Array<[string, string]> = [];
+      rules.forEach(([id, fn]) => { const m = fn((document.getElementById(id) as HTMLInputElement).value); setErr(id, m); if (m) problems.push([id, m]); });
+      if (problems.length) {
+        e.preventDefault();
+        list.innerHTML = '';
+        problems.forEach(([id, m]) => { const li = document.createElement('li'); const a = document.createElement('a'); a.href = '#' + id; a.textContent = `${labelOf(id)}: ${m}`; a.addEventListener('click', (ev) => { ev.preventDefault(); document.getElementById(id)!.focus(); }); li.append(a); list.append(li); });
+        sum.hidden = false; sum.focus(); return;
+      }
+      sum.hidden = true;
+      const thanks = location.origin + '/contact/thanks';
+      // Honeypot: a bot filled the hidden field. Pretend success, send nothing.
+      if ((document.getElementById('website') as HTMLInputElement).value) { e.preventDefault(); location.href = thanks; return; }
+
+      // Fold topic + business name into the message (Zoho only accepts its own five fields)
+      const topic = radios.find((r) => r.checked)!;
+      const biz = (document.getElementById('biz') as HTMLInputElement).value.trim();
+      const msg = document.getElementById('msg') as HTMLTextAreaElement;
+      const head = [`Topic: ${topic.dataset.label}`, biz && !bizRow.hidden ? `Business: ${biz}` : '', `Page: ${location.pathname}${location.search}`].filter(Boolean).join('\n');
+      msg.value = `${head}\n\n${msg.value.trim()}`.trim();
+      (form.elements.namedItem('zf_redirect_url') as HTMLInputElement).value = thanks;
+      // Don't send fields Zoho doesn't know
+      [...radios, document.getElementById('biz'), document.getElementById('website')].forEach((el) => ((el as HTMLInputElement).disabled = true));
+      send.disabled = true; send.textContent = 'Sending…';
+    });
+
+    // Restore the button if the user comes back via the browser's back button
+    addEventListener('pageshow', (ev) => { if ((ev as PageTransitionEvent).persisted) { send.disabled = false; send.textContent = 'Send message'; [...radios, document.getElementById('biz'), document.getElementById('website')].forEach((el) => ((el as HTMLInputElement).disabled = false)); } });
+  }
+</script>
+<script type="application/json" id="hints-json" set:html={JSON.stringify(Object.fromEntries(topics.map((t) => [t.id, t.hint])))}></script>
