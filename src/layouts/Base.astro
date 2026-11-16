@@ -5,6 +5,8 @@ import poppins700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2
 import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
 import inter500 from '@fontsource/inter/files/inter-latin-500-normal.woff2?url';
 import { ogSlugFor, OG_SIZE } from '../data/og-cards.mjs';
+import { ANALYTICS, CONSENT_VERSION } from '../data/analytics.mjs';
+import ConsentBanner from '../components/ConsentBanner.astro';
 interface Props { title: string; description: string; world?: 'personal' | 'business'; noindex?: boolean; }
 const { title, description, world = 'personal', noindex = false } = Astro.props;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -43,6 +45,13 @@ const ogImage = new URL(`/og/${ogSlugFor(Astro.url.pathname)}.png`, Astro.site).
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <slot name="head" />
+    {ANALYTICS.enabled && (
+      <script is:inline define:vars={{ V: CONSENT_VERSION }}>
+        // Pre-paint: does this visitor still need to be asked? Keep in step with src/scripts/consent.ts (same key, version, 12-month expiry, GPC).
+        try { var r = JSON.parse(localStorage.getItem('eganow_consent') || 'null'); if (!(r && r.v === V && typeof r.analytics === 'boolean' && Date.now() - r.ts < 31536e6) && navigator.globalPrivacyControl !== true) document.documentElement.classList.add('needs-consent'); }
+        catch (e) { if (navigator.globalPrivacyControl !== true) document.documentElement.classList.add('needs-consent'); }
+      </script>
+    )}
     <!-- Enable the scroll story only when motion is welcome and the viewport is big enough to benefit -->
     <script is:inline>
       (function () {
@@ -54,6 +63,7 @@ const ogImage = new URL(`/og/${ogSlugFor(Astro.url.pathname)}.png`, Astro.site).
   </head>
   <body data-world={world}>
     <a class="skip" href="#main">Skip to content</a>
+    {ANALYTICS.enabled && <ConsentBanner />}
     <slot />
   </body>
 </html>

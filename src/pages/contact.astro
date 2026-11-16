@@ -181,6 +181,7 @@ const bizIds = topics.filter((t) => t.world === 'business').map((t) => t.id);
 </style>
 
 <script>
+  import { track } from '../scripts/track';
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   if (form) {
     const bizIds = (form.dataset.biz ?? '').split(',');
@@ -238,6 +239,7 @@ const bizIds = topics.filter((t) => t.world === 'business').map((t) => t.id);
 
       // Fold topic + business name into the message (Zoho only accepts its own five fields)
       const topic = radios.find((r) => r.checked)!;
+      track('contact_submit', { topic: topic.value }); // topic only: never the message or any personal detail
       const biz = (document.getElementById('biz') as HTMLInputElement).value.trim();
       const msg = document.getElementById('msg') as HTMLTextAreaElement;
       const head = [`Topic: ${topic.dataset.label}`, biz && !bizRow.hidden ? `Business: ${biz}` : '', `Page: ${location.pathname}${location.search}`].filter(Boolean).join('\n');

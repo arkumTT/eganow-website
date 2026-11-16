@@ -1,0 +1,57 @@
+---
+// Rendered on every page ONLY when analytics is configured (see src/data/analytics.mjs). Hidden until the script
+// decides the visitor has not chosen yet, so it never shifts the layout and costs nothing for returning visitors.
+import { ANALYTICS, clientConfig } from '../data/analytics.mjs';
+const a = ANALYTICS;
+const cookieless = a.enabled && a.cookies.length === 0;
+const cfg = JSON.stringify(clientConfig()).replace(/</g, '\\u003c');
+---
+<div class="cb" data-consent-banner role="dialog" aria-labelledby="cb-t" aria-describedby="cb-d">
+  <h2 id="cb-t" tabindex="-1" data-consent-heading>Your privacy choices</h2>
+  <p id="cb-d">
+    {cookieless
+      ? <>We’d like to use {a.label}, a privacy-friendly tool, to count visits and see which pages are useful. It uses no cookies. It’s off unless you say yes.</>
+      : <>We’d like to use {a.label} cookies to see how people use this site so we can improve it. They’re off unless you say yes, and we don’t use them for advertising.</>}
+  </p>
+  <details>
+    <summary>What this means</summary>
+    <ul>
+      <li><b>We learn:</b> which pages are viewed, roughly where in the world visitors are, and what kind of device and browser they use. We also count clicks on key buttons.</li>
+      <li><b>We don’t collect:</b> your name, phone number, account details or anything you type into a form.</li>
+      {cookieless
+        ? <li><b>Cookies:</b> none.</li>
+        : <li><b>Cookies:</b> {a.cookies.map(([n, age]) => `${n} (${age})`).join(', ')}.</li>}
+      <li>You can change your mind any time with “Cookie settings” in the page footer.</li>
+    </ul>
+  </details>
+  <p class="cb__status" data-consent-status aria-live="polite"></p>
+  <div class="cb__btns">
+    <button type="button" class="btn btn--dark" data-consent-accept>Accept</button>
+    <button type="button" class="btn btn--ghost" data-consent-reject>Reject</button>
+  </div>
+  <p class="cb__links"><a href="/legal/cookies">Cookie Policy</a> · <a href="/legal/privacy">Privacy Policy</a></p>
+</div>
+<script type="application/json" id="consent-config" set:html={cfg}></script>
+<script>
+  import '../scripts/consent';
+</script>
+
+<style>
+  /* In the initial HTML so it paints WITH the page (a banner that appears after its script runs becomes the late 'largest paint').
+     Shown only when the pre-paint check in <head> adds html.needs-consent: never for returning visitors, never without JS. */
+  .cb { display: none; }
+  :global(html.needs-consent) .cb { display: grid; }
+  .cb { position: fixed; z-index: 90; left: 12px; right: 12px; bottom: 12px; max-width: 560px; gap: 12px; padding: 20px; background: #fff; color: var(--text);
+    border: 1px solid var(--border-strong); border-radius: 20px; box-shadow: 0 24px 60px -12px rgb(10 13 20 / .4); }
+  /* bottom-right on desktop: bottom-left would cover the hero's main buttons until the visitor answers */
+  @media (min-width: 700px) { .cb { left: auto; right: 24px; bottom: 24px; } }
+  .cb h2 { margin: 0; font: 600 18px/26px var(--font-display); } .cb h2:focus { outline: none; }
+  .cb p { margin: 0; font-size: 15px; line-height: 22px; color: var(--text-muted); }
+  .cb details { font-size: 14px; line-height: 20px; color: var(--text-muted); }
+  .cb summary { cursor: pointer; font: 600 14px/20px var(--font-display); color: var(--text); min-height: 44px; display: flex; align-items: center; }
+  .cb ul { margin: 0 0 4px; padding-left: 18px; display: grid; gap: 6px; } .cb li b { color: var(--text); }
+  .cb__status { font-weight: 500; color: var(--text) !important; } .cb__status:empty { display: none; }
+  .cb__btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .cb__btns .btn { justify-content: center; width: 100%; cursor: pointer; }
+  .cb__btns .btn--ghost { border-width: 2px; border-color: var(--neutral-900); }
+  .cb__links { font-size: 13px !important; } .cb__links a { text-decoration: underline; text-underline-offset: 3px; }
+</style>

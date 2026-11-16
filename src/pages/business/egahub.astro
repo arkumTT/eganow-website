@@ -196,8 +196,8 @@ const bars = [34, 52, 41, 66, 58, 82, 71, 90, 63, 77];
           <p class="body-lg">Get Egahub for iPhone or Android and take your business with you.</p>
           <div class="cta">
             <!-- TODO: replace with official store badges and real URLs -->
-            <a class="btn btn--dark" href={APP_STORE_URL} rel="noopener">App Store</a>
-            <a class="btn btn--dark" href={PLAY_STORE_URL} rel="noopener">Google Play</a>
+            <a class="btn btn--dark" href={APP_STORE_URL} rel="noopener" data-track="store_click" data-track-store="app_store" data-track-location="egahub">App Store</a>
+            <a class="btn btn--dark" href={PLAY_STORE_URL} rel="noopener" data-track="store_click" data-track-store="google_play" data-track-location="egahub">Google Play</a>
           </div>
           <figure class="qr">
             <div class="qr__code" set:html={qr} role="img" aria-label="QR code to download Egahub"></div>

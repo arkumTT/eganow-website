@@ -1,5 +1,6 @@
 ---
 import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+import { ANALYTICS } from '../../data/analytics.mjs';
 
 // DRAFT for legal review. Structured around Ghana's Data Protection Act, 2012 (Act 843) [[counsel to confirm applicable law and bases]].
 // Every [[placeholder]] must be completed by Eganow, and the whole document approved by counsel, before publication.
@@ -32,6 +33,7 @@ const sections: LegalSection[] = [
     "card networks such as Mastercard and card production partners, for card services;",
     "identity-verification and fraud-prevention providers;",
     "SMS and email delivery providers, for Bulk Messaging;",
+    ...(ANALYTICS.enabled ? [`our website analytics provider (${ANALYTICS.label}), but only if you accept analytics in the cookie banner [[confirm provider and role]];`] : []),
     "service providers that host our systems or support our customer care, including the provider that processes our contact form [[confirm provider and role]];",
     "regulators, law enforcement and courts, where the law requires it;",
     "professional advisers, and any buyer or partner in a business transfer, under suitable safeguards.",

@@ -1,4 +1,5 @@
 ---
+import { ANALYTICS } from '../data/analytics.mjs';
 const year = new Date().getFullYear();
 const cols = [
   ['Personal', [['Money transfer', '/#transfer'], ['Bill payments', '/#bills'], ['Cards', '/#cards'], ['Groups', '/#groups']]],
@@ -11,7 +12,7 @@ const cols = [
   <div class="ft__in">
     <div class="ft__brand"><img class="ft__logo" src="/brand/eganow-wordmark-white.svg" alt="Eganow" width="118" height="34" /><p>Simple. Speed. Secure.</p></div>
     {cols.map(([h, links]) => (
-      <nav aria-label={h}><h2>{h}</h2><ul>{links.map(([t, href]) => <li><a href={href}>{t}</a></li>)}</ul></nav>
+      <nav aria-label={h}><h2>{h}</h2><ul>{links.map(([t, href]) => <li><a href={href}>{t}</a></li>)}{h === 'Legal' && ANALYTICS.enabled && <li><button type="button" class="ft__btn" data-consent-open>Cookie settings</button></li>}</ul></nav>
     ))}
   </div>
   <!-- TODO(legal): confirm exact licence wording + number with compliance before launch -->
@@ -23,6 +24,7 @@ const cols = [
   .ft__brand { grid-column: 1 / -1; } .ft__logo { display: block; height: 34px; width: auto; margin-bottom: 12px; }
   h2 { font: 600 12px/16px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--neutral-400); margin: 0 0 var(--space-3); }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; } a { text-decoration: none; font-size: 14px; } a:hover { color: #fff; text-decoration: underline; }
+  .ft__btn { background: none; border: 0; padding: 0; margin: 0; font: inherit; font-size: 14px; color: inherit; cursor: pointer; text-align: left; min-height: 24px; } .ft__btn:hover { color: #fff; text-decoration: underline; }
   .ft__legal { max-width: 1200px; margin: var(--space-12) auto 0; padding-top: var(--space-6); border-top: 1px solid var(--neutral-700); font-size: 12px; line-height: 16px; color: var(--neutral-400); }
   @media (min-width: 900px) { .ft__in { grid-template-columns: 1.4fr repeat(4, 1fr); } .ft__brand { grid-column: auto; } }
 </style>

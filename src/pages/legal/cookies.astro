@@ -1,25 +1,39 @@
 ---
 import LegalDoc, { type LegalSection } from '../../components/LegalDoc.astro';
+import { ANALYTICS } from '../../data/analytics.mjs';
 
-// DRAFT for legal review. The "today" section reflects how the site is built now: it sets no cookies of its own.
-// Update it (and add a consent banner) BEFORE adding analytics, a chat widget, advertising or any other tracking tool.
+// DRAFT for legal review. The "today" section is generated from the site's real analytics configuration
+// (src/data/analytics.mjs), so the policy can't contradict what the site does. A chat widget, advertising or any
+// other tracking tool added later must also be reflected here and in the consent banner.
+const a = ANALYTICS;
+const todayParas: string[] = !a.enabled
+  ? [
+      "At the time of writing, this website does not set analytics, advertising or tracking cookies, and it does not use them to follow you around the internet [[confirm with a technical audit before launch]].",
+      "If we add tools that use cookies, such as analytics or live chat, we will update this page and, where the law requires, ask for your consent first.",
+    ]
+  : [
+      `This website uses ${a.label} to understand how it is used, but **only if you accept it** in the cookie banner. Until you do, it is not loaded and nothing is stored on your device or sent to anyone.`,
+      a.cookies.length
+        ? `If you accept, ${a.label} sets these cookies: ${a.cookies.map(([n, age, why]) => `${n} (${age}; ${why.toLowerCase()})`).join('; ')}. It receives usage information such as pages viewed, approximate location and device and browser type. We turn off its advertising features. [[confirm the provider, where data is processed, and that a data-processing agreement is in place]]`
+        : `${a.label} sets no cookies. If you accept, it counts visits and page views without storing anything on your device, and receives usage information such as pages viewed, approximate location and device and browser type. [[confirm the provider, where data is processed, and that a data-processing agreement is in place]]`,
+      "We also count clicks on key buttons (for example, choosing a contact topic). We never send your name, phone number, account details or anything you type into a form.",
+      "You can change your choice at any time with “Cookie settings” in the page footer. We remember your choice on your device for 12 months, then ask again. If your browser sends a Global Privacy Control signal, we treat it as a “no”.",
+    ];
 const sections: LegalSection[] = [
   { id: 'what', title: 'What cookies are', paras: [
     "Cookies are small text files that a website stores on your device. Similar technologies, such as local storage and tracking pixels, do the same kind of job. Websites use them to work properly, remember your choices and understand how they are used.",
   ] },
-  { id: 'today', title: 'What this website uses today', paras: [
-    "At the time of writing, this website does not set analytics, advertising or tracking cookies, and it does not use them to follow you around the internet [[confirm with a technical audit before launch]].",
-    "If we add tools that use cookies, such as analytics or live chat, we will update this page and, where the law requires, ask for your consent first.",
-  ] },
-  { id: 'types', title: 'The types of cookies we may use', paras: ["If we use cookies in future, they will fall into these groups:"], list: [
+  { id: 'today', title: 'What this website uses today', paras: todayParas },
+  { id: 'types', title: 'The types of cookies we may use', paras: [a.enabled ? "Cookies and similar technologies on this site fall into these groups:" : "If we use cookies in future, they will fall into these groups:"], list: [
     "**Strictly necessary:** needed for the site to work or to keep it secure. These do not need your consent.",
     "**Preferences:** remember choices you make, such as language or region.",
-    "**Analytics:** help us understand how the site is used so we can improve it. We will use these only with your consent where required.",
+    a.enabled ? "**Analytics:** help us understand how the site is used so we can improve it. Used only if you accept them." : "**Analytics:** help us understand how the site is used so we can improve it. We will use these only with your consent where required.",
     "**Marketing:** used to show relevant offers. We will use these only with your consent.",
   ] },
   { id: 'third-parties', title: 'Third-party services on this site', paras: [
     "Our contact form is handled by a third-party provider [[confirm provider]]. When you send the form, the details you type are passed to that provider, and the provider’s own pages and cookies may apply once you are on them.",
     "App Store and Google Play links take you to those companies’ sites, which have their own cookie policies.",
+    ...(a.enabled ? [`If you accept analytics, ${a.label} receives usage information as described above and acts under its own terms and privacy policy [[link to the provider's privacy policy]].`] : []),
   ] },
   { id: 'manage', title: 'Managing cookies', paras: [
     "You can control or delete cookies in your browser settings. Blocking some cookies can stop parts of a website from working. If we add a consent banner, you will be able to change your choices there at any time.",

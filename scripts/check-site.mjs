@@ -100,7 +100,19 @@ else {
     const scriptSrc = dir('script-src') ?? '';
     if (/'unsafe-inline'|'unsafe-eval'/.test(scriptSrc)) secErrs.push("script-src contains 'unsafe-inline' or 'unsafe-eval'");
     for (const need of ['default-src', 'object-src', 'base-uri', 'frame-ancestors', 'form-action']) if (!dir(need)) secErrs.push(`CSP is missing ${need}`);
-    if (/\bhttps?:\/\/\*|\s\*(\s|;|$)/.test(csp)) secErrs.push('CSP uses a wildcard source');
+    // a bare "*", a whole scheme (https:, data:, blob:) as a source: far too broad. (A host wildcard like https://*.google-analytics.com is fine.)
+    if (/(^|[\s;])(\*|https?:|data:|blob:)(?=[\s;]|$)/.test(csp)) secErrs.push('CSP allows a bare wildcard or a whole scheme as a source');
+    // analytics: the pages, the CSP and the consent banner must agree
+    const analyticsHost = /plausible|googletagmanager|google-analytics/.test(csp);
+    const withBanner = [...html.values()].filter((h) => h.includes('data-consent-banner')).length;
+    const referencesScripts = [...html.values()].some((h) => /_astro\/(ConsentBanner|analytics)/.test(h));
+    if (withBanner === 0) {
+      if (analyticsHost) secErrs.push('CSP allows an analytics host, but no page has the consent banner');
+      if (referencesScripts) secErrs.push('a page loads the consent/analytics scripts but has no consent banner');
+    } else {
+      if (withBanner !== html.size) secErrs.push(`consent banner is on ${withBanner} of ${html.size} pages (must be all)`);
+      if (!analyticsHost) secErrs.push('consent banner is present but the CSP does not allow the analytics host (the vendor script would be blocked)');
+    }
     // every inline executable script in every page must be allow-listed by hash
     for (const [file, h] of html) for (const m of h.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       if (/\bsrc\s*=/.test(m[1])) continue; const t = m[1].match(/\btype\s*=\s*["']([^"']+)["']/i)?.[1]?.toLowerCase(); if (t && t !== 'module' && t !== 'text/javascript') continue;

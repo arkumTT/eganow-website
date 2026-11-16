@@ -196,6 +196,7 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
     setTimeout(() => (copyBtn.textContent = 'Copy'), 1800);
   });
 
+  import { track } from '../scripts/track';
   const root = document.documentElement;
   const el = document.querySelector<HTMLElement>('[data-biz]');
   if (el && root.classList.contains('live')) {
@@ -206,7 +207,9 @@ const s3 = [['Simple', 'One platform. One dashboard. One integration.'], ['Speed
         const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('.rail a'));
         const N = panels.length;
         const FULL = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+        const seen = new Set<number>();
         const setActive = (i: number) => {
+          if (!seen.has(i)) { seen.add(i); if (i > 0) track('service_panel_viewed', { service: panels[i].id }); } // panel 0 is simply the page view
           panels.forEach((p, k) => { p.classList.toggle('is-active', k === i); p.inert = k !== i; });
           links.forEach((a, k) => { a.classList.toggle('on', k === i); k === i ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'); });
         };

@@ -16,6 +16,7 @@ import { readdirSync, readFileSync, writeFileSync, rmSync, existsSync } from 'no
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { ANALYTICS } from '../src/data/analytics.mjs';
 
 const xml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -74,13 +75,16 @@ export default function launchFiles({ site }) {
         urls.sort((a, b) => (a === origin + '/' ? -1 : b === origin + '/' ? 1 : a.localeCompare(b)));
 
         // ---- Content-Security-Policy
+        // Analytics (if configured) opens exactly its own hosts, nothing more. Default: nothing external is allowed.
+        const an = ANALYTICS.enabled ? ANALYTICS.csp : { scriptSrc: [], connectSrc: [], imgSrc: [], trustedTypes: true };
+        const list = (...parts) => parts.flat().filter(Boolean).join(' ');
         const csp = [
           "default-src 'self'",
-          `script-src 'self' ${[...scriptHashes].sort().join(' ')}`.trim(),
+          `script-src ${list("'self'", [...scriptHashes].sort(), an.scriptSrc)}`,
           "style-src 'self' 'unsafe-inline'",           // 100+ inline style="" attributes can't be hashed; styles can't run code
-          "img-src 'self'",
+          `img-src ${list("'self'", an.imgSrc)}`,
           "font-src 'self'",
-          "connect-src 'self'",
+          `connect-src ${list("'self'", an.connectSrc)}`,
           "manifest-src 'self'",
           "media-src 'none'",
           "object-src 'none'",
@@ -89,8 +93,10 @@ export default function launchFiles({ site }) {
           "frame-ancestors 'none'",                      // nobody may embed this site
           "base-uri 'self'",
           "form-action 'self' https://forms.zohopublic.com", // the contact form posts to Zoho
-          "require-trusted-types-for 'script'",          // browsers refuse string -> HTML (innerHTML etc.); our code has no such sink
-        ].join('; ');
+          // Browsers refuse string -> HTML (innerHTML etc.); our code has no such sink. Omitted ONLY for Google Analytics:
+          // gtag.js is third-party code that can't be tested offline against Trusted Types.
+          an.trustedTypes ? "require-trusted-types-for 'script'" : null,
+        ].filter(Boolean).join('; ');
 
         const headers = [
           `Content-Security-Policy: ${csp}`,
@@ -107,12 +113,12 @@ export default function launchFiles({ site }) {
           headers.push(`Strict-Transport-Security: ${hstsValue()}`);
           writeFileSync(sitemapPath, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${xml(u)}</loc></url>`).join('\n')}\n</urlset>\n`);
           writeFileSync(robots, `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
-          logger.info(`production: sitemap lists ${urls.length} indexable pages (${skipped} left out); CSP allows ${scriptHashes.size} inline scripts by hash; HSTS ${hstsValue()}`);
+          logger.info(`production: sitemap lists ${urls.length} indexable pages (${skipped} left out); CSP allows ${scriptHashes.size} inline scripts by hash; HSTS ${hstsValue()}; analytics: ${ANALYTICS.enabled ? ANALYTICS.provider : 'off'}`);
         } else {
           headers.push('X-Robots-Tag: noindex, nofollow');
           if (existsSync(sitemapPath)) rmSync(sitemapPath);
           writeFileSync(robots, `# Non-production build: keep all crawlers out.\n# The live site must be built with SITE_ENV=production.\nUser-agent: *\nDisallow: /\n`);
-          logger.info(`NON-production build: robots blocks all crawlers, no sitemap, no HSTS, X-Robots-Tag noindex; CSP allows ${scriptHashes.size} inline scripts by hash`);
+          logger.info(`NON-production build: robots blocks all crawlers, no sitemap, no HSTS, X-Robots-Tag noindex; CSP allows ${scriptHashes.size} inline scripts by hash; analytics: ${ANALYTICS.enabled ? ANALYTICS.provider : 'off'}`);
         }
         writeFileSync(join(out, '_headers'), `/*\n${headers.map((h) => `  ${h}`).join('\n')}\n`);
       },
