@@ -13,6 +13,7 @@ export const OG_CARDS = [
   { slug: 'card-issuing',   path: '/business/card-issuing',     world: 'business', label: 'Card Issuing',      headline: 'Issue cards. Control spend.',     sub: 'Mastercard cards for your team or your customers.' },
   { slug: 'agency-banking', path: '/business/agency-banking',   world: 'business', label: 'Agency Banking',    headline: 'Cash in. Cash out. Anywhere.',    sub: 'Turn your shop into a service point.' },
   { slug: 'bulk-messaging', path: '/business/bulk-messaging',   world: 'business', label: 'Bulk Messaging',    headline: 'Reach everyone. Instantly.',      sub: 'Bulk SMS and email, with delivery reports.' },
+  { slug: 'developers',    path: '/business/developers',       world: 'business', label: 'Developers',        headline: 'Integrate in an afternoon.',      sub: 'One API for collections, payouts and cards.' },
   { slug: 'egahub',         path: '/business/egahub',           world: 'business', label: 'Egahub',            headline: 'Your business, in your pocket.',  sub: 'The Eganow Business app.' },
   { slug: 'contact',        path: '/contact',                   world: 'neutral',  label: 'Contact',           headline: 'Let’s talk.',                sub: 'Questions, sales, support or just hello.' },
   { slug: 'help',           path: '/help',                      world: 'neutral',  label: 'Help centre',       headline: 'How can we help?',                sub: 'Answers for the Eganow app and Eganow Business.' },

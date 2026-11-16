@@ -66,7 +66,9 @@ When a provider is on, the build adds the banner to every page, a "Cookie settin
 
 ## Known gaps
 
-`scripts/known-missing.json` lists internal links whose pages are not built yet (currently `/business/developers`). `npm run check` reports them as warnings and fails on any *other* broken link.
+`scripts/known-missing.json` lists internal links whose pages are not built yet (currently none). `npm run check` reports them as warnings and fails on any *other* broken link.
+
+`/business/developers` has **no real API reference**: its code samples are labelled illustrative and its facts are `TODO(verify)` comments in the page source. Engineering must confirm them and decide where the real docs live (then replace the "Docs come with your sandbox" panel with a link).
 
 There is deliberately **no public pricing page**: quotes go through `/contact?topic=sales`.
 

@@ -1,0 +1,181 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+
+// NOTE (content): drafted from the product brief. There is NO real API reference here on purpose: the code samples are
+// labelled "illustrative" and must not be copied as fact. Before launch, Eganow's engineering team must confirm every
+// TODO(verify) item below and decide where the real documentation lives (a docs site, or shared with sandbox access).
+// TODO(verify): where the docs live (URL), sandbox turnaround, which products have an API, SDKs/languages, webhooks/callbacks,
+// authentication method, rate limits, support channel. Then replace the "docs" panel with a real link.
+
+const s3 = [
+  ['Simple', 'One API for collections, payouts and cards.'], // TODO(verify): scope of the API
+  ['Speed', 'Test in the sandbox, then go live when you are ready.'],
+  ['Secure', 'Keep your keys private and confirm every payment before you deliver.'],
+];
+
+const products = [
+  ['Collections', 'Request a payment from mobile money, cards or bank transfer, and get told when it lands.'], // BizCollect API
+  ['Payouts', 'Send money out to wallets and bank accounts from your own system.'], // TODO(verify): payouts API
+  ['Card issuing', 'Create and manage Mastercard virtual cards for your team or your customers.'], // TODO(verify): card API scope
+  ['Messaging', 'Trigger SMS and email from your app, with delivery status you can check.'], // TODO(verify): messaging API
+  ['Status checks', 'Look up any payment by its reference to see where it stands.'], // TODO(verify): status endpoint
+  ['Reports', 'Pull your transactions and settlements into your own books.'], // TODO(verify): reporting API
+];
+
+const steps = [
+  ['Ask for sandbox access', 'Tell us what you are building and we set you up.'],
+  ['Get your test keys', 'Use them to try everything with test money. Nothing real moves.'], // TODO(verify): key issuing
+  ['Build and test', 'Connect your app, make test payments and check your callbacks.'],
+  ['Go live', 'When you are happy, our team switches you to live.'], // TODO(verify): go-live review
+];
+
+const habits = [
+  ['Keep your keys private', 'Never put a secret key in a mobile app or in your website’s public code. Keep it on your server.'],
+  ['Wait for confirmation', 'Treat a payment as paid only when Eganow tells you it is. Do not rely on the customer’s screen.'],
+  ['Check before you deliver', 'Match the amount and reference to the order before you hand over goods or service.'],
+  ['Expect the odd retry', 'Networks fail. Make your system safe to receive the same message twice.'], // TODO(verify): idempotency/callback retries
+  ['Test the unhappy paths', 'Try a declined payment, a customer who never approves and a slow network before you go live.'],
+  ['Keep a record', 'Log each request and reference you send, so you can trace any payment in minutes.'],
+];
+
+const faqs = [
+  ['Is there a sandbox?', 'Yes. Ask for sandbox access and our team sets you up so you can test with test money before going live.'], // TODO(verify)
+  ['How long does sandbox access take?', 'We aim to reply quickly and set you up as soon as we understand what you are building.'], // TODO(verify): turnaround
+  ['Where is the documentation?', 'The API documentation is shared with your sandbox access. A public documentation site is planned.'], // TODO(verify): docs location
+  ['Which languages can I use?', 'It is a standard web API, so you can call it from any language that can make secure web requests.'], // TODO(verify): SDKs
+  ['Do I need a business account first?', 'Not to start testing. You need an approved business account to go live.'], // TODO(verify)
+  ['Who do I talk to if I get stuck?', 'Use the contact form and choose the sandbox topic. Our team will help.'], // TODO(verify): dev support channel
+];
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'Developers', item: 'https://eganow.com/business/developers' },
+] };
+---
+<Base world="business" title="Developers — Integrate in an afternoon | Eganow Business" description="Collections, payouts, cards and messaging through one Eganow API. Ask for sandbox access and test before you go live. Simple. Speed. Secure.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="Developers" overline="For developers" title="Integrate in an afternoon." titleId="dev-title"
+      body="One API for collections, payouts and cards. Test in the sandbox, then go live when you are ready."
+      primary={['Get sandbox access', '/contact?topic=sandbox']} s3={s3}>
+      <div class="hv">
+        <p class="hv__t">Illustrative example</p>
+        <pre><code>POST /v1/collections
+&#123;
+  "amount": 250.00,
+  "currency": "GHS",
+  "method": "mobile_money"
+&#125;</code></pre>
+        <p class="hv__ok"><b aria-hidden="true">✓</b> Payment received</p>
+      </div>
+    </ServiceHero>
+
+    <CardGrid overline="What you can build" title="Put Eganow inside your product." id="build-t" items={products} />
+
+    <!-- CODE -->
+    <section class="ex" aria-labelledby="ex-t">
+      <div class="wrap ex__in">
+        <div class="ex__copy">
+          <p class="overline">How it works</p>
+          <h2 id="ex-t" class="display-lg">Ask. Get told. Deliver.</h2>
+          <p class="body-lg">Your system asks Eganow to collect a payment. When the customer pays, Eganow tells your system, and you deliver the order.</p>
+          <ul class="pts">
+            <li>Your server sends a request</li>
+            <li>The customer approves on their phone</li>
+            <li>Eganow sends your server a confirmation</li>
+          </ul>
+        </div>
+        <div class="codes">
+          <div class="code">
+            <div class="code__bar"><span>1 · Ask for a payment (illustrative)</span><button type="button" data-copy="#req">Copy</button></div>
+<pre><code id="req">POST /v1/collections
+&#123;
+  "amount": 250.00,
+  "currency": "GHS",
+  "method": "mobile_money",
+  "reference": "ORDER-1042",
+  "callback_url": "https://yourshop.com/hook"
+&#125;</code></pre>
+          </div>
+          <div class="code">
+            <div class="code__bar"><span>2 · Eganow tells you (illustrative)</span><button type="button" data-copy="#cb">Copy</button></div>
+<pre><code id="cb">POST https://yourshop.com/hook
+&#123;
+  "reference": "ORDER-1042",
+  "status": "paid",
+  "amount": 250.00
+&#125;</code></pre>
+          </div>
+          <p class="note">These samples only show the shape of an integration. The real endpoints, fields, keys and security checks are in the documentation you receive with sandbox access.</p>
+        </div>
+      </div>
+    </section>
+
+    <Steps overline="Getting started" title="From idea to live in four steps." id="start-t" steps={steps} />
+
+    <CardGrid overline="Good habits" title="Build it safely." id="safe-t" items={habits} />
+
+    <!-- DOCS -->
+    <section class="docs" aria-labelledby="docs-t">
+      <div class="wrap docs__in">
+        <div>
+          <p class="overline">Documentation</p>
+          <h2 id="docs-t" class="display-lg">Docs come with your sandbox.</h2>
+          <p class="body-lg">Request access and we share the API reference, your test keys and an engineer to ask when you are stuck.</p> <!-- TODO(verify): engineer contact; replace with a real docs link once the docs site exists -->
+        </div>
+        <div class="cta"><a class="btn btn--blue-solid" href="/contact?topic=sandbox">Get sandbox access</a><a class="btn btn--ghost" href="/contact?topic=sales">Talk to sales</a></div>
+      </div>
+    </section>
+
+    <Faq items={faqs} />
+    <FinalCta title="Ready to build?" body="Tell us what you are making and we will set up your sandbox." primary={['Get sandbox access', '/contact?topic=sandbox']} />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.ex, section.docs { padding: var(--space-24) 0; }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+
+  /* hero visual */
+  .hv { position: absolute; inset: 8% 2% 8% 2%; display: grid; align-content: center; gap: 12px; padding: 18px; background: var(--neutral-950); border-radius: var(--radius-lg); box-shadow: 0 30px 60px -20px rgb(10 13 20 / .55); }
+  .hv__t { margin: 0; font: 600 11px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-400); }
+  .hv pre { margin: 0; font: 400 clamp(10px, 3.6cqw, 14px)/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #cfe5ff; overflow: hidden; }
+  .hv__ok { margin: 0; display: inline-flex; align-items: center; gap: 8px; width: max-content; padding: 6px 14px; border-radius: 99px; background: #fff; color: var(--neutral-950); font: 600 13px/20px var(--font-display); }
+  .hv__ok b { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #1f9d6b; color: #fff; font-size: 11px; }
+
+  /* code section (dark) */
+  .ex { background: var(--neutral-900); color: #fff; }
+  .ex .overline { color: var(--neutral-300); } .ex .body-lg { color: var(--neutral-300); } .ex .pts li { color: var(--neutral-200); }
+  .ex__in { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+  .ex__copy { display: grid; gap: var(--space-4); justify-items: start; } .ex__copy .display-lg { margin-top: 0; }
+  .codes { display: grid; gap: var(--space-4); min-width: 0; }
+  .code { background: var(--neutral-950); border: 1px solid var(--neutral-700); border-radius: var(--radius-md); overflow: hidden; min-width: 0; }
+  .code__bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--neutral-700); font-size: 12px; color: var(--neutral-400); }
+  .code__bar button { font: 600 12px/1 var(--font-display); color: #fff; background: var(--neutral-700); border: 0; border-radius: 99px; padding: 10px 14px; min-height: 36px; cursor: pointer; }
+  .code pre { margin: 0; padding: 18px 16px; overflow-x: auto; font: 400 13.5px/22px ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #cfe5ff; }
+  .note { margin: 0; font-size: 14px; line-height: 22px; color: var(--neutral-300); }
+  @media (min-width: 900px) { .ex__in { grid-template-columns: 1fr 1.15fr; } }
+
+  /* docs panel */
+  .docs__in { display: grid; gap: var(--space-8); align-items: center; padding: var(--space-12); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-raised); }
+  .docs__in .display-lg { margin-top: var(--space-3); } .docs__in .body-lg { margin-top: var(--space-4); max-width: 52ch; }
+  .docs__in .cta { margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  @media (min-width: 900px) { .docs__in { grid-template-columns: 1.3fr 1fr; } .docs__in .cta { justify-content: flex-end; } }
+  @media (max-width: 639px) { .docs__in { padding: var(--space-6) var(--space-4); } }
+</style>
+
+<script>
+  import '../../scripts/copy';
+</script>

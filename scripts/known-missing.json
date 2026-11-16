@@ -1,4 +1,1 @@
-{
-  "_note": "Internal URLs that are linked but intentionally not built yet. They show as warnings, not failures. Remove an entry when the page exists (the checker also warns if an entry is no longer needed).",
-  "/business/developers": "Developer docs landing page not built (docs site location undecided)."
-}
+{ "_note": "Internal URLs that are linked but intentionally not built yet. They show as warnings, not failures. Remove an entry when the page exists (the checker also warns if an entry is no longer needed)." }
