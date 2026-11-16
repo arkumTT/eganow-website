@@ -1,0 +1,19 @@
+---
+// A titled grid of short cards (use cases, features...). Headings are h3 inside an h2 section.
+interface Props { overline: string; title: string; id: string; items: ReadonlyArray<readonly [string, string]>; }
+const { overline, title, id, items } = Astro.props;
+---
+<section class="uses" aria-labelledby={id}>
+  <div class="wrap">
+    <p class="overline">{overline}</p>
+    <h2 id={id} class="display-lg">{title}</h2>
+    <ul class="usegrid">{items.map(([h, p]) => <li><h3 class="heading-4">{h}</h3><p>{p}</p></li>)}</ul>
+  </div>
+</section>
+<style>
+  .uses { padding: var(--space-24) 0; }
+  .usegrid { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+  .usegrid li { display: grid; gap: 6px; padding: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); } .usegrid p { margin: 0; color: var(--text-muted); font-size: 15px; line-height: 22px; }
+  @media (min-width: 640px) { .usegrid { grid-template-columns: repeat(2, 1fr); } } @media (min-width: 1000px) { .usegrid { grid-template-columns: repeat(3, 1fr); } }
+
+</style>

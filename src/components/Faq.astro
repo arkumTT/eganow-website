@@ -1,0 +1,22 @@
+---
+interface Props { items: ReadonlyArray<readonly [string, string]>; title?: string; }
+const { items, title = 'Good questions.' } = Astro.props;
+---
+<section class="faq" aria-labelledby="faq-t">
+  <div class="wrap faq__in">
+    <div><p class="overline">FAQ</p><h2 id="faq-t" class="display-lg">{title}</h2></div>
+    <div class="faq__list">{items.map(([q, a]) => (
+      <details><summary>{q}</summary><p>{a}</p></details>
+    ))}</div>
+  </div>
+</section>
+<style>
+  .faq { padding: var(--space-24) 0; }
+  .faq__in { display: grid; gap: var(--space-8); } .faq__list { display: grid; gap: 10px; }
+  details { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); }
+  summary { cursor: pointer; list-style: none; padding: 18px 20px; font: 600 17px/24px var(--font-display); display: flex; justify-content: space-between; gap: 16px; min-height: 44px; }
+  summary::-webkit-details-marker { display: none; } summary::after { content: "+"; font-size: 24px; line-height: 24px; color: var(--neutral-700); flex: none; } details[open] summary::after { content: "–"; }
+  details p { margin: 0; padding: 0 20px 20px; color: var(--text-muted); max-width: 62ch; }
+  @media (min-width: 900px) { .faq__in { grid-template-columns: 1fr 1.6fr; } .faq__in > div:first-child .display-lg { max-width: 10ch; } }
+
+</style>

@@ -1,0 +1,258 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BizVisuals from '../../components/BizVisuals.astro';
+import ServiceHero from '../../components/ServiceHero.astro';
+import Steps from '../../components/Steps.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PriceTeaser from '../../components/PriceTeaser.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import PosDevice from '../../components/PosDevice.astro';
+
+// NOTE (content): drafted from the product brief (EgaPOS = POS service: device issuing + POS management platform).
+// Everything marked TODO(verify) must be confirmed against the live product: device lineup and specs, accepted payment
+// methods, receipts, offline behaviour, delivery/setup process, lease vs purchase, fees.
+
+const s3 = [
+  ['Simple', 'Get a device, switch on and start selling. Manage everything from one platform.'],
+  ['Speed', 'Customers tap to pay and the sale is done in seconds.'],
+  ['Secure', 'Licensed and monitored, with every sale on record.'],
+];
+
+// TODO(verify): real device lineup, names and specs. These three are placeholders for the shapes a POS usually comes in.
+const devices = [
+  { id: 'handheld', variant: 'handheld', name: 'Handheld POS', tag: 'Take it anywhere', body: 'Walk the shop floor, serve at the table or deliver to the door. Take payments wherever your customer is.', points: ['Light and easy to hold', 'Built-in keypad and screen', 'Great for shops, restaurants and deliveries'] },
+  { id: 'counter', variant: 'counter', name: 'Countertop POS', tag: 'Always at the till', body: 'A bigger screen for the busy counter. Stays put, stays ready, and is easy for every cashier to use.', points: ['Large, clear display', 'Made for busy checkouts', 'Great for supermarkets and pharmacies'] },
+  { id: 'mini', variant: 'mini', name: 'Mini POS', tag: 'Small space, big sales', body: 'Compact tap-to-pay for market stalls, kiosks and pop-ups. Small enough for any counter.', points: ['Pocket-friendly size', 'Quick tap-to-pay', 'Great for stalls, kiosks and events'] },
+] as const;
+
+const steps = [
+  ['Apply', 'Tell us about your business and how many devices you need.'],
+  ['Get verified', 'We verify your business so you can start accepting safely.'],
+  ['Receive your device', 'Eganow issues and sets up your device for you.'], // TODO(verify): delivery/setup process
+  ['Start accepting', 'Tap, accept, and watch every sale appear on the platform.'],
+];
+
+const features = [
+  ['Cards and mobile money at the counter', 'Customers pay the way they prefer.'], // TODO(verify)
+  ['Receipts for every sale', 'Give customers proof of payment, every time.'], // TODO(verify)
+  ['Every terminal, one platform', 'Manage all your devices and branches in one place.'],
+  ['Sales by device and branch', 'See what each terminal sold, and when.'],
+  ['One dashboard for everything', 'Keep POS sales alongside your BizCollect payments.'], // TODO(verify)
+  ['Help when you need it', 'Our team supports your setup and any device issue.'], // TODO(verify): support SLAs
+];
+
+const uses = [
+  ['Retail shops', 'Speed up the till and keep every sale on record.'],
+  ['Restaurants and cafés', 'Take payment at the table with a handheld device.'],
+  ['Pharmacies and clinics', 'A clear, quick checkout for every customer.'],
+  ['Market and street traders', 'A small device that fits a small stall.'],
+  ['Delivery and field sales', 'Collect payment at the door and know it went through.'],
+  ['Events and pop-ups', 'Set up anywhere and sell all day.'],
+];
+
+const faqs = [
+  ['How do I get a POS device?', 'Apply for an Eganow business account and tell us what you need. Once you’re verified, Eganow issues and sets up your device.'], // TODO(verify): buy vs lease, lead time
+  ['Which payments can I accept?', 'You can accept the payment methods Eganow supports on the device. We confirm the full list when you apply.'], // TODO(verify)
+  ['Can I manage more than one terminal?', 'Yes. The POS management platform shows every device, branch and sale in one place.'],
+  ['What if a device is lost or stops working?', 'Contact our support team and we’ll help you get back to selling.'], // TODO(verify): replacement policy
+  ['Can I use EgaPOS with BizCollect?', 'Yes. Many businesses use POS at the counter and BizCollect for online payments, payment links and USSD.'], // TODO(verify): unified reporting
+  ['What does it cost?', 'It depends on the devices you need and your volumes. Talk to our team for a quote.'], // TODO(verify): publish rates?
+];
+
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'Business', item: 'https://eganow.com/business' },
+  { '@type': 'ListItem', position: 2, name: 'EgaPOS', item: 'https://eganow.com/business/egapos' },
+] };
+
+const terminals = [
+  ['Accra Mall · Till 1', true], ['Kumasi Central · Till 2', true], ['Tema Branch · Till 1', false],
+] as const;
+const hours = [18, 34, 52, 40, 66, 82, 74, 92, 70, 58];
+const sales = [['10:42', 'Card', 'GHS 120.00', 'Paid'], ['10:38', 'Mobile money', 'GHS 45.00', 'Paid'], ['10:31', 'Card', 'GHS 310.00', 'Paid'], ['10:27', 'Mobile money', 'GHS 60.00', 'Pending']];
+---
+<Base world="business" title="EgaPOS — Tap. Paid. | Eganow Business" description="Get POS devices from Eganow and manage every terminal, receipt and sale from one platform. Simple. Speed. Secure.">
+  <script type="application/ld+json" set:html={JSON.stringify(crumbs)} slot="head" />
+  <Header world="business" />
+  <main id="main">
+    <ServiceHero crumb="EgaPOS" overline="EgaPOS" title="Tap. Paid." titleId="pos-title"
+      body="Get an Eganow POS device and take payments at the counter. Manage every terminal from one platform." s3={s3}>
+      <BizVisuals name="pos" />
+    </ServiceHero>
+
+    <!-- DEVICE CAROUSEL -->
+    <section class="devices" aria-labelledby="dev-t">
+      <div class="wrap">
+        <p class="overline">Devices</p>
+        <h2 id="dev-t" class="display-lg">The right device for how you sell.</h2>
+        <p class="body-lg lead">Swipe through the range. Eganow issues the device and sets it up for you.</p>
+      </div>
+
+      <div class="car" data-car aria-roledescription="carousel" aria-label="EgaPOS devices">
+        <div class="car__track" tabindex="0" role="group" aria-label="Device list. Scroll sideways to browse.">
+          {devices.map((d, i) => (
+            <article class="slide" id={`dev-${d.id}`} aria-roledescription="slide" aria-label={`${i + 1} of ${devices.length}: ${d.name}`}>
+              <div class="slide__stage" data-tilt><div class="slide__dev"><PosDevice variant={d.variant} /></div></div>
+              <div class="slide__copy">
+                <p class="tag">{d.tag}</p>
+                <h3 class="heading-2">{d.name}</h3>
+                <p class="body-lg">{d.body}</p>
+                <ul class="pts">{d.points.map((p) => <li>{p}</li>)}</ul>
+                <a class="more" href="/contact?topic=sales">Ask about the {d.name} <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div class="car__ctrl">
+          <button type="button" class="car__btn" data-prev aria-label="Previous device">←</button>
+          <ol class="car__dots" aria-label="Choose a device">{devices.map((d, i) => <li><button type="button" data-dot={i} aria-label={`Show ${d.name}`} aria-current={i === 0 ? 'true' : undefined}></button></li>)}</ol>
+          <button type="button" class="car__btn" data-next aria-label="Next device">→</button>
+        </div>
+      </div>
+    </section>
+
+    <Steps overline="Device issuing" title="From sign-up to first sale." id="issue-t" steps={steps} />
+
+    <!-- MANAGEMENT PLATFORM -->
+    <section class="plat" aria-labelledby="plat-t">
+      <div class="wrap plat__in">
+        <div class="plat__copy">
+          <p class="overline">POS management platform</p>
+          <h2 id="plat-t" class="display-lg">Every terminal. One view.</h2>
+          <p class="body-lg">See which devices are online, what each one sold and how the day is going, without leaving your desk.</p>
+          <ul class="pts pts--inv">
+            <li>All your devices and branches in one place</li>
+            <li>Sales by terminal, with every transaction listed</li>
+            <li>Spot an offline device before it costs you a sale</li>
+          </ul>
+          <div class="cta"><a class="btn btn--blue-solid" href="/contact?topic=business">Open a business account</a><a class="btn btn--ghost-inv" href="/contact?topic=sales">Talk to sales</a></div>
+        </div>
+
+        <div class="console" aria-hidden="true">
+          <aside class="terms">
+            <p class="t">Terminals · {terminals.length}</p>
+            <ul>{terminals.map(([n, on], i) => (
+              <li class:list={{ sel: i === 0 }}><b>{n}</b><span class:list={['stat', { off: !on }]}><i></i>{on ? 'Online' : 'Offline'}</span></li>
+            ))}</ul>
+          </aside>
+          <div class="detail">
+            <p class="t">Accra Mall · Till 1</p>
+            <p class="amt">GHS 3,420.00</p><p class="sub">Sales today · 38 transactions</p>
+            <div class="hbars">{hours.map((h, i) => <i style={`--h:${h}%;--d:${i * 0.09}s`}></i>)}</div>
+            <table><tbody>{sales.map(([tm, m, a, s]) => <tr><td>{tm}</td><td class="m">{m}</td><td class="r">{a}</td><td><span class:list={['st', { pend: s === 'Pending' }]}>{s === 'Paid' ? '✓ ' : '… '}{s}</span></td></tr>)}</tbody></table>
+          </div>
+        </div>
+        <p class="sr-only">Example management platform showing three terminals with their online status, today's sales for the selected terminal and a list of recent transactions.</p>
+      </div>
+    </section>
+
+    <CardGrid overline="Why EgaPOS" title="Built for busy counters." id="feat-t" items={features} />
+    <CardGrid overline="Who it’s for" title="From market stalls to supermarkets." id="uses-t" items={uses} />
+    <PriceTeaser body="No surprises. Tell us what devices you need and we’ll show you exactly what you pay." />
+    <Faq items={faqs} />
+    <FinalCta title="Ready to tap and get paid?" />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section.devices { padding: var(--space-24) 0 var(--space-16); }
+  .tag { margin: 0; font: 600 12px/16px var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+  .pts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pts li { position: relative; padding-left: 28px; font-size: 16px; line-height: 24px; }
+  .pts li::before { content: ""; position: absolute; left: 0; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--eganow-blue); }
+  .pts li::after { content: ""; position: absolute; left: 5px; top: 9px; width: 6px; height: 3px; border-left: 2px solid var(--neutral-950); border-bottom: 2px solid var(--neutral-950); transform: rotate(-45deg); }
+
+  /* CAROUSEL: native scroll-snap, works without JS; buttons/dots/tilt are enhancements */
+  .car { margin-top: var(--space-12); }
+  .car__track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; padding: 0 clamp(16px, 4vw, 48px); gap: var(--space-4); }
+  .car__track::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 min(100%, 1120px); scroll-snap-align: center; display: grid; gap: var(--space-6); align-items: center; padding: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-raised); }
+  .car__track > .slide:first-child { margin-left: max(0px, calc((100vw - 1200px) / 2)); }
+  .slide__stage { display: grid; place-items: center; padding: var(--space-6); min-height: 300px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--eganow-blue), #0b4f99); perspective: 900px; overflow: hidden; }
+  .slide__dev { width: min(100%, 360px); transform-style: preserve-3d; transition: transform .25s var(--ease-out); will-change: transform; }
+  .slide__copy { display: grid; gap: var(--space-4); justify-items: start; }
+  .car__ctrl { display: flex; align-items: center; justify-content: center; gap: var(--space-4); margin-top: var(--space-6); }
+  .car__btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border-strong); background: var(--surface-raised); font: 600 18px/1 var(--font-display); cursor: pointer; }
+  .car__btn:hover { border-color: var(--eganow-blue); }
+  .car__dots { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+  .car__dots button { width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; position: relative; }
+  .car__dots button::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: var(--neutral-300); transition: width .25s var(--ease-out), background-color .25s; }
+  .car__dots button[aria-current="true"]::after { width: 26px; margin-left: -13px; border-radius: 99px; background: var(--eganow-blue); }
+  /* Without JS the controls do nothing, so hide them */
+  .car:not(.ready) .car__ctrl { display: none; }
+  @media (min-width: 900px) { .slide { grid-template-columns: 1fr 1fr; padding: var(--space-8); } }
+
+  /* PLATFORM (dark) */
+  .plat { background: var(--neutral-950); color: #fff; padding: var(--space-24) 0; }
+  .plat .overline { color: var(--neutral-300); } .plat .body-lg { color: var(--neutral-300); }
+  .plat__in { display: grid; gap: var(--space-12); align-items: center; }
+  .plat__copy { display: grid; gap: var(--space-4); justify-items: start; } .plat__copy .display-lg { margin-top: 0; }
+  .pts--inv li::after { border-color: var(--neutral-950); }
+  .plat .pts li { color: var(--neutral-200); }
+  .console { display: grid; background: var(--surface-raised); color: var(--text); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .7); min-width: 0; }
+  .terms { padding: 18px; background: var(--neutral-100); display: grid; gap: 10px; align-content: start; border-bottom: 1px solid var(--border); }
+  .terms ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .terms li { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; font: 500 13px/18px var(--font-display); }
+  .terms li.sel { background: #fff; border-color: var(--eganow-blue); box-shadow: 0 0 0 1px var(--eganow-blue); }
+  .stat { display: inline-flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-display); color: #0b5b40; } .stat i { width: 8px; height: 8px; border-radius: 50%; background: #12805c; }
+  .stat.off { color: #7a3b00; } .stat.off i { background: transparent; box-shadow: inset 0 0 0 2px #b45309; }
+  .t { font: 600 12px/16px var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--neutral-500); margin: 0; }
+  .detail { padding: 20px; display: grid; gap: 8px; min-width: 0; } .detail .amt { font: 600 32px/40px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 0; } .sub { margin: 0; font-size: 13px; color: var(--text-muted); }
+  .hbars { display: flex; align-items: flex-end; gap: 6px; height: 96px; margin: 6px 0; } .hbars i { flex: 1; height: var(--h); border-radius: 4px; background: var(--eganow-blue); transform-origin: bottom; animation: gr 4s var(--ease-out) var(--d) infinite; }
+  @keyframes gr { 0% { transform: scaleY(.2); } 35%, 85% { transform: scaleY(1); } 100% { transform: scaleY(.2); } }
+  table { width: 100%; border-collapse: collapse; font: 400 13px/20px var(--font-sans); } td { padding: 8px 4px; border-top: 1px solid var(--border); white-space: nowrap; } td.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .st { font: 600 12px/16px var(--font-display); padding: 3px 10px; border-radius: 99px; background: #d7f2e6; color: #0b5b40; white-space: nowrap; } .st.pend { background: #fdf0c8; color: #6b4a00; }
+  @media (min-width: 900px) { .plat__in { grid-template-columns: 1fr 1.25fr; } .console { grid-template-columns: 220px 1fr; } .terms { border-bottom: 0; border-right: 1px solid var(--border); } }
+  @media (max-width: 639px) { td.m { display: none; } }
+
+  @media (prefers-reduced-motion: reduce) { .hbars i { animation: none; } .slide__dev { transition: none; } }
+</style>
+
+<script>
+  const car = document.querySelector<HTMLElement>('[data-car]');
+  if (car) {
+    const track = car.querySelector<HTMLElement>('.car__track')!;
+    const slides = Array.from(track.querySelectorAll<HTMLElement>('.slide'));
+    const dots = Array.from(car.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    car.classList.add('ready');
+
+    const current = () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bd = Infinity;
+      slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } });
+      return best;
+    };
+    const go = (i: number) => {
+      const n = Math.max(0, Math.min(slides.length - 1, i));
+      const s = slides[n];
+      track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    };
+    const sync = () => { const c = current(); dots.forEach((d, k) => (k === c ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current'))); };
+    let raf = 0; track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive: true });
+    car.querySelector('[data-prev]')!.addEventListener('click', () => go(current() - 1));
+    car.querySelector('[data-next]')!.addEventListener('click', () => go(current() + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+    });
+    sync();
+
+    // Pointer parallax: gentle 3D tilt (mouse only, never with reduced motion)
+    if (!reduce && matchMedia('(pointer: fine)').matches) {
+      car.querySelectorAll<HTMLElement>('[data-tilt]').forEach((stage) => {
+        const dev = stage.querySelector<HTMLElement>('.slide__dev')!;
+        stage.addEventListener('pointermove', (e) => {
+          const r = stage.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+          dev.style.transform = `rotateY(${x * 22}deg) rotateX(${-y * 16}deg) translateZ(0)`;
+        });
+        stage.addEventListener('pointerleave', () => { dev.style.transform = ''; });
+      });
+    }
+  }
+</script>

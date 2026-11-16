@@ -1,0 +1,41 @@
+---
+// Business service-page hero: breadcrumb, headline, CTAs, a visual (slot) and the 3S strip.
+interface Props {
+  crumb: string; overline: string; title: string; body: string; titleId?: string;
+  primary?: [string, string]; secondary?: [string, string]; s3: ReadonlyArray<readonly [string, string]>;
+}
+const { crumb, overline, title, body, titleId = 'svc-title', primary = ['Open a business account', '/contact?topic=business'], secondary = ['Talk to sales', '/contact?topic=sales'], s3 } = Astro.props;
+---
+<section class="hero" aria-labelledby={titleId}>
+  <div class="hero__in">
+    <div class="hero__copy">
+      <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/business">Business</a></li><li aria-current="page">{crumb}</li></ol></nav>
+      <p class="overline">{overline}</p>
+      <h1 id={titleId} class="display-xl">{title}</h1>
+      <p class="body-lg">{body}</p>
+      <div class="cta">
+        <a class="btn btn--blue-solid" href={primary[1]}>{primary[0]}</a>
+        <a class="btn btn--ghost" href={secondary[1]}>{secondary[0]}</a>
+      </div>
+    </div>
+    <div class="hero__vis" aria-hidden="true"><div class="vis"><slot /></div></div>
+  </div>
+  <ul class="s3">{s3.map(([h, p]) => <li><b>{h}</b><span>{p}</span></li>)}</ul>
+</section>
+<style>
+  .hero { position: relative; overflow: hidden; background: var(--surface); }
+  .hero::before { content: ""; position: absolute; top: 0; right: 0; width: 56%; height: 100%; background: var(--eganow-blue); clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%); }
+  .hero::after { content: ""; position: absolute; top: 0; right: 0; width: 64%; height: 100%; background: #9fd0ff; opacity: .5; clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%); }
+  .hero__in { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: var(--space-12) clamp(16px, 4vw, 48px) var(--space-8); display: grid; gap: var(--space-8); align-items: center; }
+  .hero__copy { display: grid; gap: var(--space-4); max-width: 560px; justify-items: start; }
+  .hero__copy .cta { margin-top: var(--space-2); }
+  .crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; font: 500 13px/20px var(--font-display); color: var(--text-muted); }
+  .crumbs li + li::before { content: "/"; margin-right: 8px; color: var(--neutral-400); } .crumbs a { text-decoration: none; } .crumbs a:hover { text-decoration: underline; }
+  .vis { position: relative; width: min(100%, 520px); aspect-ratio: 1; margin-inline: auto; container-type: inline-size; }
+  .s3 { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px) var(--space-12); list-style: none; display: grid; gap: var(--space-3); }
+  .s3 li { display: grid; gap: 2px; padding: var(--space-4); background: rgb(255 255 255 / .92); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .s3 b { font: 600 18px/24px var(--font-display); } .s3 span { color: var(--text-muted); font-size: 14px; line-height: 20px; }
+  @media (min-width: 900px) { .hero__in { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-16); } .s3 { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 899px) { .hero::before, .hero::after { width: 100%; height: 46%; top: auto; bottom: 0; clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%); } }
+
+</style>

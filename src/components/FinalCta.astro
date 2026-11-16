@@ -1,0 +1,14 @@
+---
+interface Props { title?: string; body?: string; }
+const { title = 'Ready to get started?', body = 'Open an account in minutes, or talk to our team.' } = Astro.props;
+---
+<section class="final">
+  <h2 class="display-lg">{title}</h2>
+  <p class="body-lg">{body}</p>
+  <div class="cta"><a class="btn btn--blue-solid" href="/contact?topic=business">Open a business account</a><a class="btn btn--ghost" href="/contact?topic=sales">Talk to sales</a></div>
+  <a class="swap" href="/business">← Explore all Business services</a>
+</section>
+<style>
+  .final { padding: var(--space-24) clamp(16px, 4vw, 48px); text-align: center; display: grid; justify-items: center; gap: var(--space-4); border-top: 1px solid var(--border); } .final .cta { justify-content: center; }
+  .swap { margin-top: var(--space-4); font: 500 14px/20px var(--font-display); color: var(--text-muted); }
+</style>
