@@ -1,0 +1,190 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import DraftNote from '../components/DraftNote.astro';
+import { COMPANY_DRAFT } from '../data/company-status';
+import { fmt, assertNoPlaceholders } from '../lib/text';
+
+// DRAFT. Written from the product brief only: no company history, numbers, people or partners are invented.
+// Anything company-specific is a [[placeholder]] for Eganow to supply. Turning COMPANY_DRAFT off while any remain fails the build.
+// Note for the team: public news reports describe Eganow as a Ghana-based fintech owned by Teksol and holding a Bank of Ghana
+// Enhanced Payment Service Provider licence. Confirm before stating either.
+
+const story = [
+  '[[Our story: who founded Eganow, when and why. Two or three short, human paragraphs.]]',
+  '[[Who we are today: where we are based, how big the team is, and who owns or backs Eganow.]]',
+];
+const personal = [['Money transfer', 'Send money at home and abroad.', '/#transfer'], ['Bill payments', 'Pay utilities, airtime and more.', '/#bills'], ['Cards', 'Virtual and physical Mastercard cards.', '/#cards'], ['Groups', 'Pool money privately or publicly.', '/#groups']] as const;
+const business = [['BizCollect', 'Collect and pay out.', '/business/bizcollect'], ['EgaPOS', 'POS devices and management.', '/business/egapos'], ['Card Issuing', 'Cards for teams and customers.', '/business/card-issuing'], ['Agency Banking', 'Cash in and cash out.', '/business/agency-banking'], ['Bulk Messaging', 'SMS and email at scale.', '/business/bulk-messaging'], ['Egahub', 'The business app.', '/business/egahub']] as const;
+const values = [
+  { icon: 'simple', h: 'Simple', p: 'Money should not need a manual. We cut every screen and every step we can, and say things plainly.' },
+  { icon: 'bolt', h: 'Speed', p: 'Your time matters. We build for quick payments, quick answers and quick help.' },
+  { icon: 'shield', h: 'Secure', p: 'Trust comes first. We protect your money and information, and we are open about how.' },
+] as const;
+const licence = 'Eganow is licensed by the Bank of Ghana as [[licence type and number]]. We work with [[banks, mobile money operators and other partners, by name]], and issue Mastercard cards [[confirm programme details]].';
+const partners = ['[[Partner logo]]', '[[Partner logo]]', '[[Partner logo]]', '[[Partner logo]]'];
+const leaders = [
+  { name: '[[Full name]]', role: '[[Job title]]', bio: '[[One-line bio]]' },
+  { name: '[[Full name]]', role: '[[Job title]]', bio: '[[One-line bio]]' },
+  { name: '[[Full name]]', role: '[[Job title]]', bio: '[[One-line bio]]' },
+];
+const work = [
+  { icon: 'users', h: 'Partner with us', p: 'Banks, networks, platforms and organisations: let’s build something together.', href: '/contact?topic=partnership', cta: 'Get in touch' },
+  { icon: 'mail', h: 'Press and media', p: '[[Press contact email, or a link to a press page]]', href: '', cta: '' },
+  { icon: 'building', h: 'Careers', p: '[[Careers page link or email]]', href: '', cta: '' },
+];
+
+assertNoPlaceholders('About page', { story, licence, partners, leaders, work }, COMPANY_DRAFT);
+---
+<Base title="About Eganow | Simple. Speed. Secure." description="Eganow helps people and businesses send, pay, collect and spend money. Learn who we are, what we do and how we work." noindex={COMPANY_DRAFT}>
+  <Header world="neutral" />
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="ab-t">
+      <div class="hero__in">
+        <div class="hero__copy">
+          <p class="overline">About Eganow</p>
+          <h1 id="ab-t" class="display-xl">Money, made simple.</h1>
+          <p class="body-lg">Eganow helps people and businesses send, pay, collect and spend money. Simple. Speed. Secure.</p>
+          <div class="cta"><a class="btn btn--red" href="/#download">Get the app</a><a class="btn btn--blue" href="/business"><span class="dot"></span>Explore Business</a></div>
+          {COMPANY_DRAFT && <DraftNote />}
+        </div>
+        <div class="tiles" aria-hidden="true">
+          <div class="tile tile--red"><img src="/brand/eganow-icon-white-blue.svg" alt="" width="160" height="160" /></div>
+          <div class="tile tile--blue"></div>
+          <div class="tile tile--white"><img src="/brand/eganow-icon.svg" alt="" width="80" height="80" /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="story" aria-labelledby="st-t">
+      <div class="wrap story__in">
+        <div><p class="overline">Our story</p><h2 id="st-t" class="display-lg">Why Eganow exists.</h2></div>
+        <div class="story__body">{story.map((t) => <p class="body-lg" set:html={fmt(t)} />)}</div>
+      </div>
+    </section>
+
+    <!-- TWO WORLDS -->
+    <section class="two" aria-labelledby="tw-t">
+      <div class="wrap">
+        <p class="overline">What we do</p>
+        <h2 id="tw-t" class="display-lg">Two worlds. One Eganow.</h2>
+        <div class="worlds">
+          <article class="world world--red" data-world="personal">
+            <h3 class="heading-3">For people</h3><p>The Eganow app puts everyday money in your pocket.</p>
+            <ul>{personal.map(([h, p, href]) => <li><a href={href}><b>{h}</b><span>{p}</span></a></li>)}</ul>
+          </article>
+          <article class="world world--blue" data-world="business">
+            <h3 class="heading-3">For businesses</h3><p>Eganow Business helps you get paid, pay out and grow.</p>
+            <ul>{business.map(([h, p, href]) => <li><a href={href}><b>{h}</b><span>{p}</span></a></li>)}</ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREE S -->
+    <section class="vals" aria-labelledby="v-t">
+      <div class="wrap">
+        <p class="overline">What we believe</p>
+        <h2 id="v-t" class="display-lg">Simple. Speed. Secure.</h2>
+        <ul class="vgrid">{values.map((v) => (
+          <li><span class="vic"><Icon name={v.icon} size={28} /></span><h3 class="heading-3">{v.h}</h3><p>{v.p}</p></li>
+        ))}</ul>
+      </div>
+    </section>
+
+    <!-- LICENSED -->
+    <section class="lic" aria-labelledby="l-t">
+      <div class="wrap lic__in">
+        <div class="lic__copy">
+          <p class="overline">Licensed and trusted</p>
+          <h2 id="l-t" class="display-lg">A regulated business you can rely on.</h2>
+          <p class="body-lg" set:html={fmt(licence)} />
+          <a class="more" href="/security">How we keep you safe <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="partners" aria-label="Partners">{partners.map((t) => <li set:html={fmt(t)} />)}</ul>
+      </div>
+    </section>
+
+    <!-- LEADERSHIP -->
+    <section class="lead" aria-labelledby="ld-t">
+      <div class="wrap">
+        <p class="overline">Leadership</p>
+        <h2 id="ld-t" class="display-lg">The people behind Eganow.</h2>
+        <ul class="people">{leaders.map((l) => (
+          <li><span class="avatar" aria-hidden="true">?</span><h3 class="heading-4" set:html={fmt(l.name)} /><p class="role" set:html={fmt(l.role)} /><p set:html={fmt(l.bio)} /></li>
+        ))}</ul>
+      </div>
+    </section>
+
+    <!-- WORK WITH US -->
+    <section class="work" aria-labelledby="w-t">
+      <div class="wrap">
+        <p class="overline">Work with us</p>
+        <h2 id="w-t" class="display-lg">Let’s build together.</h2>
+        <ul class="wgrid">{work.map((w) => (
+          <li><span class="wic"><Icon name={w.icon} /></span><h3 class="heading-4">{w.h}</h3><p set:html={fmt(w.p)} />{w.href && <a class="more" href={w.href}>{w.cta} <span aria-hidden="true">→</span></a>}</li>
+        ))}</ul>
+      </div>
+    </section>
+
+    <section class="end" aria-labelledby="e-t">
+      <h2 id="e-t" class="display-lg">Ready to try Eganow?</h2>
+      <p class="body-lg">Get the app, or see how Eganow Business can help your business.</p>
+      <div class="cta"><a class="btn btn--red" href="/#download">Get the app</a><a class="btn btn--blue" href="/business"><span class="dot"></span>Explore Business</a></div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section { scroll-margin-top: var(--header-h); }
+  .hero { background: var(--surface); overflow: hidden; }
+  .hero__in { max-width: 1240px; margin: 0 auto; padding: var(--space-16) clamp(16px, 4vw, 48px); display: grid; gap: var(--space-12); align-items: center; }
+  .hero__copy { display: grid; gap: var(--space-4); justify-items: start; max-width: 600px; } .hero__copy .cta { margin-top: var(--space-2); }
+  .tiles { position: relative; width: min(100%, 420px); aspect-ratio: 1; margin-inline: auto; }
+  .tile { position: absolute; border-radius: 22%; box-shadow: 0 30px 50px -20px rgb(10 13 20 / .45); display: grid; place-items: center; }
+  .tile--red { left: 2%; top: 4%; width: 62%; height: 62%; background: linear-gradient(145deg, #cc0229, #7a0118); } .tile--red img { width: 56%; height: 56%; }
+  .tile--blue { right: 0; top: 26%; width: 46%; height: 46%; background: linear-gradient(145deg, #1f8fff, #0b4f99); transform: rotate(8deg); }
+  .tile--white { left: 30%; bottom: 0; width: 38%; height: 38%; background: #fff; transform: rotate(-6deg); } .tile--white img { width: 56%; height: 56%; }
+  @media (min-width: 900px) { .hero__in { grid-template-columns: 1.2fr 1fr; } }
+  @media (prefers-reduced-motion: no-preference) { .tile--red { animation: fl 6s var(--ease-inout) infinite; } .tile--blue { animation: fl 7s var(--ease-inout) -2s infinite; } .tile--white { animation: fl 6.5s var(--ease-inout) -4s infinite; } @keyframes fl { 50% { translate: 0 -8px; } } }
+
+  section.story, section.two, section.vals, section.lic, section.lead, section.work { padding: var(--space-24) 0; }
+  .story { background: var(--surface-sunken); } .story__in { display: grid; gap: var(--space-8); } .story__in .display-lg { margin-top: var(--space-3); } .story__body { display: grid; gap: var(--space-4); max-width: 64ch; } .story__body p { margin: 0; }
+  @media (min-width: 900px) { .story__in { grid-template-columns: 1fr 1.4fr; gap: var(--space-16); } }
+
+  .worlds { margin-top: var(--space-12); display: grid; gap: var(--space-6); }
+  .world { padding: var(--space-8); border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface-raised); border-top: 6px solid var(--accent); display: grid; gap: var(--space-2); align-content: start; }
+  .world p { margin: 0; color: var(--text-muted); } .world > h3 { margin: 0; }
+  .world ul { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; gap: 4px; }
+  .world a { display: grid; gap: 2px; padding: 12px 0; border-top: 1px solid var(--border); text-decoration: none; } .world a:hover b { text-decoration: underline; text-underline-offset: 4px; }
+  .world b { font: 600 16px/24px var(--font-display); } .world span { color: var(--text-muted); font-size: 14px; line-height: 20px; }
+  @media (min-width: 900px) { .worlds { grid-template-columns: 1fr 1fr; } .world ul { grid-template-columns: 1fr 1fr; column-gap: var(--space-6); } }
+
+  .vals { background: var(--neutral-950); color: #fff; } .vals .overline { color: var(--neutral-300); }
+  .vgrid { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-6); }
+  .vgrid li { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-8); border: 1px solid var(--neutral-700); border-radius: var(--radius-lg); background: var(--neutral-900); } .vgrid p { margin: 0; color: var(--neutral-300); } .vgrid h3 { margin: 0; }
+  .vic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--eganow-red); color: #fff; margin-bottom: var(--space-2); } .vgrid li:nth-child(2) .vic { background: var(--eganow-blue); color: var(--neutral-950); } .vgrid li:nth-child(3) .vic { background: #fff; color: var(--neutral-950); }
+  @media (min-width: 900px) { .vgrid { grid-template-columns: repeat(3, 1fr); } }
+
+  .lic__in { display: grid; gap: var(--space-12); align-items: center; } .lic__copy { display: grid; gap: var(--space-4); justify-items: start; } .lic__copy .display-lg { margin-top: 0; }
+  .partners { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); } .partners li { display: grid; place-items: center; min-height: 96px; padding: var(--space-4); border: 1px dashed var(--border-strong); border-radius: var(--radius-md); background: var(--surface-raised); text-align: center; font-size: 14px; }
+  @media (min-width: 900px) { .lic__in { grid-template-columns: 1.2fr 1fr; } }
+
+  .lead { background: var(--surface-sunken); }
+  .people { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+  .people li { display: grid; gap: 4px; align-content: start; padding: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); } .people p { margin: 0; color: var(--text-muted); font-size: 15px; line-height: 22px; } .people .role { font-weight: 600; color: var(--text); } .people h3 { margin: 0; }
+  .avatar { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; background: var(--neutral-200); color: var(--neutral-600); font: 700 28px/1 var(--font-display); margin-bottom: var(--space-2); }
+  @media (min-width: 700px) { .people { grid-template-columns: repeat(3, 1fr); } }
+
+  .wgrid { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+  .wgrid li { display: grid; gap: var(--space-2); align-content: start; justify-items: start; padding: var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-raised); } .wgrid p { margin: 0; color: var(--text-muted); } .wgrid h3 { margin: 0; }
+  .wic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #ffe1e6; color: #8a001c; margin-bottom: 4px; }
+  @media (min-width: 900px) { .wgrid { grid-template-columns: repeat(3, 1fr); } }
+
+  .end { padding: var(--space-24) clamp(16px, 4vw, 48px); text-align: center; display: grid; justify-items: center; gap: var(--space-4); border-top: 1px solid var(--border); } .end .cta { justify-content: center; }
+</style>

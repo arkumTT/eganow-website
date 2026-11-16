@@ -111,6 +111,8 @@ A single friendly guide ("**Ega**", working name — confirm) who travels both w
 
 **Legal and Help (drafts):** `/legal/*` and `/help` exist as structured drafts. Eganow-specific facts are `[[highlighted placeholders]]`. Two switches (`src/data/legal-status.ts` and `src/data/help.ts`) keep them `noindex` and bannered; turning a switch off while any placeholder remains **fails the build**. Counsel must approve legal text and support must confirm help answers before launch.
 
+**Security and About (drafts):** `/security` and `/about` exist as structured drafts, `noindex`, with a draft note. Company facts, people, partners, certifications and security specifics are `[[highlighted placeholders]]`; `src/data/company-status.ts` is the switch (turning it off while any placeholder remains fails the build). Security claims must be verified by Eganow's security/compliance team: only claims that can be proven should be published. Public news reports describe Eganow as owned by Teksol with a Bank of Ghana Enhanced PSP licence; confirm before stating either.
+
 ### 5.3 Scrollytelling mechanics
 - Pin the phone; scrub a timeline with scroll (GSAP ScrollTrigger, `scrub: 0.6`). Each chapter = one scroll "page" (≈100–150 vh).
 - Phone screens are **HTML/CSS screens inside a CSS frame** (crisp, tiny, accessible) or short **WebM/AV1+MP4 loops** for complex UI; swap with crossfade/clip-path.

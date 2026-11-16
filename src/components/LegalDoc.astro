@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { LEGAL_DRAFT, LEGAL_DRAFT_DATE, LEGAL_DOCS } from '../data/legal-status';
+import { fmt, assertNoPlaceholders } from '../lib/text';
 
 // A legal section: heading + paragraphs, optionally a bulleted list after the paragraphs.
 // Text may contain [[placeholders]] which render as highlighted marks so none can slip through unnoticed.
@@ -10,19 +11,7 @@ export interface LegalSection { id: string; title: string; paras?: string[]; lis
 interface Props { title: string; description: string; intro: string; sections: LegalSection[]; slug: string }
 const { title, description, intro, sections, slug } = Astro.props;
 
-const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-// Inline formatting (input is HTML-escaped first, so only these tokens can produce markup):
-//   [[placeholder]] -> highlighted mark   **bold** -> <strong>   [label — /path] -> internal link
-const fmt = (t: string) =>
-  esc(t)
-    .replace(/\[\[(.+?)\]\]/g, '<mark class="todo">$1</mark>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[([^\[\]]+?) — (\/[a-z0-9\-\/#?=]*)\]/gi, '<a href="$2">$1</a>');
-// Safety net: once LEGAL_DRAFT is switched off, any leftover [[placeholder]] fails the build instead of shipping.
-if (!LEGAL_DRAFT) {
-  const text = [intro, ...sections.flatMap((s) => [...(s.paras ?? []), ...(s.list ?? []), ...(s.after ?? [])])].join(' ');
-  if (text.includes('[[')) throw new Error(`Legal document "${title}" still contains [[placeholders]]. Complete them before setting LEGAL_DRAFT = false.`);
-}
+assertNoPlaceholders(`Legal document "${title}"`, { intro, sections }, LEGAL_DRAFT);
 const others = LEGAL_DOCS.filter((d) => d.href !== `/legal/${slug}`);
 ---
 <Base title={`${title} | Eganow`} description={description} noindex={LEGAL_DRAFT}>

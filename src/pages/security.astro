@@ -1,0 +1,201 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import DraftNote from '../components/DraftNote.astro';
+import Faq from '../components/Faq.astro';
+import { COMPANY_DRAFT } from '../data/company-status';
+import { fmt, assertNoPlaceholders } from '../lib/text';
+
+// DRAFT. Security claims are commitments the company must be able to prove. Everything Eganow-specific or unverified is a
+// [[placeholder]] for Eganow's security and compliance team to confirm. Turning COMPANY_DRAFT off while any remain fails the build.
+
+const pillars = [
+  { icon: 'building', title: 'Licensed and regulated', text: 'Eganow is licensed by the Bank of Ghana as [[licence type and number]], so we operate under the rules that protect customers.' },
+  { icon: 'id', title: 'Verified customers', text: 'We check who our customers are, which helps keep fraudsters out. [Here’s how we verify identity — /legal/aml-policy].' },
+  { icon: 'key', title: 'Protected sign-in', text: 'Open your account with your PIN [[and fingerprint or face unlock — confirm]]. We will never ask you for it.' },
+  { icon: 'lock', title: 'Encrypted data', text: 'Your information is encrypted [[confirm: in transit and at rest, and the standards used]].' },
+  { icon: 'eye', title: 'Watching for fraud', text: 'We monitor transactions for unusual activity and may pause a payment to check with you [[confirm monitoring approach and hours]].' },
+  { icon: 'card', title: 'Control of your cards', text: 'Freeze and unfreeze your card in the app, and set limits [[confirm]].' },
+] as const;
+
+const never = [
+  'ask for your PIN, password or one-time codes',
+  'ask you to send money to “unlock”, “verify” or “protect” your account',
+  'ask you to install software or share your screen',
+  'ask for your full card number or card security code in a call or message',
+];
+const always = [
+  'hang up and contact us through our official channels if you are unsure',
+  'check who a message is from before you tap any link',
+  'download the app only from the App Store or Google Play',
+  'keep your phone locked and its software up to date',
+  'check every detail of a payment before you confirm it',
+];
+const scams = [
+  ['Someone pretending to be Eganow', 'They may call, text or message you, often saying there is a problem with your account.'],
+  ['A friend or relative in urgent need', 'A hijacked account or new number asks you to send money fast. Call them on a number you know.'],
+  ['Prizes, refunds and “fees”', 'If you have to pay to receive money, it is a scam.'],
+  ['Fake agents and fake payment links', 'Check you are at a real agent point, and that a payment link comes from someone you trust.'],
+];
+const biz = [
+  { icon: 'key', title: 'Protect your API keys', text: 'Keep keys secret. Never put them in public code or in an app that customers can open.' },
+  { icon: 'users', title: 'Control who has access', text: 'Give each team member their own login with only the access they need, and remove it when they leave.' },
+  { icon: 'phone', title: 'Secure your devices', text: 'Keep POS devices and phones with Egahub safe, and tell us straight away if one is lost.' },
+  { icon: 'mail', title: 'Message responsibly', text: 'Only send bulk messages to people who agreed, and honour every opt-out.' },
+] as const;
+const steps = [
+  'Freeze your card in the app and change your PIN.',
+  'Contact us straight away so we can help.',
+  'Keep evidence: messages, receipts and numbers involved.',
+  'If you are not happy with how it was handled, make a complaint.',
+];
+const faqs = [
+  ['Will Eganow ever ask for my PIN or password?', 'No. We will never ask for your PIN, password or one-time codes, by phone, message or in person.'],
+  ['What should I do with a suspicious message?', 'Do not click links or reply. Contact us through our official channels and tell us what you received.'],
+  ['What if I lose my phone?', 'Contact us straight away. If you can, freeze your cards from another device and change your PIN.'],
+  ['How do I know a call or message is really from Eganow?', 'If you are not sure, end the call and contact us yourself using the official details on this website or in the app.'],
+];
+
+const disclosure = 'If you are a security researcher and you have found a vulnerability, please tell us privately at [[security contact email]]. Please do not share details publicly until we have had a chance to fix it. [[link to the responsible-disclosure policy]]';
+const standards = '[[List certifications and standards, such as PCI DSS or ISO/IEC 27001, only if they are held and current. Do not list any that are not.]]';
+
+assertNoPlaceholders('Security page', { pillars, never, always, scams, biz, steps, faqs, disclosure, standards }, COMPANY_DRAFT);
+---
+<Base title="Security | Eganow" description="How Eganow protects your money and information, and how you can stay safe from fraud and scams." noindex={COMPANY_DRAFT}>
+  <Header world="neutral" />
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="sec-t">
+      <div class="hero__in">
+        <div class="hero__copy">
+          <p class="overline">Security</p>
+          <h1 id="sec-t" class="display-xl">Your money. Protected.</h1>
+          <p class="body-lg">Secure is the third S in everything we build. Here is how we protect you, and how you can help keep your money safe.</p>
+          <div class="cta"><a class="btn btn--red" href="#stay-safe">Stay safe</a><a class="btn btn--ghost" href="#problem">I have a problem</a></div>
+          {COMPANY_DRAFT && <DraftNote />}
+        </div>
+        <div class="shield" aria-hidden="true">
+          <svg viewBox="0 0 200 230"><path d="M100 8 18 40v66c0 52 34 92 82 116 48-24 82-64 82-116V40z" fill="#cc0229"/><path d="M100 8v214c48-24 82-64 82-116V40z" fill="#1f8fff" opacity=".9"/><path d="m64 112 28 28 46-52" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- PILLARS -->
+    <section class="pil" aria-labelledby="pil-t">
+      <div class="wrap">
+        <p class="overline">How we protect you</p>
+        <h2 id="pil-t" class="display-lg">Built to keep your money safe.</h2>
+        <ul class="grid">{pillars.map((p) => (
+          <li><span class="ic"><Icon name={p.icon} /></span><h3 class="heading-4">{p.title}</h3><p set:html={fmt(p.text)} /></li>
+        ))}</ul>
+      </div>
+    </section>
+
+    <!-- STAY SAFE -->
+    <section class="safe" id="stay-safe" aria-labelledby="safe-t">
+      <div class="wrap">
+        <p class="overline">Stay safe</p>
+        <h2 id="safe-t" class="display-lg">A few habits keep you safe.</h2>
+        <div class="two">
+          <div class="box box--no">
+            <h3 class="heading-3">Eganow will never…</h3>
+            <ul>{never.map((t) => <li><span class="mk" aria-hidden="true"><Icon name="x" size={16} /></span><span><span class="sr-only">Eganow will never </span>{t}</span></li>)}</ul>
+          </div>
+          <div class="box box--yes">
+            <h3 class="heading-3">You can always…</h3>
+            <ul>{always.map((t) => <li><span class="mk" aria-hidden="true"><Icon name="check" size={16} /></span><span>{t}</span></li>)}</ul>
+          </div>
+        </div>
+        <h3 class="heading-3 scams__t">Scams to watch for</h3>
+        <ul class="scams">{scams.map(([h, p]) => <li><b>{h}</b><span>{p}</span></li>)}</ul>
+      </div>
+    </section>
+
+    <!-- BUSINESS -->
+    <section class="biz" aria-labelledby="biz-t">
+      <div class="wrap">
+        <p class="overline">For businesses</p>
+        <h2 id="biz-t" class="display-lg">Keep your business safe too.</h2>
+        <ul class="grid grid--4">{biz.map((b) => (
+          <li><span class="ic ic--blue"><Icon name={b.icon} /></span><h3 class="heading-4">{b.title}</h3><p>{b.text}</p></li>
+        ))}</ul>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="prob" id="problem" aria-labelledby="prob-t">
+      <div class="wrap prob__in">
+        <div>
+          <p class="overline">If something goes wrong</p>
+          <h2 id="prob-t" class="display-lg">Act fast. We’re here to help.</h2>
+          <p class="body-lg">If you think someone has used your account, or you have been tricked, do these four things.</p>
+          <div class="cta"><a class="btn btn--red" href="/contact?topic=support">Contact support</a><a class="btn btn--ghost-inv" href="/contact?topic=complaint">Make a complaint</a></div>
+        </div>
+        <ol class="steps">{steps.map((s) => <li>{s}</li>)}</ol>
+      </div>
+    </section>
+
+    <!-- DISCLOSURE + STANDARDS -->
+    <section class="disc" aria-labelledby="disc-t">
+      <div class="wrap two two--tight">
+        <div class="card">
+          <span class="ic"><Icon name="alert" /></span>
+          <h2 id="disc-t" class="heading-3">Found a security issue?</h2>
+          <p set:html={fmt(disclosure)} />
+        </div>
+        <div class="card">
+          <span class="ic"><Icon name="shield" /></span>
+          <h2 class="heading-3">Standards and certifications</h2>
+          <p set:html={fmt(standards)} />
+        </div>
+      </div>
+    </section>
+
+    <Faq items={faqs} />
+
+    <section class="end" aria-labelledby="end-t">
+      <h2 id="end-t" class="display-lg">Questions about security?</h2>
+      <p class="body-lg">Our team is happy to help.</p>
+      <div class="cta"><a class="btn btn--red" href="/contact?topic=support">Contact us</a><a class="btn btn--ghost" href="/help">Visit the Help centre</a></div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  section { scroll-margin-top: var(--header-h); }
+  .hero { background: var(--surface); overflow: hidden; }
+  .hero__in { max-width: 1240px; margin: 0 auto; padding: var(--space-16) clamp(16px, 4vw, 48px); display: grid; gap: var(--space-12); align-items: center; }
+  .hero__copy { display: grid; gap: var(--space-4); justify-items: start; max-width: 600px; } .hero__copy .cta { margin-top: var(--space-2); }
+  .shield { width: min(70%, 320px); margin-inline: auto; filter: drop-shadow(0 30px 40px rgb(10 13 20 / .25)); } .shield svg { display: block; width: 100%; height: auto; }
+  @media (min-width: 900px) { .hero__in { grid-template-columns: 1.2fr 1fr; } }
+  @media (prefers-reduced-motion: no-preference) { .shield { animation: float 6s var(--ease-inout) infinite; } @keyframes float { 50% { transform: translateY(-10px); } } }
+
+  section.pil, section.safe, section.biz, section.prob, section.disc { padding: var(--space-24) 0; }
+  .grid { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+  .grid li { display: grid; gap: 8px; align-content: start; padding: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); } .grid p { margin: 0; color: var(--text-muted); font-size: 15px; line-height: 22px; }
+  .ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #ffe1e6; color: #8a001c; margin-bottom: 4px; } .ic--blue { background: #dbeafe; color: #0b4f99; }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } } @media (min-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } .grid--4 { grid-template-columns: repeat(4, 1fr); } }
+
+  .safe { background: var(--surface-sunken); }
+  .two { margin-top: var(--space-12); display: grid; gap: var(--space-6); } .two--tight { margin-top: 0; }
+  .box { padding: var(--space-8); border-radius: var(--radius-lg); background: var(--surface-raised); border: 2px solid var(--border); display: grid; gap: var(--space-4); align-content: start; }
+  .box--no { border-color: #fecdd3; } .box--yes { border-color: #bbf7d0; }
+  .box ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; } .box li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; line-height: 24px; }
+  .mk { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; flex: none; margin-top: -2px; } .box--no .mk { background: #fecdd3; color: #7f1d1d; } .box--yes .mk { background: #bbf7d0; color: #14532d; }
+  .scams__t { margin-top: var(--space-12); }
+  .scams { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; gap: var(--space-3); } .scams li { display: grid; gap: 2px; padding: var(--space-4) var(--space-6); border-left: 4px solid var(--eganow-red); background: var(--surface-raised); border-radius: 0 var(--radius-md) var(--radius-md) 0; } .scams span { color: var(--text-muted); font-size: 15px; line-height: 22px; }
+  @media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; } .scams { grid-template-columns: 1fr 1fr; } }
+
+  .prob { background: var(--neutral-950); color: #fff; } .prob .overline { color: var(--neutral-300); } .prob .body-lg { color: var(--neutral-300); }
+  .prob__in { display: grid; gap: var(--space-12); align-items: center; } .prob__in > div { display: grid; gap: var(--space-4); justify-items: start; } .prob__in .display-lg { margin-top: 0; }
+  .steps { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-4); counter-reset: s; }
+  .steps li { position: relative; counter-increment: s; padding: var(--space-4) var(--space-4) var(--space-4) 68px; border: 1px solid var(--neutral-700); border-radius: var(--radius-md); background: var(--neutral-900); font-size: 17px; line-height: 26px; }
+  .steps li::before { content: counter(s); position: absolute; left: var(--space-4); top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--eganow-red); color: #fff; font: 700 16px/1 var(--font-display); }
+  @media (min-width: 900px) { .prob__in { grid-template-columns: 1fr 1fr; } }
+
+  .disc .card { display: grid; gap: var(--space-3); align-content: start; padding: var(--space-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface-raised); } .disc .card p { margin: 0; color: var(--text-muted); } .disc .card .heading-3 { margin: 0; }
+  .end { padding: var(--space-24) clamp(16px, 4vw, 48px); text-align: center; display: grid; justify-items: center; gap: var(--space-4); border-top: 1px solid var(--border); } .end .cta { justify-content: center; }
+</style>

@@ -3,11 +3,9 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { HELP, HELP_DRAFT } from '../data/help';
+import { fmt, assertNoPlaceholders } from '../lib/text';
 
-// Guard: unresolved [[placeholders]] must never ship.
-if (!HELP_DRAFT && JSON.stringify(HELP).includes('[[')) throw new Error('Help content still contains [[placeholders]]. Confirm every answer, then clear them before setting HELP_DRAFT = false.');
-const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const fmt = (t: string) => esc(t).replace(/\[\[(.+?)\]\]/g, '<mark class="todo">$1</mark>');
+assertNoPlaceholders('Help content', HELP, HELP_DRAFT);
 const personal = HELP.filter((c) => c.world === 'personal');
 const business = HELP.filter((c) => c.world === 'business');
 ---
