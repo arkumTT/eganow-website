@@ -227,7 +227,7 @@ const bizIds = topics.filter((t) => t.world === 'business').map((t) => t.id);
       rules.forEach(([id, fn]) => { const m = fn((document.getElementById(id) as HTMLInputElement).value); setErr(id, m); if (m) problems.push([id, m]); });
       if (problems.length) {
         e.preventDefault();
-        list.innerHTML = '';
+        list.replaceChildren(); // not innerHTML = '': the site's CSP enforces Trusted Types, which blocks string-to-HTML assignment
         problems.forEach(([id, m]) => { const li = document.createElement('li'); const a = document.createElement('a'); a.href = '#' + id; a.textContent = `${labelOf(id)}: ${m}`; a.addEventListener('click', (ev) => { ev.preventDefault(); document.getElementById(id)!.focus(); }); li.append(a); list.append(li); });
         sum.hidden = false; sum.focus(); return;
       }

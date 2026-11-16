@@ -1,13 +1,20 @@
-// Generates sitemap.xml, robots.txt (and, for non-production builds, an X-Robots-Tag header file)
-// from the FINISHED html in dist/, so they can never disagree with the pages themselves.
+// Post-build step. Reads the FINISHED html in dist/ and writes, so none of it can disagree with the pages:
+//   sitemap.xml   (production only) every indexable page, using each page's own canonical URL
+//   robots.txt    production: allow all + Sitemap line | otherwise: block everything
+//   _headers      security headers for every response (CSP, HSTS, ...) [+ X-Robots-Tag noindex when not production]
 //
-//   SITE_ENV=production  -> real robots.txt (allow all + Sitemap line) and a sitemap of every indexable page
-//   anything else/unset  -> staging-safe: robots.txt blocks everything, no sitemap, X-Robots-Tag: noindex on every response
+//   SITE_ENV=production  -> real robots.txt + sitemap + HSTS
+//   anything else/unset  -> staging-safe: robots blocks all, no sitemap, no HSTS, X-Robots-Tag: noindex
 //
-// A page is "indexable" when it has no <meta name="robots" content="...noindex...">, is not the 404 page,
-// and declares a canonical URL (the sitemap uses exactly that canonical URL).
+// The CSP is generated here: every inline <script> in the built pages is allow-listed by SHA-256 hash, so scripts
+// stay strictly locked down (no 'unsafe-inline') without maintaining hashes by hand. Staging gets the SAME CSP as
+// production, so a policy problem shows up before launch, not after.
+//
+// HSTS knobs (production only):  HSTS_MAX_AGE (seconds, default 31536000)
+//                                HSTS_INCLUDE_SUBDOMAINS=true   HSTS_PRELOAD=true (needs includeSubDomains and >= 1 year)
 import { readdirSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const xml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -21,6 +28,28 @@ function htmlFiles(dir, out = []) {
   return out;
 }
 
+// Inline scripts that EXECUTE (classic or module). JSON/JSON-LD data blocks are never executed, so they need no hash.
+function inlineScriptHashes(html) {
+  const hashes = [];
+  for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    const [, attrs, body] = m;
+    if (/\bsrc\s*=/.test(attrs)) continue;
+    const type = attrs.match(/\btype\s*=\s*["']([^"']+)["']/i)?.[1]?.toLowerCase();
+    if (type && type !== 'module' && type !== 'text/javascript') continue;
+    hashes.push(`'sha256-${createHash('sha256').update(body, 'utf8').digest('base64')}'`);
+  }
+  return hashes;
+}
+
+function hstsValue() {
+  const maxAge = Number(process.env.HSTS_MAX_AGE ?? 31536000);
+  const sub = process.env.HSTS_INCLUDE_SUBDOMAINS === 'true';
+  const preload = process.env.HSTS_PRELOAD === 'true';
+  if (!Number.isInteger(maxAge) || maxAge < 0) throw new Error(`HSTS_MAX_AGE must be a non-negative integer (got "${process.env.HSTS_MAX_AGE}")`);
+  if (preload && (!sub || maxAge < 31536000)) throw new Error('HSTS_PRELOAD=true requires HSTS_INCLUDE_SUBDOMAINS=true and HSTS_MAX_AGE >= 31536000 (hstspreload.org rules).');
+  return `max-age=${maxAge}${sub ? '; includeSubDomains' : ''}${preload ? '; preload' : ''}`;
+}
+
 export default function launchFiles({ site }) {
   return {
     name: 'launch-files',
@@ -31,10 +60,12 @@ export default function launchFiles({ site }) {
         const origin = site.replace(/\/$/, '');
 
         const urls = [];
+        const scriptHashes = new Set();
         let skipped = 0;
         for (const file of htmlFiles(out)) {
-          if (file.endsWith('404.html')) { skipped++; continue; }
           const html = readFileSync(file, 'utf8');
+          inlineScriptHashes(html).forEach((h) => scriptHashes.add(h));
+          if (file.endsWith('404.html')) { skipped++; continue; }
           const noindex = /<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html);
           const canonical = html.match(/<link[^>]+rel=["']canonical["'][^>]*href=["']([^"']+)["']/i)?.[1];
           if (noindex || !canonical) { skipped++; continue; }
@@ -42,21 +73,48 @@ export default function launchFiles({ site }) {
         }
         urls.sort((a, b) => (a === origin + '/' ? -1 : b === origin + '/' ? 1 : a.localeCompare(b)));
 
+        // ---- Content-Security-Policy
+        const csp = [
+          "default-src 'self'",
+          `script-src 'self' ${[...scriptHashes].sort().join(' ')}`.trim(),
+          "style-src 'self' 'unsafe-inline'",           // 100+ inline style="" attributes can't be hashed; styles can't run code
+          "img-src 'self'",
+          "font-src 'self'",
+          "connect-src 'self'",
+          "manifest-src 'self'",
+          "media-src 'none'",
+          "object-src 'none'",
+          "worker-src 'none'",
+          "frame-src 'none'",
+          "frame-ancestors 'none'",                      // nobody may embed this site
+          "base-uri 'self'",
+          "form-action 'self' https://forms.zohopublic.com", // the contact form posts to Zoho
+          "require-trusted-types-for 'script'",          // browsers refuse string -> HTML (innerHTML etc.); our code has no such sink
+        ].join('; ');
+
+        const headers = [
+          `Content-Security-Policy: ${csp}`,
+          'X-Content-Type-Options: nosniff',
+          'X-Frame-Options: DENY',
+          'Referrer-Policy: strict-origin-when-cross-origin',
+          'Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(), accelerometer=(), gyroscope=(), magnetometer=()',
+          'Cross-Origin-Opener-Policy: same-origin',
+        ];
+
         const sitemapPath = join(out, 'sitemap.xml');
         const robots = join(out, 'robots.txt');
-        const headers = join(out, '_headers');
-
         if (production) {
+          headers.push(`Strict-Transport-Security: ${hstsValue()}`);
           writeFileSync(sitemapPath, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${xml(u)}</loc></url>`).join('\n')}\n</urlset>\n`);
           writeFileSync(robots, `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
-          if (existsSync(headers)) rmSync(headers);
-          logger.info(`production: sitemap.xml lists ${urls.length} indexable pages (${skipped} noindex/404 pages left out)`);
+          logger.info(`production: sitemap lists ${urls.length} indexable pages (${skipped} left out); CSP allows ${scriptHashes.size} inline scripts by hash; HSTS ${hstsValue()}`);
         } else {
+          headers.push('X-Robots-Tag: noindex, nofollow');
           if (existsSync(sitemapPath)) rmSync(sitemapPath);
           writeFileSync(robots, `# Non-production build: keep all crawlers out.\n# The live site must be built with SITE_ENV=production.\nUser-agent: *\nDisallow: /\n`);
-          writeFileSync(headers, `/*\n  X-Robots-Tag: noindex, nofollow\n`);
-          logger.info(`NON-production build: robots.txt blocks all crawlers, no sitemap, X-Robots-Tag noindex (would list ${urls.length} pages in production)`);
+          logger.info(`NON-production build: robots blocks all crawlers, no sitemap, no HSTS, X-Robots-Tag noindex; CSP allows ${scriptHashes.size} inline scripts by hash`);
         }
+        writeFileSync(join(out, '_headers'), `/*\n${headers.map((h) => `  ${h}`).join('\n')}\n`);
       },
     },
   };

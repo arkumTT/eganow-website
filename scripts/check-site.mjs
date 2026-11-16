@@ -3,6 +3,7 @@
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const DIST = 'dist';
 const known = JSON.parse(readFileSync('scripts/known-missing.json', 'utf8'));
@@ -86,6 +87,36 @@ for (const [file, h] of html) {
   if (errs.length || warns.length) seo.push({ url, noindex, errs, warns });
 }
 
+// ---- security headers (dist/_headers is generated at build time from the finished pages)
+const secErrs = [];
+const headersFile = join(DIST, '_headers');
+if (!existsSync(headersFile)) secErrs.push('dist/_headers is missing (no security headers would be sent)');
+else {
+  const hdr = Object.fromEntries(readFileSync(headersFile, 'utf8').split('\n').filter((l) => /^\s+\S/.test(l)).map((l) => { const i = l.indexOf(':'); return [l.slice(0, i).trim().toLowerCase(), l.slice(i + 1).trim()]; }));
+  const csp = hdr['content-security-policy'] ?? '';
+  const dir = (name) => csp.split(';').map((d) => d.trim()).find((d) => d.startsWith(name + ' ') || d === name);
+  if (!csp) secErrs.push('no Content-Security-Policy header');
+  else {
+    const scriptSrc = dir('script-src') ?? '';
+    if (/'unsafe-inline'|'unsafe-eval'/.test(scriptSrc)) secErrs.push("script-src contains 'unsafe-inline' or 'unsafe-eval'");
+    for (const need of ['default-src', 'object-src', 'base-uri', 'frame-ancestors', 'form-action']) if (!dir(need)) secErrs.push(`CSP is missing ${need}`);
+    if (/\bhttps?:\/\/\*|\s\*(\s|;|$)/.test(csp)) secErrs.push('CSP uses a wildcard source');
+    // every inline executable script in every page must be allow-listed by hash
+    for (const [file, h] of html) for (const m of h.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      if (/\bsrc\s*=/.test(m[1])) continue; const t = m[1].match(/\btype\s*=\s*["']([^"']+)["']/i)?.[1]?.toLowerCase(); if (t && t !== 'module' && t !== 'text/javascript') continue;
+      const hash = `'sha256-${createHash('sha256').update(m[2], 'utf8').digest('base64')}'`;
+      if (!scriptSrc.includes(hash)) secErrs.push(`inline script in ${urlOf(file) || '/'} is not allow-listed in the CSP (it would be blocked)`);
+    }
+  }
+  if (hdr['x-content-type-options'] !== 'nosniff') secErrs.push('missing X-Content-Type-Options: nosniff');
+  if (!hdr['referrer-policy']) secErrs.push('missing Referrer-Policy');
+  if (!hdr['permissions-policy']) secErrs.push('missing Permissions-Policy');
+  const production = !/Disallow:\s*\/\s*$/m.test(existsSync(join(DIST, 'robots.txt')) ? readFileSync(join(DIST, 'robots.txt'), 'utf8') : '');
+  if (production && !hdr['strict-transport-security']) secErrs.push('production build without Strict-Transport-Security (HSTS)');
+  if (!production && hdr['strict-transport-security']) secErrs.push('staging build must not send HSTS');
+  if (!production && !/noindex/.test(hdr['x-robots-tag'] ?? '')) secErrs.push('staging build is missing X-Robots-Tag: noindex');
+}
+
 // ---- report
 let failures = 0;
 const unknownBroken = [...broken].filter(([k]) => !(k in known));
@@ -105,6 +136,7 @@ if (stale.length) console.log(`\nNOTE  known-missing entries nothing links to an
 if (brokenAnchors.length) { failures += brokenAnchors.length; console.log(`\nFAIL  ${brokenAnchors.length} broken #anchor(s):\n   ` + brokenAnchors.join('\n   ')); } else console.log('PASS  all #anchors resolve');
 const seoErrs = seo.filter((s) => s.errs.length);
 if (seoErrs.length) { failures += seoErrs.length; console.log(`\nFAIL  SEO errors:`); for (const s of seoErrs) console.log(`   ${s.url}${s.noindex ? ' (noindex)' : ''}: ${s.errs.join('; ')}`); } else console.log('PASS  every page has lang, title, description, one h1, image alt text, and (if indexable) a canonical');
+if (secErrs.length) { failures += secErrs.length; console.log(`\nFAIL  security headers:\n   ` + secErrs.join('\n   ')); } else console.log('PASS  security headers: CSP (no unsafe-inline/eval in script-src, every inline script allow-listed), nosniff, referrer and permissions policy, HSTS/noindex correct for this build type');
 const seoWarns = seo.filter((s) => s.warns.length);
 if (seoWarns.length) { console.log(`\nWARN  SEO suggestions:`); const g = new Map(); for (const s of seoWarns) for (const w of s.warns) (g.get(w) ?? g.set(w, []).get(w)).push(s.url); for (const [w, urls] of g) console.log(`   ${w}: ${urls.length > 4 ? urls.slice(0, 4).join(', ') + `, +${urls.length - 4} more` : urls.join(', ')}`); }
 console.log(failures ? `\n${failures} failure(s).` : '\nAll checks passed.');
