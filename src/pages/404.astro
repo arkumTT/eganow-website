@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const links = [
+  ['Eganow app', 'Send money, pay bills, get cards', '/'],
+  ['Eganow Business', 'Collect, pay out and grow', '/business'],
+  ['Help centre', 'Answers to common questions', '/help'],
+  ['Contact us', 'Talk to our team', '/contact'],
+  ['Security', 'Stay safe from fraud', '/security'],
+  ['About Eganow', 'Who we are', '/about'],
+] as const;
+---
+<Base title="Page not found | Eganow" description="We couldn’t find that page. Here are some helpful places to go next." noindex>
+  <Header world="neutral" />
+  <main id="main">
+    <section class="nf" aria-labelledby="nf-t">
+      <div class="nf__in">
+        <div class="nf__copy">
+          <p class="overline">Error 404</p>
+          <h1 id="nf-t" class="display-xl">We can’t find that page.</h1>
+          <p class="body-lg">It may have moved, or the link might be wrong. <span id="nf-path" class="path" hidden></span></p>
+
+          <form class="search" action="/help" method="get" role="search">
+            <label for="nf-q">Search the Help centre</label>
+            <div class="search__row">
+              <input id="nf-q" name="q" type="search" placeholder="Try “freeze card” or “payment link”" autocomplete="off" />
+              <button class="btn btn--red" type="submit">Search</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="mark" aria-hidden="true"><span class="four">4</span><img src="/brand/eganow-icon.svg" alt="" width="120" height="120" /><span class="four">4</span></div>
+      </div>
+
+      <div class="nf__links">
+        <h2 class="heading-3">Or try one of these</h2>
+        <ul>{links.map(([h, p, href]) => <li><a href={href}><b>{h}</b><span>{p}</span></a></li>)}</ul>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .nf { background: var(--surface); padding: var(--space-16) 0 var(--space-24); }
+  .nf__in { max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+  .nf__copy { display: grid; gap: var(--space-4); max-width: 620px; }
+  .path { display: block; margin-top: 6px; font: 500 14px/20px ui-monospace, Menlo, Consolas, monospace; color: var(--text-muted); overflow-wrap: anywhere; }
+  .search label { display: block; font: 600 14px/20px var(--font-display); margin-bottom: 8px; }
+  .search__row { display: flex; gap: 8px; } .search__row input { flex: 1; width: 100%; min-width: 0; min-height: 52px; padding: 0 18px; border: 2px solid var(--border-strong); border-radius: var(--radius-full); font: 400 16px/24px var(--font-sans); background: #fff; }
+  .search__row input:focus-visible { outline: 3px solid var(--neutral-950); outline-offset: 2px; }
+  .search__row .btn { min-height: 52px; border: 0; cursor: pointer; }
+  .mark { display: flex; align-items: center; justify-content: center; gap: clamp(8px, 2vw, 20px); justify-self: center; }
+  .four { font: 700 clamp(96px, 16vw, 168px)/1 var(--font-display); letter-spacing: -.04em; color: var(--eganow-red); }
+  .mark img { width: clamp(64px, 11vw, 120px); height: auto; }
+  @media (prefers-reduced-motion: no-preference) { .mark img { animation: spin 14s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } } }
+  .nf__links { max-width: 1240px; margin: var(--space-16) auto 0; padding: 0 clamp(16px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .nf__links h2 { margin: 0; } .nf__links ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+  .nf__links a { display: grid; gap: 2px; padding: var(--space-4) var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); text-decoration: none; transition: border-color .2s, transform .2s var(--ease-out); }
+  .nf__links a:hover { border-color: var(--neutral-700); transform: translateY(-2px); } .nf__links b { font: 600 17px/24px var(--font-display); } .nf__links span { color: var(--text-muted); font-size: 14px; }
+  @media (min-width: 640px) { .nf__links ul { grid-template-columns: repeat(2, 1fr); } } @media (min-width: 960px) { .nf__links ul { grid-template-columns: repeat(3, 1fr); } .nf__in { grid-template-columns: 1.2fr 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .nf__links a { transition: none; } }
+</style>
+
+<script>
+  // Show which address was not found (textContent only: never inject the path as HTML)
+  const el = document.getElementById('nf-path');
+  if (el && location.pathname !== '/404' && location.pathname !== '/404.html') { el.textContent = location.pathname; el.hidden = false; }
+</script>
