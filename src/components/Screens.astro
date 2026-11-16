@@ -1,6 +1,6 @@
 ---
 // HTML phone screens (crisp, tiny, themeable). Illustrative content only: no real rates/fees.
-interface Props { name: 'home' | 'tx' | 'bills'; }
+interface Props { name: 'home' | 'tx' | 'bills' | 'cards' | 'groups'; }
 const { name } = Astro.props;
 const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
 ---
@@ -25,8 +25,25 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   <div class="scr__row"><span class="av">⚡</span><div><b>Electricity</b><small>Meter ••• 3920</small></div></div>
   <div class="scr__cta">Pay GHS 120.00</div>
 </div>}
+{name === 'cards' && <div class="scr scr--cards">
+  <p class="scr__title">My cards</p>
+  <div class="cardv"><span class="net"><i></i><i></i></span><small>Virtual · Ready to use</small><b>•••• 4821</b><em>Ama Mensah</em></div>
+  <div class="scr__row sw"><div><b>Freeze card</b><small>Pause spending instantly</small></div><span class="tgl"><i></i></span></div>
+  <div class="scr__fx"><span>Monthly limit</span><b>GHS 5,000</b></div>
+  <div class="scr__cta">Order physical card</div>
+</div>}
+{name === 'groups' && <div class="scr scr--groups">
+  <p class="scr__title">Family Fund</p>
+  <div class="seg"><span class="on">Private</span><span>Public</span></div>
+  <div class="ring"><div><b>68%</b><small>of GHS 10,000</small></div></div>
+  <ul class="avs"><li>A</li><li>K</li><li>E</li><li>+5</li></ul>
+  <div class="scr__fx"><span>Raised so far</span><b>GHS 6,800</b></div>
+  <div class="scr__cta">Contribute</div>
+</div>}
 <style>
-  .scr { position: absolute; inset: 0; padding: 44px 16px 16px; background: #fff; display: flex; flex-direction: column; gap: 10px; font: 400 12px/16px var(--font-sans); color: var(--text); }
+  /* Screens are laid out at a fixed 252px design width and scaled to whatever phone size holds them */
+  :global(.phone__screen:has(> .scr)) { container-type: size; }
+  .scr { --k: tan(atan2(100cqw, 252px)); position: absolute; left: 0; top: 0; width: 252px; height: 541px; transform: scale(var(--k)); transform-origin: 0 0; padding: 44px 16px 16px; background: #fff; display: flex; flex-direction: column; gap: 10px; font: 400 12px/16px var(--font-sans); color: var(--text); }
   .scr p, .scr ul { margin: 0; } .scr ul { padding: 0; list-style: none; }
   .scr__hi { font-weight: 500; color: var(--text-muted); } .scr__lbl { color: var(--text-subtle); margin-top: 6px; }
   .scr__amt { font: 600 25px/32px var(--font-display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
@@ -44,4 +61,16 @@ const bills = ['Electricity', 'Water', 'Airtime', 'TV', 'Internet', 'Fuel'];
   .scr__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .scr__grid li { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 2px; background: var(--surface-sunken); border-radius: 12px; font: 500 10.5px/12px var(--font-display); }
   .scr__grid i { width: 26px; height: 26px; border-radius: 50%; background: var(--eganow-red); opacity: .9; }
+  .scr--cards { perspective: 700px; }
+  .cardv { position: relative; height: 112px; border-radius: 16px; padding: 12px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px;
+    background: linear-gradient(135deg, #cc0229, #5c0014); box-shadow: 0 10px 24px -8px rgb(204 2 41 / .6); transform-origin: 50% 100%; }
+  .cardv small { opacity: .85; font-size: 10.5px; } .cardv b { font: 600 15px/20px var(--font-display); letter-spacing: .08em; } .cardv em { font: 500 10.5px/14px var(--font-display); font-style: normal; opacity: .9; }
+  .net { position: absolute; top: 12px; right: 12px; display: flex; } .net i { width: 20px; height: 20px; border-radius: 50%; background: rgb(255 255 255 / .75); } .net i + i { margin-left: -8px; background: rgb(255 255 255 / .45); }
+  .sw { justify-content: space-between; } .tgl { position: relative; width: 38px; height: 22px; border-radius: 99px; background: var(--neutral-300); flex: none; } .tgl i { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: none; }
+  .seg { display: flex; padding: 3px; background: var(--surface-sunken); border-radius: 99px; } .seg span { flex: 1; text-align: center; padding: 7px; border-radius: 99px; font: 500 11px/14px var(--font-display); } .seg .on { background: var(--eganow-red); color: #fff; }
+  .ring { --p: 68; align-self: center; width: 128px; height: 128px; border-radius: 50%; display: grid; place-items: center; margin: 4px 0;
+    background: conic-gradient(var(--eganow-red) calc(var(--p) * 1%), var(--neutral-200) 0); }
+  .ring > div { width: 100px; height: 100px; border-radius: 50%; background: #fff; display: grid; place-content: center; text-align: center; } .ring b { font: 700 24px/28px var(--font-display); } .ring small { color: var(--text-subtle); font-size: 10px; }
+  .avs { display: flex; justify-content: center; } .avs li { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; margin-left: -6px; display: grid; place-items: center; font: 600 11px/1 var(--font-display); background: var(--eganow-red); color: #fff; }
+  .avs li:nth-child(2) { background: var(--neutral-800); } .avs li:nth-child(3) { background: #ff6b81; } .avs li:nth-child(4) { background: var(--neutral-200); color: var(--neutral-800); }
 </style>

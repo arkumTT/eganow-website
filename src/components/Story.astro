@@ -13,7 +13,7 @@ import Character from './Character.astro';
     </div>
 
     <div class="phone-wrap" aria-hidden="true">
-      <Phone class="phone--main"><Screens name="home" /><Screens name="tx" /><Screens name="bills" /></Phone>
+      <Phone class="phone--main"><Screens name="home" /><Screens name="tx" /><Screens name="bills" /><Screens name="cards" /><Screens name="groups" /></Phone>
     </div>
     <div class="ega-wrap"><Character /></div>
 
@@ -45,6 +45,20 @@ import Character from './Character.astro';
         <Phone class="phone--mini"><Screens name="bills" /></Phone>
       </article>
 
+      <article class="beat beat--cards" id="cards">
+        <p class="overline">Cards · Secure</p>
+        <h2 class="display-lg">Your card. Instant.</h2>
+        <p class="body-lg">Get a Mastercard virtual card in seconds, or order a physical one. Freeze it from the app any time.</p>
+        <Phone class="phone--mini"><Screens name="cards" /></Phone>
+      </article>
+
+      <article class="beat beat--groups" id="groups">
+        <p class="overline">Groups · Simple</p>
+        <h2 class="display-lg">Pool it. Together.</h2>
+        <p class="body-lg">Start a private group for family and friends, or a public one for a cause. Everyone sees the progress.</p>
+        <Phone class="phone--mini"><Screens name="groups" /></Phone>
+      </article>
+
       <article class="beat beat--biz" id="business">
         <p class="overline">Now meet</p>
         <h2 class="display-lg">Eganow Business.</h2>
@@ -74,7 +88,7 @@ import Character from './Character.astro';
   .beat--biz .overline, .beat--biz .body-lg { color: var(--neutral-950); }
 
   /* ---------- Live scrollytelling ---------- */
-  :global(.live) .story { height: 520vh; overflow: visible; }
+  :global(.live) .story { height: 820vh; overflow: visible; }
   :global(.live) .stage { position: sticky; top: var(--header-h); height: calc(100svh - var(--header-h)); overflow: hidden;
     --pw: min(300px, calc((100svh - var(--header-h)) * .74 / 2.07)); }
   :global(.live) .lines, :global(.live) .wash, :global(.live) .phone-wrap, :global(.live) .ega-wrap { display: block; }
@@ -85,8 +99,8 @@ import Character from './Character.astro';
 
   :global(.live) .phone-wrap { position: absolute; right: clamp(24px, 12vw, 200px); top: 50%; translate: 0 -50%; perspective: 1200px; }
   :global(.live .phone--main) { transform: rotateY(-26deg) rotateZ(7deg) scale(.9); transform-style: preserve-3d; }
-  :global(.live .phone--main .scr) { position: absolute; inset: 0; }
-  :global(.live .phone--main .scr--tx), :global(.live .phone--main .scr--bills) { clip-path: inset(100% 0 0 0); }
+  :global(.live .phone--main .scr) { position: absolute; left: 0; top: 0; }
+  :global(.live .phone--main .scr--tx), :global(.live .phone--main .scr--bills), :global(.live .phone--main .scr--cards), :global(.live .phone--main .scr--groups) { clip-path: inset(100% 0 0 0); }
 
   :global(.live) .ega-wrap { position: absolute; left: clamp(8px, 3vw, 48px); bottom: 0; width: clamp(64px, 8vw, 112px); }
   .lines i { position: absolute; height: 3px; background: var(--neutral-950); transform-origin: left; opacity: .85; }
@@ -127,7 +141,7 @@ import Character from './Character.astro';
           tl.fromTo(s, { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.8 }, at);
         const beatOut = (s: string, at: number) => tl.to(s, { autoAlpha: 0, y: -36, duration: 0.7 }, at);
 
-        gsap.set('.beat--tx, .beat--bills, .beat--biz', { autoAlpha: 0 });
+        gsap.set('.beat--tx, .beat--bills, .beat--cards, .beat--groups, .beat--biz', { autoAlpha: 0 });
         tl.to('.phone--main', { rotateY: 0, rotateZ: 0, scale: 1, duration: 1.4, ease: 'power3.out' }, 0.1)
           .to('.plane--a', { xPercent: -8, duration: 2, ease: 'none' }, 0)
           .to('.lines i', { scaleX: 2.2, duration: 1, stagger: 0.1, ease: 'power1.in' }, 0.2);
@@ -145,12 +159,27 @@ import Character from './Character.astro';
         tl.to('.scr--bills', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 3.5);
         beatOut('.beat--bills', 5.2);
 
+        // Chapter 3: cards. The card flips in, then the freeze toggle switches on
+        beatIn('.beat--cards', 5.5);
+        tl.to('.scr--cards', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 5.5)
+          .fromTo('.phone--main .cardv', { rotateX: -80, autoAlpha: 0 }, { rotateX: 0, autoAlpha: 1, duration: 0.7, ease: 'back.out(1.4)' }, 5.8)
+          .to('.scr--cards .tgl', { backgroundColor: '#cc0229', duration: 0.25 }, 6.7)
+          .to('.scr--cards .tgl i', { x: 16, duration: 0.25 }, 6.7);
+        beatOut('.beat--cards', 7.2);
+
+        // Chapter 4: groups. The progress ring fills
+        beatIn('.beat--groups', 7.5);
+        tl.to('.scr--groups', { clipPath: 'inset(0% 0 0 0)', duration: 0.9 }, 7.5)
+          .fromTo('.phone--main .ring', { '--p': 0 }, { '--p': 68, duration: 1.1, ease: 'power2.inOut' }, 7.9)
+          .fromTo('.phone--main .avs li', { scale: 0 }, { scale: 1, duration: 0.3, stagger: 0.1, ease: 'back.out(2)' }, 8.2);
+        beatOut('.beat--groups', 9.2);
+
         // Bridge: red world wipes into blue; phone exits; Ega's scarf turns blue
-        tl.to('.wash', { xPercent: -110, duration: 1.1, ease: 'power3.inOut' }, 5.3)
-          .to('.phone--main', { y: 160, rotateZ: -10, autoAlpha: 0, duration: 0.9 }, 5.3)
-          .to('.ega', { '--scarf': '#1f8fff', duration: 0.4 }, 5.9)
-          .to('.plane, .lines', { autoAlpha: 0, duration: 0.4 }, 5.6);
-        beatIn('.beat--biz', 6.0);
+        tl.to('.wash', { xPercent: -110, duration: 1.1, ease: 'power3.inOut' }, 9.4)
+          .to('.phone--main', { y: 160, rotateZ: -10, autoAlpha: 0, duration: 0.9 }, 9.4)
+          .to('.ega', { '--scarf': '#1f8fff', duration: 0.4 }, 10.0)
+          .to('.plane, .lines', { autoAlpha: 0, duration: 0.4 }, 9.7);
+        beatIn('.beat--biz', 10.1);
         tl.to({}, { duration: 0.6 }); // hold
       });
     ('requestIdleCallback' in window ? (window as any).requestIdleCallback(start) : setTimeout(start, 1));
