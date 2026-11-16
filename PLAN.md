@@ -35,7 +35,7 @@ Primary goals: (1) app installs (Personal), (2) merchant sign-ups / sales leads 
    bulk-messaging         Bulk SMS + email
    egahub                 Mobile merchant app
    developers             API docs landing (links to docs site), sandbox sign-up
-/pricing                  Rates & fees (Personal + Business tabs)
+/pricing                  DROPPED by decision: no public pricing page. Quotes go through /contact?topic=sales
 /about                    Story, licence, team, partners
 /security                 Security & compliance, licences
 /help                     FAQ, support channels, status link

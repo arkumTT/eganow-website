@@ -27,4 +27,4 @@ npm run check               # audit dist/: broken links/anchors + SEO basics (ru
 
 ## Known gaps
 
-`scripts/known-missing.json` lists internal links whose pages are not built yet (`/pricing`, `/business/developers`). `npm run check` reports them as warnings and fails on any *other* broken link.
+`scripts/known-missing.json` lists internal links whose pages are not built yet (currently `/business/developers`). `npm run check` reports them as warnings and fails on any *other* broken link.
