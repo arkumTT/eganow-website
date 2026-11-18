@@ -32,12 +32,11 @@ No build step. Three.js r170 is vendored in `vendor/` so it works offline.
 ## Replace the placeholders (important)
 * **Logo** – `index.html` has a stand-in wordmark; drop in the official Eganow SVG.
 * **Brand colours/font** – tokens at the top of `styles.css`; ribbon colours in `CFG`.
-* **People on screens** – currently *drawn illustrations* (`js/screens.js`). For production use real
-  photography: `S.momAndChildScreen({ photo: 'img/mother-daughter.jpg' })` (portrait, ≥1080×2200;
-  the UI chip is drawn on top). Suggested shots, all warm, natural light, smiling to camera:
-  * Transfer – Ghanaian mother (30–35) + child (4–5) waving; and a man (30–45) waving back.
-  * Merchant – market-stall owner holding up a QR code.
-  * Bills – young adult paying a bill with a thumbs-up.
+* **People on screens** – AI-generated photos (Magnific) in `img/`, mapped in the `PHOTOS` object at the top of
+  `js/main.js`. Set an entry to `null` to fall back to the drawn illustration. They are stand-ins for a
+  proper shoot or licensed set: check usage rights/brand fit, and consider real Ghanaian talent for launch.
+  Portrait, ≥720×1280; keep faces in the upper two thirds (status bar on top, UI chip at the bottom).
+  Prompts used: see `img/PROMPTS.md`.
 * **Phone model** – built procedurally (`js/phone.js`). A branded GLB can replace it via `GLTFLoader`.
 
 ## Accessibility / perf

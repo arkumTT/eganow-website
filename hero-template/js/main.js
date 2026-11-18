@@ -16,6 +16,14 @@ const CFG = {
   blue: { width: 2.1, amp: 0.55, freq: 10.2, twist: 1.35, colors: ['#0c1f8f', '#2a52f0', '#86adff'] }, // red ≈ 30% thicker (set both to taste)
 };
 
+// Phone-screen photos (Magnific-generated). Set a value to null to fall back to the drawn illustration.
+const PHOTOS = {
+  momAndChild: 'img/mother-daughter.jpg',
+  man: 'img/man-waving.jpg',
+  vendor: 'img/vendor-qr.jpg',
+  bills: 'img/bills-thumbsup.jpg',
+};
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -95,22 +103,22 @@ function floatCard(tex, w, h) {
 const BUILDERS = {
   transfer() { // two phones, screens facing each other
     const g = new THREE.Group();
-    const a = buildPhone(S.momAndChildScreen()); a.position.set(-1.15, 0.12, 0); a.rotation.set(0.04, 0.62, 0.07);
-    const b = buildPhone(S.manScreen());         b.position.set(1.15, -0.1, 0);  b.rotation.set(0.04, -0.62, -0.07);
+    const a = buildPhone(S.momAndChildScreen({ photo: PHOTOS.momAndChild })); a.position.set(-1.15, 0.12, 0); a.rotation.set(0.04, 0.62, 0.07);
+    const b = buildPhone(S.manScreen({ photo: PHOTOS.man }));         b.position.set(1.15, -0.1, 0);  b.rotation.set(0.04, -0.62, -0.07);
     const c = coins([-0.7, 0.7, 0.3], [0.7, 0.7, 0.3], 0.8);
     g.add(a, b, c); g.userData.parts = { a, b }; g.userData.extra = [c];
     return g;
   },
   merchant() {
     const g = new THREE.Group();
-    const p = buildPhone(S.vendorScreen()); p.position.set(-0.5, 0, 0); p.rotation.set(0.04, -0.38, 0.05); p.scale.setScalar(1.12);
+    const p = buildPhone(S.vendorScreen({ photo: PHOTOS.vendor })); p.position.set(-0.5, 0, 0); p.rotation.set(0.04, -0.38, 0.05); p.scale.setScalar(1.12);
     const card = floatCard(S.qrCardTexture(), 1.25, 1.55); card.position.set(1.08, -0.15, 0.45); card.rotation.set(0.05, -0.5, -0.06);
     g.add(p, card); g.userData.parts = { p, card };
     return g;
   },
   bills() {
     const g = new THREE.Group();
-    const p = buildPhone(S.billsScreen()); p.position.set(0, 0, 0); p.rotation.set(0.04, 0.34, -0.05); p.scale.setScalar(1.12);
+    const p = buildPhone(S.billsScreen({ photo: PHOTOS.bills })); p.position.set(0, 0, 0); p.rotation.set(0.04, 0.34, -0.05); p.scale.setScalar(1.12);
     const c1 = floatCard(S.chipTexture('ECG · Paid', '#16a34a', 330), 1.3, 0.47); c1.position.set(-0.95, 0.8, 0.6);
     const c2 = floatCard(S.chipTexture('Airtime · Done', '#2563eb', 380), 1.5, 0.47); c2.position.set(0.9, -0.55, 0.65);
     g.add(p, c1, c2); g.userData.parts = { p, c1, c2 };

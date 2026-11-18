@@ -103,19 +103,26 @@ function chip(title, sub, accent = '#16a34a', y = SCREEN_H - 250) {
   x.textAlign = 'left'; x.fillStyle = '#11131a'; x.font = '700 33px system-ui, sans-serif'; x.fillText(title, 146, y + 80);
   x.fillStyle = '#5b6070'; x.font = '500 26px system-ui, sans-serif'; x.fillText(sub, 146, y + 122);
 }
-function finish(photo, draw) {
+function finish(photo, art, ui) {
   const [c, ctx] = canvas(); x = ctx;
   const tex = new THREE.CanvasTexture(c);
-  draw();
-  if (photo) {
-    const img = new Image();
-    img.onload = () => { // cover-fit the photo, then redraw chips on top
-      const k = Math.max(SCREEN_W / img.width, SCREEN_H / img.height);
-      x = ctx; x.drawImage(img, (SCREEN_W - img.width * k) / 2, (SCREEN_H - img.height * k) / 2, img.width * k, img.height * k);
-      statusBar(); tex.needsUpdate = true;
-    };
-    img.src = photo;
-  }
+  const overlay = () => { // legibility scrims + app UI always sit on top of the art/photo
+    x = ctx;
+    let g = x.createLinearGradient(0, 0, 0, 170); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0, 0, SCREEN_W, 170);
+    g = x.createLinearGradient(0, SCREEN_H - 420, 0, SCREEN_H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.4)');
+    x.fillStyle = g; x.fillRect(0, SCREEN_H - 420, SCREEN_W, 420);
+    statusBar(); ui(); tex.needsUpdate = true;
+  };
+  if (!photo) { art(); statusBar(); ui(); return tex; }
+  x.fillStyle = '#222'; x.fillRect(0, 0, SCREEN_W, SCREEN_H);  // until the photo arrives
+  const img = new Image();
+  img.onload = () => { // cover-fit
+    const k = Math.max(SCREEN_W / img.width, SCREEN_H / img.height);
+    x = ctx; x.drawImage(img, (SCREEN_W - img.width * k) / 2, (SCREEN_H - img.height * k) / 2, img.width * k, img.height * k);
+    overlay();
+  };
+  img.src = photo;
   return tex;
 }
 
@@ -125,33 +132,25 @@ export function momAndChildScreen({ photo } = {}) {
     backdrop('#ffb36b', '#ff7a6e', '#b83280');
     person(x, { cx: 190, base: 760, s: 1.12, skin: '#6a4230', hair: '#140e0b', top: '#fff', style: 'wrap', wrap: '#2563eb' });
     person(x, { cx: 392, base: 800, s: 0.78, skin: '#7a4d37', hair: '#140e0b', top: '#e63946', style: 'buns', wave: 1, kid: true });
-    statusBar();
-    chip('Sending to Kofi', 'GH₵ 500.00 · Instant', '#16a34a');
-  });
+  }, () => chip('Sending to Kofi', 'GH₵ 500.00 · Instant', '#16a34a'));
 }
 export function manScreen({ photo } = {}) {
   return finish(photo, () => {
     backdrop('#5ad1e6', '#3b82f6', '#312e81');
     person(x, { cx: 262, base: 780, s: 1.22, skin: '#5b3827', hair: '#0f0a08', top: '#e63946', style: 'short', wave: -1, beard: true });
-    statusBar();
-    chip('Received from Ama', 'GH₵ 500.00 · Just now', '#16a34a');
-  });
+  }, () => chip('Received from Ama', 'GH₵ 500.00 · Just now', '#16a34a'));
 }
 export function vendorScreen({ photo } = {}) {
   return finish(photo, () => {
     backdrop('#ffd36e', '#ff9a56', '#e0442f');
     person(x, { cx: 270, base: 790, s: 1.2, skin: '#6c4432', hair: '#140e0b', top: '#1d4ed8', style: 'wrap', wrap: '#e63946' });
-    statusBar();
-    chip('Payment received', 'GH₵ 85.00 · MoMo QR', '#16a34a');
-  });
+  }, () => chip('Payment received', 'GH₵ 85.00 · MoMo QR', '#16a34a'));
 }
 export function billsScreen({ photo } = {}) {
   return finish(photo, () => {
     backdrop('#a78bfa', '#4f46e5', '#1e1b4b');
     person(x, { cx: 262, base: 790, s: 1.2, skin: '#5f3b29', hair: '#0f0a08', top: '#fff', style: 'short', wave: 1 });
-    statusBar();
-    chip('Bills paid', 'ECG · Airtime · Water', '#16a34a');
-  });
+  }, () => chip('Bills paid', 'ECG · Airtime · Water', '#16a34a'));
 }
 
 /* ---------- floating cards ---------- */
@@ -169,7 +168,7 @@ export function qrCardTexture() {
     if (!inF && rnd() > 0.52) k.fillRect(ox + i * cell, oy + j * cell, cell, cell);
   }
   finder(0, 0); finder(n - 7, 0); finder(0, n - 7);
-  k.fillStyle = '#6b7080'; k.font = '600 26px system-ui, sans-serif'; k.fillText('Mama Esi Provisions', 210, 484);
+  k.fillStyle = '#6b7080'; k.font = '600 26px system-ui, sans-serif'; k.fillText('Mama Kofi Produce', 210, 484);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
 export function chipTexture(label, color = '#16a34a', w = 400) {
