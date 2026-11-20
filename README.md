@@ -64,6 +64,10 @@ When a provider is on, the build adds the banner to every page, a "Cookie settin
 
 **Test it:** build with a provider, `npm run serve`, then `npm run test:consent -- plausible|ga4|default` (needs Playwright + Chromium). It uses stand-ins for the vendors at their real URLs, and checks zero requests before consent, payloads, GPC, expiry, focus, accessibility (axe) and CSP violations. `npm run check` also verifies banner / CSP / pages are consistent.
 
+## Hero animation (Personal page)
+
+The first screen plays a Lottie scene: `public/lottie/hero-scene.json` plus its image `public/lottie/hero-woman.webp`, drawn by `lottie-web` (light build, loaded on the Personal page only). `src/assets/hero-scene-poster.webp` is the still shown when scripts, motion or the animation file are unavailable. To swap the scene: export a new Lottie JSON (remove any editor watermark layer), put its images in `public/lottie/` (reference them by path, not embedded base64, to keep the JSON small), and regenerate the poster from its last frame.
+
 ## Known gaps
 
 `scripts/known-missing.json` lists internal links whose pages are not built yet (currently none). `npm run check` reports them as warnings and fails on any *other* broken link.

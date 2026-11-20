@@ -3,7 +3,7 @@ import Phone from './Phone.astro';
 import Screens from './Screens.astro';
 import QRCode from 'qrcode';
 import { Image } from 'astro:assets';
-import heroWoman from '../assets/hero-woman.webp';
+import heroPoster from '../assets/hero-scene-poster.webp';
 
 // TODO: real store URLs + an OS-aware smart link (App Store on iOS, Play on Android) at /app
 const APP_STORE_URL = '#';
@@ -20,10 +20,12 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
       <div class="wash"></div>
     </div>
 
-    <!-- Hero picture: replaces the phone mockup on the first screen. It enters with the page, leaves as the story moves on, and the phone takes over -->
+    <!-- Hero visual: an animated scene (Lottie) that replaces the phone mockup on the first screen. It plays on arrival, leaves as the story
+         scrolls on, and the phone takes over. The still poster is used when scripts or motion are unavailable. -->
     <div class="hero-person">
-      <Image src={heroWoman} alt="A smiling woman taking a selfie with her red phone" widths={[640, 960, 1280]} sizes="(max-width: 899px) 92vw, 56vw"
-        format="webp" quality={80} loading="eager" fetchpriority="high" decoding="async" />
+      <Image class="hero-poster" src={heroPoster} alt="A smiling woman taking a selfie with her red phone, in front of the Accra skyline" widths={[640, 960, 1184]}
+        sizes="(max-width: 899px) 92vw, 52vw" format="webp" quality={82} loading="lazy" decoding="async" />
+      <div class="hero-scene" data-lottie="/lottie/hero-scene.json" role="img" aria-label="A smiling woman taking a selfie with her red phone, in front of the Accra skyline"></div>
     </div>
 
     <div class="phone-wrap" aria-hidden="true">
@@ -117,8 +119,9 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   .plane--b { top: 0; right: 0; width: 70%; height: 100%; clip-path: polygon(38% 0, 100% 0, 100% 100%, 0 100%); background: #ff9aa9; opacity: .55; }
   .lines, .wash, .phone-wrap { display: none; }
   /* Static layout: the picture sits above the copy */
-  .hero-person { position: relative; z-index: 1; width: min(100%, 420px); margin: var(--space-6) auto 0; }
-  .hero-person :global(img) { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%); mask-image: linear-gradient(to bottom, #000 72%, transparent 98%); }
+  .hero-person { position: relative; z-index: 1; width: min(100%, 440px); margin: var(--space-6) auto 0; }
+  .hero-person :global(img) { display: block; width: 100%; height: auto; }
+  .hero-scene { display: none; }
   .beats { position: relative; display: grid; gap: var(--space-16); padding: var(--space-12) clamp(16px, 4vw, 48px) var(--space-24); max-width: 1200px; margin: 0 auto; }
   .beat { display: grid; gap: var(--space-4); max-width: 560px; }
   .beat :global(.phone--mini) { --pw: 220px; margin-top: var(--space-6); }
@@ -153,10 +156,13 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
     :global(.live) .beat--tx, :global(.live) .beat--cards, :global(.live) .beat--trust { left: auto; right: clamp(16px, 5vw, 80px); }
   }
 
-  /* Live: the woman stands on the bottom edge of the red shape, on the right; entry is a CSS animation so it plays with first paint */
-  :global(.live) .hero-person { position: absolute; z-index: 1; right: 0; bottom: 0; width: auto; margin: 0; height: min(74%, calc(54vw / 1.293)); pointer-events: none; }
-  :global(.live) .hero-person :global(img) { -webkit-mask-image: none; mask-image: none; width: auto; height: 100%; max-width: none; transform-origin: 70% 100%; animation: person-in .95s cubic-bezier(.2, .8, .2, 1) .1s both; }
-  @keyframes person-in { from { opacity: 0; transform: translate3d(9%, 7%, 0) rotate(3deg) scale(.94); } to { opacity: 1; transform: none; } }
+  /* Live: the animated scene sits on the right, over the red shape; the poster is only for when the animation can't load */
+  :global(.live) .hero-person { position: absolute; z-index: 1; right: 0; bottom: 0; width: auto; margin: 0; aspect-ratio: 1184 / 1203; height: min(86%, calc(50vw / .984)); pointer-events: none; }
+  :global(.live) .hero-poster { display: none; }
+  :global(.live) .hero-scene { display: block; width: 100%; height: 100%; }
+  :global(.live) .hero-scene :global(svg) { display: block; }
+  :global(.live.scene-fallback) .hero-poster { display: block; width: 100%; height: 100%; }
+  :global(.live.scene-fallback) .hero-scene { display: none; }
   /* the phone stays hidden until the hero picture has left (the timeline fades it in) */
   :global(.live) .phone-wrap { opacity: 0; visibility: hidden; position: absolute; right: clamp(24px, 12vw, 200px); top: 50%; translate: 0 -50%; perspective: 1200px; }
   :global(.live .phone--main) { transform: rotateY(-26deg) rotateZ(7deg) scale(.9); transform-style: preserve-3d; }
@@ -172,10 +178,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   @media (max-width: 899px) {
     :global(.live) .stage { --pw: min(240px, calc((100svh - var(--header-h)) * .5 / 2.07)); }
     /* centred with a margin (not a CSS translate) so the timeline can slide it sideways without losing the centring */
-    :global(.live) .hero-person { left: 0; right: 0; margin: 0 auto; width: fit-content; top: 3%; bottom: auto; height: min(46%, calc(92vw / 1.293));
-      /* her photo ends in a straight cut at the waist: on phones it floats, so fade it into the red */
-      }
-    :global(.live) .hero-person :global(img) { -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%); mask-image: linear-gradient(to bottom, #000 72%, transparent 98%); }
+    :global(.live) .hero-person { left: 0; right: 0; margin: 0 auto; top: 2%; bottom: auto; height: auto; width: min(96vw, calc((100svh - var(--header-h)) * .5 * .984)); }
     :global(.live) .phone-wrap { right: auto; left: 50%; margin-left: calc(var(--pw) / -2); top: 4%; translate: none; }
     :global(.live) .beat { left: 0; right: 0; top: auto; bottom: 0; translate: none; width: auto; padding: 20px clamp(16px, 5vw, 32px) 24px;
       background: linear-gradient(to top, var(--surface) calc(100% - 28px), rgb(248 249 250 / 0)); gap: 10px; }
@@ -199,6 +202,17 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   const root = document.documentElement;
   const el = document.querySelector<HTMLElement>('[data-story]');
   if (el && root.classList.contains('live')) {
+    // The hero scene (Lottie). Loaded straight away because it IS the first screen; if anything fails, the still poster takes its place.
+    const scene = el.querySelector<HTMLElement>('.hero-scene');
+    if (scene) {
+      Promise.all([import('lottie-web/build/player/lottie_light.min.js'), fetch(scene.dataset.lottie!).then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })])
+        .then(([mod, data]) => {
+          const lottie: any = (mod as any).default ?? mod;
+          lottie.loadAnimation({ container: scene, renderer: 'svg', loop: false, autoplay: true, animationData: data, rendererSettings: { preserveAspectRatio: 'xMidYMax meet' } });
+        })
+        .catch(() => root.classList.add('scene-fallback'));
+    }
+
     const start = () =>
       Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(([{ gsap }, { ScrollTrigger }]) => {
         gsap.registerPlugin(ScrollTrigger);

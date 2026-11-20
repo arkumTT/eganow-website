@@ -103,7 +103,7 @@ export default function launchFiles({ site }) {
           'X-Content-Type-Options: nosniff',
           'X-Frame-Options: DENY',
           'Referrer-Policy: strict-origin-when-cross-origin',
-          'Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), serial=(), accelerometer=(), gyroscope=(), magnetometer=()',
+          'Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), accelerometer=(), gyroscope=(), magnetometer=()',
           'Cross-Origin-Opener-Policy: same-origin',
         ];
 
