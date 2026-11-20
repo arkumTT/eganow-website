@@ -157,7 +157,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   }
 
   /* Live: the animated scene sits on the right, over the red shape; the poster is only for when the animation can't load */
-  :global(.live) .hero-person { position: absolute; z-index: 1; right: 0; bottom: 0; width: auto; margin: 0; aspect-ratio: 1184 / 1203; height: min(86%, calc(50vw / .984)); pointer-events: none; }
+  :global(.live) .hero-person { position: absolute; z-index: 1; right: 0; bottom: 0; width: auto; margin: 0; aspect-ratio: 1184 / 1145; height: min(86%, calc(50vw / 1.034)); pointer-events: none; }
   :global(.live) .hero-poster { display: none; }
   :global(.live) .hero-scene { display: block; width: 100%; height: 100%; }
   :global(.live) .hero-scene :global(svg) { display: block; }
@@ -178,7 +178,7 @@ const qr = await QRCode.toString(SMART_LINK, { type: 'svg', margin: 0, errorCorr
   @media (max-width: 899px) {
     :global(.live) .stage { --pw: min(240px, calc((100svh - var(--header-h)) * .5 / 2.07)); }
     /* centred with a margin (not a CSS translate) so the timeline can slide it sideways without losing the centring */
-    :global(.live) .hero-person { left: 0; right: 0; margin: 0 auto; top: 2%; bottom: auto; height: auto; width: min(96vw, calc((100svh - var(--header-h)) * .5 * .984)); }
+    :global(.live) .hero-person { left: 0; right: 0; margin: 0 auto; top: 2%; bottom: auto; height: auto; width: min(96vw, calc((100svh - var(--header-h)) * .5 * 1.034)); }
     :global(.live) .phone-wrap { right: auto; left: 50%; margin-left: calc(var(--pw) / -2); top: 4%; translate: none; }
     :global(.live) .beat { left: 0; right: 0; top: auto; bottom: 0; translate: none; width: auto; padding: 20px clamp(16px, 5vw, 32px) 24px;
       background: linear-gradient(to top, var(--surface) calc(100% - 28px), rgb(248 249 250 / 0)); gap: 10px; }
