@@ -1,0 +1,10 @@
+# Netlify / Cloudflare Pages
+/_f/*
+  Cache-Control: public, max-age=31536000, immutable
+/_gf/*
+  Cache-Control: public, max-age=31536000, immutable
+/_s/*
+  Cache-Control: public, max-age=31536000, immutable
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
