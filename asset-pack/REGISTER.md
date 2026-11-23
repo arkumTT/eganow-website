@@ -8,7 +8,17 @@
 | P02c | `p02c-canada-to-ghana-video-call_{800,1400}.webp` (25 / 59 KB) | Canada page "Seamless transfer" | **AI-generated** (Magnific free plan). Prompt: P02 adapted (Toronto kitchen, snow) | 2026-11-23 | Stand-in |
 | P04 | `p04-bills-at-home_{800,1400}.webp` (25 / 52 KB) | Bill Payment "Scheduled payments" | **AI-generated** (Magnific free plan). Prompt: `ASSETS.md` P04 | 2026-11-23 | Stand-in |
 | P05 | `p05-card-abroad_{800,1400}.webp` (26 / 52 KB) | Cards "Shop. Pay. Stream. Travel." | **AI-generated** (Magnific free plan). Prompt: `ASSETS.md` P05 (plain red card, no network logos; the Mastercard mark is only in text) | 2026-11-23 | Stand-in |
+| P08 | `p08-bizcollect-market-stall_{800,1400}.webp` | BizCollect hero | **AI-generated** (Magnific free plan). Prompt: `ASSETS.md` P08 | 2026-11-23 | Stand-in |
+| P09 | `p09-egapos-boutique_{800,1400}.webp` | EgaPOS hero | **AI-generated** (Magnific free plan). Prompt: P09 | 2026-11-23 | Stand-in |
+| P10 | `p10-card-issuing-office_{800,1400}.webp` | Card Issuing hero | **AI-generated** (Magnific free plan). Prompt: P10 | 2026-11-23 | Stand-in |
+| P11 | `p11-agency-banking-kiosk_{800,1400}.webp` | Agency Banking hero | **AI-generated** (Magnific free plan). Prompt: P11. Shows banknotes (generated, not a real currency design); review before launch | 2026-11-23 | Stand-in |
+| P12 | `p12-bulk-messaging-retail_{800,1400}.webp` | Bulk Messaging hero | **AI-generated** (Magnific free plan). Prompt: P12. Tablet/phone screens show blurred pseudo-UI | 2026-11-23 | Stand-in |
+| P13 | `p13-egahub-market-merchant_{800,1400}.webp` | Egahub hero | **AI-generated** (Magnific free plan). Prompt: P13 | 2026-11-23 | Stand-in |
 | fonts | `eganow-business/assets/fonts/*.woff2` + `assets/fonts.css` | all pages | Inter (400/600) and Manrope (variable 600–800), latin + latin-ext (includes the cedi sign), downloaded from Google Fonts (SIL Open Font License) | 2026-11-23 | Self-hosted; no third-party font requests |
+
+## Generated but deliberately NOT used
+- **P14 team portrait** (AI group of six): not used on About. The About page names real board and management members, so an AI team photo would be misleading. Use the real staff shoot (SHOTLIST P14). The image exists in the Magnific project if you want it for internal mock-ups only.
+- Business hub, Developers, Help, Security, Legal and Blog pages have no photography by design (hub/developers use product mock-ups; the rest are editorial pages).
 
 ## Generated but rejected (not shipped)
 - **D01 phone render**: the screen UI contained garbled text ("#C0229"). The site uses CSS/HTML phone mock-ups instead.

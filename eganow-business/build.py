@@ -62,7 +62,18 @@ def footer():
 <nav aria-label="Get started"><h2>Get started</h2><ul><li><a href="{REGISTER}">Open a business account</a></li><li><a href="{LOGIN}">Business sign in</a></li><li><a href="{SALES}">Talk to sales</a></li><li><a href="{SANDBOX}">Get sandbox access</a></li></ul></nav></div>
 <p class="ft__l">{LEGAL} © 2026 Eganow.</p></footer><script src="/assets/business.js"></script></body></html>'''
 
+HERO_PHOTOS = {
+ "BizCollect": ("p08-bizcollect-market-stall", "A market-stall owner and a customer completing a mobile money payment at a produce stall in Accra"),
+ "EgaPOS": ("p09-egapos-boutique", "A boutique owner handing a customer a handheld payment terminal in a clothing shop in Kumasi"),
+ "Card Issuing": ("p10-card-issuing-office", "A finance manager handing a red company card to a teammate in a modern office"),
+ "Agency Banking": ("p11-agency-banking-kiosk", "An agent in a red uniform counting cash for a customer at a kiosk in Ghana"),
+ "Bulk Messaging": ("p12-bulk-messaging-retail", "A retail manager sending a promotion from a tablet while a customer receives a notification on a phone"),
+ "Egahub": ("p13-egahub-market-merchant", "A merchant walking through a busy market while checking daily sales on a phone"),
+}
 def hero(name, title, lead, cta, vis, strip, crumb=True):
+    if name in HERO_PHOTOS:
+        b, alt = HERO_PHOTOS[name]
+        vis = f'<div class="photo hero-photo"><img src="/assets/img/{b}_1400.webp" srcset="/assets/img/{b}_800.webp 800w, /assets/img/{b}_1400.webp 1400w" sizes="(max-width:959px) 92vw, 520px" width="1400" height="927" alt="{alt}" decoding="async"></div>' + vis
     ctas = "".join(f'<a class="btn {c}" href="{h}">{t}</a>' for t, h, c in cta)
     crumbs = f'<ol class="crumbs"><li><a href="/business/">Business</a></li><li aria-current="page">{name}</li></ol>' if crumb else ''
     s3 = "".join(f"<li><b>{b}</b><span>{t}</span></li>" for b, t in strip)

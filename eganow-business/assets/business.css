@@ -193,3 +193,15 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
 @media(min-width:960px){.hhero__vis .mk:nth-of-type(1){left:-3%!important}}
 /* photo + overlay cards: stack the cards under the photo on small screens so the people stay visible */
 @media(max-width:700px){.split__vis>div:has(.photo){min-height:0!important;display:grid;gap:12px}.split__vis .photo~.mk{position:relative!important;inset:auto!important;width:100%!important;max-width:none!important;animation:none}.split__vis .photo~.card3d{display:none}}
+/* business hero photos: photo sits behind the floating product cards */
+.hero__vis .hero-photo{position:absolute;right:0;top:4%;width:80%;z-index:0;box-shadow:var(--eg-shadow-float)}
+.hero__vis .mk{z-index:1}
+@media(max-width:959px){.hero__vis:has(.hero-photo){min-height:0!important;display:grid;gap:12px}.hero__vis .hero-photo{position:relative;width:100%;top:auto}.hero__vis:has(.hero-photo) .mk{position:relative!important;inset:auto!important;width:100%!important;max-width:none!important;animation:none}.hero__vis:has(.hero-photo) .mk~.mk,.hero__vis:has(.hero-photo) .card3d,.hero__vis:has(.hero-photo) .phone{display:none}}
+@media(min-width:960px){
+ .hero__vis .hero-photo{top:0;width:96%}
+ .hero__vis:has(.hero-photo) .phone,.hero__vis:has(.hero-photo) .card3d,.hero__vis:has(.hero-photo) .mk:nth-of-type(n+3){display:none}
+ .hero__vis:has(.hero-photo) .mk:nth-of-type(1){left:-8%!important;top:auto!important;bottom:6%!important;right:auto!important;width:200px!important}
+ .hero__vis:has(.hero-photo) .mk:nth-of-type(2){right:-3%!important;left:auto!important;top:auto!important;bottom:-2%!important;width:190px!important}
+ .hero__vis:has(.hero-photo) .mk .big{font-size:24px}
+}
+.mk .tabs{flex-wrap:wrap}

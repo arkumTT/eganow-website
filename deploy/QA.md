@@ -71,3 +71,6 @@ Open items: legal text approval (see Legal findings above), editorial/compliance
 
 ## Addendum: image batch 2
 Added US, Canada, Bill Payment and Cards photos (responsive WebP, 23–59 KB each). axe-core: 0 violations on those four pages (desktop + mobile). On screens ≤700 px the overlay cards stack under the photos so people stay visible. All images remain AI-generated stand-ins (see `asset-pack/REGISTER.md`).
+
+## Addendum: image batch 3 (business pages)
+Added hero photos to BizCollect, EgaPOS, Card Issuing, Agency Banking, Bulk Messaging and Egahub (WebP 800/1400 w). axe-core: 0 violations on those six pages (desktop + mobile). On ≤959 px the floating cards collapse to one card under the photo. About page intentionally has no AI team photo (see `asset-pack/REGISTER.md`).
