@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eganow design system preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="tokens.css">
+<style>body{margin:0;background:var(--eg-ice);font-family:var(--eg-font-body)}section{padding:48px 0}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.sw{width:150px;border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--eg-shadow-card);font-size:12px}.sw i{display:block;height:72px}.sw b,.sw span{display:block;padding:2px 10px}.sw b{padding-top:8px}.sw span{padding-bottom:8px;color:var(--eg-text-muted)}
+.logos img{height:42px}.logos div{padding:20px;border-radius:16px}</style></head><body>
+<section class="eg-section--red"><div class="eg-container"><div class="logos row"><img src="brand/eganow-wordmark-white.svg" alt="eganow"><img src="brand/eganow-icon-white-blue.svg" alt="" style="height:48px"></div>
+<h1 class="eg-h1" style="margin:24px 0 8px">Your one app for everything money</h1><p style="max-width:520px;opacity:.92">Send, pay, save and do more—across any account, on a single platform.</p>
+<div class="row"><a class="eg-btn eg-btn--on-red" href="#">Get the app</a><a class="eg-btn eg-btn--ghost-on-red" href="#">Register</a></div></div></section>
+<section><div class="eg-container"><h2 class="eg-h2">Colour</h2><div class="row" id="sw"></div>
+<h2 class="eg-h2" style="margin-top:40px">Logo</h2><div class="logos row"><div style="background:#fff"><img src="brand/eganow-wordmark-red.svg" alt="eganow"></div><div style="background:#fff"><img src="brand/eganow-icon.svg" alt="" style="height:48px"></div></div>
+<h2 class="eg-h2" style="margin-top:40px">Buttons &amp; card</h2><div class="row"><a class="eg-btn eg-btn--primary" href="#">Send money</a><a class="eg-btn eg-btn--secondary" href="#">Learn more</a><span class="eg-chip">Sample rates</span></div>
+<div class="eg-card" style="max-width:420px;margin-top:20px"><h3 style="font:800 20px var(--eg-font-display);margin:0 0 8px">Bill payments made easy</h3><p class="eg-body" style="margin:0">Paying bills, buying airtime and settling utilities is quick with eganow.</p></div></div></section>
+<script>const c=[["red","Eganow Red"],["red-hover","Red hover"],["blue","Brand blue"],["blue-action","Action blue"],["ink","Ink"],["slate","Slate"],["text-muted","Muted text"],["mute","Mute (decor)"],["mist","Mist"],["ice","Ice"],["night","Night"],["amber","Amber"]];
+document.getElementById("sw").innerHTML=c.map(([k,n])=>{const v=getComputedStyle(document.documentElement).getPropertyValue("--eg-"+k).trim();return `<div class="sw"><i style="background:${v}"></i><b>${n}</b><span>${v}</span></div>`}).join("")</script></body></html>

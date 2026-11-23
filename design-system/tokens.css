@@ -1,0 +1,48 @@
+/* Eganow design tokens — source of truth: DESIGN.md. Import once; use var(--eg-*) everywhere. */
+:root{
+  /* Brand */
+  --eg-red:#CC0229;        --eg-red-hover:#A80222;  --eg-red-tint:#FFF1F3;
+  --eg-blue:#1F8FFF;       /* logo accent / illustration only (3.3:1 on white) */
+  --eg-blue-action:#1065E3;--eg-blue-action-hover:#084DB3; /* links + buttons used on current site */
+  /* Neutrals */
+  --eg-ink:#14202E;        --eg-slate:#485E79;      --eg-text-muted:#596779;  /* AA on white and ice */
+  --eg-mute:#828E9D;       /* decorative / large text only (3.3:1) */
+  --eg-mist:#C8D3E3;       --eg-mist-2:#DEE8F6;     --eg-ice:#F2F9FE;  --eg-white:#FFFFFF;
+  --eg-night:#0F1B2A;      /* dark sections (Developers) */
+  --eg-amber:#FFB407;      /* sparing highlight: Boss Card, badges, focus ring */
+  /* Status */
+  --eg-success:#12805C;    --eg-warning:#B26A00;    --eg-error:#B3122D;
+  /* Type */
+  --eg-font-display:"Manrope","Poppins",system-ui,sans-serif;
+  --eg-font-body:"Inter",system-ui,sans-serif;
+  --eg-font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --eg-fs-display:clamp(40px,6vw,72px); --eg-fs-h1:clamp(34px,4.6vw,56px); --eg-fs-h2:clamp(28px,3.4vw,40px);
+  --eg-fs-h3:28px; --eg-fs-h4:20px; --eg-fs-body:16px; --eg-fs-small:14px; --eg-fs-caption:12px;
+  --eg-lh-tight:1.05; --eg-lh-snug:1.25; --eg-lh-body:1.6;
+  /* Space (8-pt) */
+  --eg-s1:4px;--eg-s2:8px;--eg-s3:12px;--eg-s4:16px;--eg-s5:24px;--eg-s6:32px;--eg-s7:48px;--eg-s8:64px;--eg-s9:96px;--eg-s10:128px;
+  /* Shape + elevation */
+  --eg-r-sm:12px;--eg-r-md:18px;--eg-r-lg:28px;--eg-r-pill:999px;
+  --eg-shadow-card:0 8px 30px rgba(20,32,46,.10);
+  --eg-shadow-float:0 24px 60px rgba(20,32,46,.22);
+  --eg-shadow-on-red:0 24px 60px rgba(60,0,10,.28);
+  /* Layout + motion */
+  --eg-container:1200px; --eg-gutter:24px;
+  --eg-ease:cubic-bezier(.2,.8,.2,1); --eg-t-fast:150ms; --eg-t:300ms; --eg-t-slow:600ms;
+  --eg-focus:0 0 0 3px var(--eg-amber);
+}
+@media (prefers-reduced-motion:reduce){:root{--eg-t-fast:0ms;--eg-t:0ms;--eg-t-slow:0ms}}
+
+/* Base components */
+.eg-container{max-width:var(--eg-container);margin:0 auto;padding:0 var(--eg-gutter)}
+.eg-h1{font:800 var(--eg-fs-h1)/var(--eg-lh-tight) var(--eg-font-display);letter-spacing:-.02em}
+.eg-h2{font:800 var(--eg-fs-h2)/var(--eg-lh-snug) var(--eg-font-display);letter-spacing:-.015em}
+.eg-body{font:400 var(--eg-fs-body)/var(--eg-lh-body) var(--eg-font-body);color:var(--eg-ink)}
+.eg-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 16px var(--eg-font-display);padding:14px 28px;border-radius:var(--eg-r-pill);border:2px solid transparent;text-decoration:none;cursor:pointer;transition:background var(--eg-t-fast),transform var(--eg-t-fast)}
+.eg-btn:active{transform:scale(.98)}.eg-btn:focus-visible{outline:none;box-shadow:var(--eg-focus)}
+.eg-btn--primary{background:var(--eg-red);color:#fff}.eg-btn--primary:hover{background:var(--eg-red-hover)}
+.eg-btn--secondary{background:transparent;color:var(--eg-blue-action);border-color:var(--eg-blue-action)}.eg-btn--secondary:hover{background:var(--eg-ice)}
+.eg-btn--on-red{background:#fff;color:var(--eg-red)}.eg-btn--ghost-on-red{border-color:#fff;color:#fff}
+.eg-card{background:#fff;border-radius:var(--eg-r-lg);box-shadow:var(--eg-shadow-card);padding:var(--eg-s6)}
+.eg-chip{display:inline-block;font:600 12px var(--eg-font-body);letter-spacing:.04em;text-transform:uppercase;background:var(--eg-ice);color:var(--eg-slate);border:1px solid var(--eg-mist);border-radius:var(--eg-r-pill);padding:4px 10px}
+.eg-section--red{background:var(--eg-red);color:#fff}.eg-section--ice{background:var(--eg-ice)}.eg-section--night{background:var(--eg-night);color:#fff}
