@@ -44,7 +44,7 @@ Note: the amber in the plan is a suggested accent, not found in the live brand b
 ## 4. Typography
 - **Display/headings:** Manrope 800 (Poppins 600/700 as fallback and where existing pages use it). Tight tracking (−0.02em).
 - **Body/UI:** Inter 400/600. Numerals tabular in calculators, tables, dashboards.
-- Self-host (already in `eganow-site/_gf`); never load from Google in production.
+- Self-hosted in the site build (`eganow-business/assets/fonts`, loaded by `assets/fonts.css`); never load from Google in production.
 
 | Style | Size (desktop → mobile) | Line height | Weight |
 |---|---|---|---|

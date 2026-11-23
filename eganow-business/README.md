@@ -39,3 +39,7 @@ Copy comes from session 2's build (FAQs, steps, use cases); layout/visuals follo
 - **Findings for legal:** the old "Privacy Policy" page was actually Terms of Service (so no privacy policy is in force); the money-transfer T&Cs name Eganow Ltd (England) with "FCA register number TBC" and an app name "tbc"; the Terms contain duplicated "System Subscription / System Revisions" paragraphs.
 - **Blog** (`/blog` + 4 posts in `blog_posts.py`): the 6 old posts were Framer template filler and are retired (redirect to `/blog`). The 4 new posts are starter editorial drafts with general guidance only, `noindex` until editorial + compliance approve.
 - **404:** new `404.html` served by the host for unknown URLs.
+
+## Fonts and first real assets
+- **Fonts are self-hosted**: `assets/fonts.css` + `assets/fonts/*.woff2` (Inter 400/600, Manrope variable 600–800, latin + latin-ext). The two latin files are preloaded; the pages make **no third-party requests**.
+- **Images**: `assets/img/` holds the first generated assets (Home hero cut-out, UK→Ghana video-call photo) as responsive WebP. See `../asset-pack/REGISTER.md` for source, status and the pre-launch checklist (they are AI-generated stand-ins for the planned photoshoot).

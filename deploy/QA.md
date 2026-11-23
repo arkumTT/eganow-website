@@ -61,3 +61,10 @@ then axe/Lighthouse against `http://localhost:8095`.
 ## Addendum: Blog, Legal and 404 (added after the main QA pass)
 Re-ran the crawl and axe-core on the 12 new pages (desktop + mobile): 0 broken links, 0 axe violations after fixing (a) duplicate section landmarks in the long legal documents (sections no longer expose redundant labelled regions) and (b) a button inside article bodies picking up link colour (contrast). Not yet re-run: Lighthouse on these pages.
 Open items: legal text approval (see Legal findings above), editorial/compliance approval of blog drafts, remove `noindex` when approved.
+
+
+## Addendum: self-hosted fonts and first images
+- Fonts: 0 requests to googleapis/gstatic on Home, UK and Money Transfer (desktop + mobile); fonts load from `/assets/fonts`. Cookie draft no longer mentions Google Fonts.
+- Lighthouse (Home): desktop 100/100/100/100, LCP 0.6 s, CLS 0; mobile (simulated slow 4G) 95/100/100/100, LCP 2.8 s (LCP element is the hero image: discoverable, `fetchpriority=high`, preloaded, 74 KB at 600 w).
+- axe-core: 0 violations on Home, UK, US, Canada, Money Transfer, Cookies at desktop + mobile after adding the images.
+- Open: replace stand-in imagery with real photography; confirm image licence terms; hero image alt is intentionally empty (decorative).
