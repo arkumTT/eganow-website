@@ -42,3 +42,8 @@ python3 preview.py 8080   # then open http://localhost:8080
 ```
 (Opening the HTML files directly from disk will not work.) `preview.py`, `set-domain.sh` and this
 README are not needed on the server.
+
+## Money Transfer calculator (mock rates)
+`mt-calculator/` is mounted into the hero of `money-transfer`, `uk`, `us` and `canada` via one `<script type="module">` before `</body>`.
+It currently uses `MockRateProvider` (sample rates, "Sample rates" badge). To go live, implement `EganowRateProvider`
+(see `../money-transfer-calculator/README.md`) and swap it in `mt-calculator/mount.js`. Remove the script tag to disable.
