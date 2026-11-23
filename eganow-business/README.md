@@ -33,3 +33,9 @@ Copy comes from session 2's build (FAQs, steps, use cases); layout/visuals follo
 - **Help / Security:** drafted in session 2 with `<mark class="todo">` placeholders and a visible Draft banner; both are `noindex` until Eganow fills the placeholders and removes the banner/meta (`NOINDEX` in `build.py`).
 - **Blog not rebuilt:** the 6 existing posts are Framer template filler ("Financia" lorem). Replace with real articles first.
 - **Legal pages not rebuilt:** privacy policy and money-transfer T&Cs remain the live versions; Terms, Cookies, AML & KYC and Complaints exist only as session 2 drafts and need legal-approved text.
+
+## Blog and Legal (this round)
+- **Legal** (`/legal` hub + `/legal/terms`, `/legal/money-transfer-terms`, `/legal/privacy`, `/legal/cookies`, `/legal/aml-policy`, `/legal/complaints`): `legal-src/*.txt` holds the existing live text, migrated word-for-word (Framer's duplicated responsive blocks removed) and parsed by `parse_terms` / `parse_mt`; `legal_drafts.py` holds the four draft documents carried over from session 2 with `TODO` placeholders. Drafts are `noindex`, flagged with a banner and kept out of the sitemap.
+- **Findings for legal:** the old "Privacy Policy" page was actually Terms of Service (so no privacy policy is in force); the money-transfer T&Cs name Eganow Ltd (England) with "FCA register number TBC" and an app name "tbc"; the Terms contain duplicated "System Subscription / System Revisions" paragraphs.
+- **Blog** (`/blog` + 4 posts in `blog_posts.py`): the 6 old posts were Framer template filler and are retired (redirect to `/blog`). The 4 new posts are starter editorial drafts with general guidance only, `noindex` until editorial + compliance approve.
+- **404:** new `404.html` served by the host for unknown URLs.

@@ -36,7 +36,7 @@ def BC(path, title):
 def head(title, desc, path):
     return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {SUF(path)}</title><meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{SITE}{path}"><link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml"><meta name="theme-color" content="#CC0229">{NOINDEX if path in ("/help/","/security/") else ""}
+<link rel="canonical" href="{SITE}{path}"><link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml"><meta name="theme-color" content="#CC0229">{NOINDEX if (path in ("/help/","/security/","/blog/") or path.startswith("/blog/") or path in ("/legal/privacy/","/legal/cookies/","/legal/aml-policy/","/legal/complaints/")) else ""}
 <meta property="og:title" content="{e(title)} | {SUF(path)}"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -58,7 +58,7 @@ def footer():
     return f'''<footer class="ft"><div class="ft__in"><div class="ft__b"><img src="/brand/eganow-wordmark-white.svg" alt="eganow" width="118" height="34"><p>Simple. Speed. Secure.</p></div>
 <nav aria-label="Personal"><h2>Personal</h2><ul><li><a href="https://eganow.com/money-transfer">Money transfer</a></li><li><a href="https://eganow.com/bill-payment">Bill payments</a></li><li><a href="https://eganow.com/cards">Cards</a></li><li><a href="https://eganow.com/groups">Groups</a></li></ul></nav>
 <nav aria-label="Business"><h2>Business</h2><ul>{biz}</ul></nav>
-<nav aria-label="Company"><h2>Company</h2><ul><li><a href="/about/">About</a></li><li><a href="/security/">Security</a></li><li><a href="/help/">Help</a></li><li><a href="/contact/">Contact</a></li><li><a href="https://eganow.com/privacy-policy">Privacy policy</a></li><li><a href="https://eganow.com/money-transfer-terms-and-conditions">Terms</a></li></ul></nav>
+<nav aria-label="Company"><h2>Company</h2><ul><li><a href="/about/">About</a></li><li><a href="/blog/">Blog</a></li><li><a href="/security/">Security</a></li><li><a href="/help/">Help</a></li><li><a href="/contact/">Contact</a></li><li><a href="/blog/">Blog</a></li><li><a href="/legal/">Legal</a></li><li><a href="/legal/privacy/">Privacy policy</a></li><li><a href="/legal/terms/">Terms</a></li></ul></nav>
 <nav aria-label="Get started"><h2>Get started</h2><ul><li><a href="{REGISTER}">Open a business account</a></li><li><a href="{LOGIN}">Business sign in</a></li><li><a href="{SALES}">Talk to sales</a></li><li><a href="{SANDBOX}">Get sandbox access</a></li></ul></nav></div>
 <p class="ft__l">{LEGAL} © 2026 Eganow.</p></footer><script src="/assets/business.js"></script></body></html>'''
 
@@ -365,7 +365,7 @@ def page_transfer(key):
     body += section(sec_head("Why eganow", "Why choose eganow for money transfers.") + cards([("Competitive transfer fees", "Transparent and competitive fees on every transaction, with no hidden charges."), ("Secure and reliable", "Compliant with regulatory standards, so your money is sent securely and can be tracked at any time."), ("Fast delivery", "Transfers to Africa are completed quickly, often within minutes, so your loved ones can access funds when they need them."), ("Multiple currencies", "Send in your currency; recipients receive funds in their local currency without hassle."), ("Dedicated support", "Our customer service team is available to help with any question or issue."), ("Impact", "Remittances support education, healthcare and local investment in communities.")]), "sec--ice")
     body += section('<div class="split"><div class="split__copy rv"><p class="over">Payout</p><h3 class="d-lg">Where it lands.</h3><p class="lead">Your recipient chooses how to collect.</p>' + li(["Mobile money wallets: MTN, Telecel, AirtelTigo", "Bank accounts in Ghana"], "ticks") + '<div class="partners"><span>MTN</span><span>Telecel</span><span>AirtelTigo</span><span>Bank account</span></div></div><div class="rv"><div class="price" style="background:var(--eg-red);color:#fff"><p class="over" style="color:#fff">Join thousands of satisfied users</p><h3 class="d-lg">Every transaction strengthens connections.</h3><p class="lead" style="color:rgba(255,255,255,.9)">Experience the convenience of remittances at your fingertips with the eganow app.</p><a class="btn btn--w" href="https://eganow.com/download">Download the app</a></div></div></div>')
     body += faq([("How fast will my money arrive?", "Transfers to Africa are completed quickly, often within minutes. The calculator shows the estimated delivery time for your payout method before you send."), ("What does it cost?", "Eganow shows the fee and the exchange rate before you confirm, with no hidden charges. The calculator on this page gives an indicative figure."), ("Which currencies can I send in?", "You can send in your local currency and your recipient receives funds in their local currency. Available currencies are shown in the calculator."), ("Can I track my transfer?", "Yes. Transfers can be tracked at any time in the app."), ("Is it safe?", "Eganow is licensed by the Bank of Ghana as an Enhanced Payment Service Provider and its services comply with regulatory standards."), ("Where can I read the terms?", "Read the money transfer terms and conditions on our website before you send.")])
-    body += section('<p class="legalnote rv"><b>Regulatory information' + (f' for customers in {name}' if cur else '') + '.</b> Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank, licensed by the Bank of Ghana. <!-- TODO(legal): add the licence / registration statement required for ' + name + ' customers --> Read the <a href="https://eganow.com/money-transfer-terms-and-conditions">Money transfer terms and conditions</a>. Rates shown are indicative.</p>')
+    body += section('<p class="legalnote rv"><b>Regulatory information' + (f' for customers in {name}' if cur else '') + '.</b> Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank, licensed by the Bank of Ghana. <!-- TODO(legal): add the licence / registration statement required for ' + name + ' customers --> Read the <a href="/legal/money-transfer-terms">Money transfer terms and conditions</a>. Rates shown are indicative.</p>')
     body += final("Send money home today.", "Download the app and send in 3 easy steps.", [("Download the app", "https://eganow.com/download", "btn--white"), ("Business services", "/business/", "btn--line")])
     # calculator init + sticky bar
     body += """<div class="stickybar" id="sticky" aria-hidden="true"><span id="sticky-text">Send money to Ghana</span><button type="button" id="sticky-btn" tabindex="-1">Calculate</button></div>
@@ -568,7 +568,120 @@ def page_security():
     body += cend("Questions about security?", "Our team is happy to help.", [("Contact us", "/contact/", "btn--white"), ("Help centre", "/help/", "btn--line")])
     return "Security — Your money. Protected.", "How Eganow protects your money and information, and how you can stay safe from fraud and scams.", "security", body
 
-PAGES = {"__t:about": page_about, "__t:contact": page_contact, "__t:help": page_help, "__t:security": page_security, "__t:bill-payment": page_bills, "__t:cards": page_cards_p, "__t:groups": page_groups, "__t:money-transfer": lambda: page_transfer("money-transfer"), "__t:uk": lambda: page_transfer("uk"), "__t:us": lambda: page_transfer("us"), "__t:canada": lambda: page_transfer("canada"), "__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
+import re as _re
+from legal_drafts import DRAFTS
+from blog_posts import POSTS
+BASE = os.path.dirname(os.path.abspath(__file__))
+def _slug(t): return _re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")[:40]
+LEGAL_LIST = [("terms", "Terms of Service", "The terms that apply when you use the Eganow system and app.", "live"),
+              ("money-transfer-terms", "Money transfer terms and conditions", "The terms for sending money with the Eganow remittance app.", "live"),
+              ("privacy", "Privacy Policy", "What personal data we collect, why, and the choices you have.", "draft"),
+              ("cookies", "Cookie Policy", "How this website uses cookies and similar technologies.", "draft"),
+              ("aml-policy", "AML and KYC", "How we verify identity and help prevent financial crime.", "draft"),
+              ("complaints", "Complaints", "How to tell us when something goes wrong, and what happens next.", "draft")]
+
+def parse_terms(txt):
+    """Terms of Service (migrated verbatim from the live page, duplicates from Framer's responsive variants removed)."""
+    secs, cur = [], None
+    for l in [x.strip() for x in txt.split("\n") if x.strip()]:
+        if _re.match(r"^\d+\.\s+\S", l) and len(l) < 80:
+            cur = [_slug(l), l, []]; secs.append(cur)
+        elif _re.match(r"^[IVX]+\.\s+\S", l) and len(l) < 80:
+            if cur is None: cur = ["intro", "Introduction", []]; secs.append(cur)
+            cur[2].append(("h3", l))
+        else:
+            if cur is None: cur = ["intro", "Introduction", []]; secs.append(cur)
+            cur[2].append(("b" if l.isupper() else "p", l))
+    return secs
+
+def _smart(h):
+    small = {"of", "and", "to", "the", "a", "in", "on", "for", "or"}
+    w = h.title().split(); return " ".join(x.lower() if (i and x.lower() in small) else x for i, x in enumerate(w))
+
+def parse_mt(txt):
+    """Money-transfer T&Cs: Framer glued ALL-CAPS headings to the first sentence ('CHANGESWe may…'); split them again."""
+    secs, cur = [], None
+    for l in [x.strip() for x in txt.split("\n") if x.strip()]:
+        if l.startswith(("Terms & Conditions", "Eganow Ltd: Terms of Use")): continue
+        m = _re.match(r"^([A-Z][A-Z &,’'()/\-]{3,}?)(?=[A-Z][a-z])(.*)$", l)
+        if m and len(m.group(1)) < 70: head, rest = m.group(1).strip(), m.group(2)
+        elif l.isupper() and len(l) < 60: head, rest = l, ""
+        else: head, rest = None, l
+        if head and not (head.startswith("BY USING") or head.startswith("WHEN YOU") or head.startswith("YOUR ATTENTION")):
+            cur = [_slug(head), _smart(head) if head.isupper() else head, []]; secs.append(cur)
+            if rest: cur[2].append(("p", rest))
+        else:
+            if cur is None: cur = ["notice", "Important notice", []]; secs.append(cur)
+            cur[2].append(("b" if l.isupper() else "p", l))
+    return secs
+
+def render_sec(secs, numbered=True):
+    out = ""; used = {}
+    for sid, title, items in secs:
+        used[sid] = used.get(sid, 0) + 1
+        if used[sid] > 1: sid = f"{sid}-{used[sid]}"
+        body = ""
+        for it in items:
+            if isinstance(it, tuple) and it[0] == "ul": body += li(it[1])
+            elif isinstance(it, tuple) and it[0] == "h3": body += f'<h3>{it[1]}</h3>'
+            elif isinstance(it, tuple) and it[0] == "b": body += f'<p><strong>{it[1]}</strong></p>'
+            elif isinstance(it, tuple): body += f'<p>{it[1]}</p>'
+            elif isinstance(it, str): body += f'<p>{it}</p>'
+        out += f'<section id="{sid}"><h2>{title}</h2>{body}</section>'
+    return out
+
+def legal_doc_page(key):
+    meta = {k: (t, d, st) for k, t, d, st in LEGAL_LIST}[key]; title, desc, status = meta
+    if key == "terms": secs, lead = parse_terms(open(os.path.join(BASE, "legal-src/terms-of-service.txt")).read()), "The terms that apply when you use the Eganow system and app."
+    elif key == "money-transfer-terms": secs, lead = parse_mt(open(os.path.join(BASE, "legal-src/money-transfer-terms.txt")).read()), "The terms that apply when you send money with the Eganow remittance app."
+    else:
+        d = DRAFTS[key]; lead = d["lead"]; secs = [(sid, t, [x if isinstance(x, (str, tuple)) else x for x in items]) for sid, t, items in d["sections"]]
+        secs = [(sid, t, [(("ul", x[1]) if isinstance(x, tuple) else x) for x in items]) for sid, t, items in secs]
+    if status == "draft":
+        banner = '<div class="draft" role="note"><b>Draft for legal review.</b> This document is not yet in force. Items highlighted <mark class="todo">like this</mark> are placeholders Eganow must complete before publication.</div>'
+    elif key == "terms":
+        banner = '<div class="draft" role="note"><b>Review needed.</b> This is the text of the existing live page, moved into the new design without changes to its wording (repeated blocks produced by the old site builder were removed). It is titled “Privacy Policy” on the old site but is a Terms of Service; legal should review it, and the “II. System Subscription / III. System Revisions” clauses appear to contain duplicated text.</div>'
+    else:
+        banner = '<div class="draft" role="note"><b>Review needed.</b> This is the text of the existing live page, moved into the new design. It still contains “TBC” items (FCA register number, mobile app name) and refers to Eganow Ltd (England); legal should confirm the correct entity and complete them.</div>'
+    _u = {}; _ids = []
+    for sid, t, _ in secs:
+        _u[sid] = _u.get(sid, 0) + 1; _ids.append(sid if _u[sid] == 1 else f"{sid}-{_u[sid]}")
+    toc = "".join(f'<li><a href="#{i}">{t}</a></li>' for i, (sid, t, _) in zip(_ids, secs))
+    related = "".join(f'<li><a href="/legal/{k}">{t}</a><span>{d}</span></li>' for k, t, d, st in LEGAL_LIST if k != key)
+    body = f"""<main id="main"><section class="phead"><div class="wrap"><nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="/legal">Legal</a></li><li aria-current="page">{title}</li></ol></nav><h1 class="d-xl" id="h1" style="font-size:clamp(32px,4.6vw,56px);max-width:22ch">{title}</h1><p class="lead">{lead}</p>{banner}</div></section>
+<div class="wrap lgrid"><aside class="toc" aria-label="On this page"><details open><summary>On this page</summary><ol>{toc}</ol></details></aside><article class="doc{' doc--num' if status=='draft' else ''}">{render_sec(secs)}<nav class="relnav" aria-label="Other legal documents"><h2>Other legal documents</h2><ul>{related}</ul></nav></article></div></main>"""
+    return title, desc, "legal-" + key, body
+
+def page_legal_hub():
+    rows = "".join(f'<li class="rv"><a class="card" href="/legal/{k}"><span class="chip-s {"on" if st=="live" else ""}">{"Live text" if st=="live" else "Draft"}</span><h2 class="h4">{t}</h2><p>{d}</p></a></li>' for k, t, d, st in LEGAL_LIST)
+    body = chead("Legal", "Legal documents", "The terms, policies and notices that apply to Eganow’s website, app and services.", DRAFT) + section(f'<ul class="grid grid--2 legal-grid">{rows}</ul><p class="legalnote rv" style="margin-top:28px">Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank. Eganow is licensed by Bank of Ghana as an Enhanced Payment Service Provider (EPSP) under the Payment Systems and Services ACT, 2019 (ACT 987). Documents marked <b>Draft</b> are not yet in force.</p>') + cend("Questions about these documents?", "Contact our team.", [("Contact us", "/contact", "btn--white"), ("Complaints", "/legal/complaints", "btn--line")])
+    return "Legal documents", "Terms, privacy, cookie, AML/KYC and complaints information for Eganow.", "legal", body
+
+def page_blog_index():
+    chips = "".join(f'<button type="button" class="chipx" data-cat="{c}">{c}</button>' for c in sorted({p["cat"] for p in POSTS}))
+    cards_ = "".join(f'<li class="rv" data-cat="{p["cat"]}"><a class="card post" href="/blog/{p["slug"]}"><span class="chip-s">{p["cat"]}</span><h2 class="h4">{p["title"]}</h2><p>{p["lead"]}</p><span class="meta">{p["mins"]} min read</span></a></li>' for p in POSTS)
+    body = chead("Blog", "Stories, tips and guides.", "Practical guides on sending money, staying safe, saving together and paying bills.", '<div class="draft" role="note"><b>Editorial drafts.</b> These starter articles contain general guidance only and need editorial and compliance approval before publication. The previous blog posts were template placeholder text and have been retired.</div>')
+    body += section(f'<div class="chipsx" id="bf" style="margin-bottom:22px"><button type="button" class="chipx on" data-cat="">All</button>{chips}</div><ul class="grid grid--2" id="bl">{cards_}</ul><script>(function(){{var f=document.getElementById("bf");f.addEventListener("click",function(e){{var b=e.target.closest("button");if(!b)return;f.querySelectorAll("button").forEach(function(x){{x.classList.toggle("on",x===b)}});document.querySelectorAll("#bl>li").forEach(function(li){{li.hidden=b.dataset.cat&&li.dataset.cat!==b.dataset.cat}})}})}})();</script>')
+    body += cend("Get the app.", "Send, pay, save and do more on a single platform.", [("Get the app", APP, "btn--white"), ("Explore Business", "/business", "btn--line")])
+    return "Blog", "Guides on sending money to Ghana, spotting scams, susu savings and paying bills on time.", "blog", body
+
+def page_blog_post(slug):
+    p = next(x for x in POSTS if x["slug"] == slug)
+    secs = "".join(f'<section id="{_slug(h)}"><h2>{h}</h2>' + "".join(f"<p>{t}</p>" for t in ps) + "</section>" for h, ps in p["sections"])
+    toc = "".join(f'<li><a href="#{_slug(h)}">{h}</a></li>' for h, _ in p["sections"])
+    related = "".join(f'<li class="rv"><a class="card post" href="/blog/{q["slug"]}"><span class="chip-s">{q["cat"]}</span><h3 class="h4">{q["title"]}</h3><span class="meta">{q["mins"]} min read</span></a></li>' for q in POSTS if q["slug"] != slug)[:5000]
+    ld = json.dumps({"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "description": p["lead"], "author": {"@type": "Organization", "name": "Eganow"}, "publisher": {"@type": "Organization", "name": "Eganow"}, "mainEntityOfPage": f"{SITE}/blog/{slug}"})
+    body = f"""<main id="main"><section class="phead"><div class="wrap"><nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="/blog">Blog</a></li><li aria-current="page">{p['cat']}</li></ol></nav><p class="over">{p['cat']} · {p['mins']} min read</p><h1 class="d-xl" id="h1" style="font-size:clamp(30px,4.4vw,52px);max-width:22ch">{p['title']}</h1><p class="lead">{p['lead']}</p><div class="draft" role="note"><b>Editorial draft.</b> General guidance; needs editorial and compliance approval before publication.</div></div></section>
+<div class="wrap lgrid"><aside class="toc" aria-label="In this article"><details open><summary>In this article</summary><ol>{toc}</ol></details></aside><article class="doc article">{secs}<aside class="callout"><h2 class="h4">Ready to try it?</h2><p>Open the app and see for yourself.</p><a class="btn btn--red" href="{p['cta'][1]}">{p['cta'][0]}</a></aside><div class="share"><button type="button" class="btn btn--line btn--sm" id="cp">Copy link</button></div></article></div>
+<section class="sec sec--ice"><div class="wrap"><h2 class="h4" style="margin-bottom:16px">Keep reading</h2><ul class="grid grid--3">{related}</ul></div></section>{cend('Do more with your money.', 'Send, pay, save and manage cards in one app.', [('Get the app', APP, 'btn--white'), ('All articles', '/blog', 'btn--line')])}
+<script type="application/ld+json">{ld}</script><script>document.getElementById('cp').addEventListener('click',function(){{var b=this;navigator.clipboard&&navigator.clipboard.writeText(location.href).then(function(){{b.textContent='Copied'}}).catch(function(){{b.textContent='Copy failed'}})}})</script>"""
+    return p["title"], p["lead"], "blog-" + slug, body
+
+def page_404():
+    body = chead("Error 404", "We can’t find that page.", "The page may have moved or never existed. Try one of these instead.") + section('<div class="chipsx rv"><a class="chipx" href="/">Home</a><a class="chipx" href="/money-transfer">Money transfer</a><a class="chipx" href="/business">Business</a><a class="chipx" href="/help">Help centre</a><a class="chipx" href="/contact">Contact</a></div>') + '</main>'
+    return "Page not found", "This page could not be found.", "404", body
+
+PAGES = {"__t:legal": page_legal_hub, "__t:blog": page_blog_index, "__t:404": page_404, "__t:legal/terms": (lambda: legal_doc_page("terms")), "__t:legal/money-transfer-terms": (lambda: legal_doc_page("money-transfer-terms")), "__t:legal/privacy": (lambda: legal_doc_page("privacy")), "__t:legal/cookies": (lambda: legal_doc_page("cookies")), "__t:legal/aml-policy": (lambda: legal_doc_page("aml-policy")), "__t:legal/complaints": (lambda: legal_doc_page("complaints")), "__t:blog/send-money-to-ghana-safely": (lambda: page_blog_post("send-money-to-ghana-safely")), "__t:blog/spot-mobile-money-scams": (lambda: page_blog_post("spot-mobile-money-scams")), "__t:blog/susu-savings-explained": (lambda: page_blog_post("susu-savings-explained")), "__t:blog/pay-bills-on-time": (lambda: page_blog_post("pay-bills-on-time")), "__t:about": page_about, "__t:contact": page_contact, "__t:help": page_help, "__t:security": page_security, "__t:bill-payment": page_bills, "__t:cards": page_cards_p, "__t:groups": page_groups, "__t:money-transfer": lambda: page_transfer("money-transfer"), "__t:uk": lambda: page_transfer("uk"), "__t:us": lambda: page_transfer("us"), "__t:canada": lambda: page_transfer("canada"), "__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
 if __name__ == "__main__":
     for slug, fn in PAGES.items():
         title, desc, s, body = fn()

@@ -1,0 +1,151 @@
+Privacy Policy
+PLEASE READ THESE TERMS OF SERVICE CAREFULLY
+This Terms and Conditions Agreement (this “Agreement”) is a legally binding contract between TEKSOL EGANOW LTD (“EGANOW”) and an individual end user of Eganow’s System, as defined below (“You,” “Your”). Eganow provides this website and its features (the “System”). You agree that when you access or use the System, You will do so subject to this Agreement. Do not access or use the system if you are unwilling or unable to be bound by this agreement.
+1. Use of the system in general
+I. Eligibility
+You represent and warrant that You are 18 years old or older, and you recognize and agree that You must be 18 years old or older to use the System
+I. Eligibility
+II. System Subscription
+During the Term (as defined in Clause 9.1 below), you may access and use the System and all its end user features.
+II. System Subscription
+III. System Revisions
+III. System Revisions
+IV. Subscription Fees
+You agree to pay Eganow the fee set forth in Your order on the dates required therein. Eganow will not be required to refund fees under any circumstances.
+IV. Subscription Fees
+2. The App
+I. License
+Eganow hereby grants You a nonexclusive license to reproduce and use one copy of the App (as defined below) on Your mobile device, solely as a component of the System, provided You comply with the restrictions set forth below in Clause 2.2 (Restrictions on Software Rights). The license in the preceding sentence does not include use by any third party, and You shall not permit any such use. (The “App” means Eganow’s downloadable EGANOW application. The App is a component of the System and is included in references thereto, except in this clause 2 and in any other provision that separately addresses the App.).
+II. System Subscription
+Copies of the App created or transferred pursuant to this Agreement are licensed, not sold, and You receive no title to or ownership of any copy or of the App itself. Furthermore, You receive no rights to the App other than those specifically granted in Clause 2.1 above. Without limiting the generality of the foregoing, You shall not: (a) modify, create derivative works from, distribute, publicly display, publicly perform, or sublicense the App; (b) use the App in any way forbidden by Clause 4.1 below; or (c) reverse engineer, decompile, disassemble, or otherwise attempt to derive any of the App’s source code.
+II. System Subscription
+3. Your content and privacy
+I. Permission from You
+You grant Eganow permission to access, process and otherwise use Your Content (as defined below) to provide Eganow’s products and/or services to You, to track and analyze Your use of the System, and make Your Content available to other users of the System and other third parties. To the extent that You have intellectual property rights in Your Content, You grant Eganow a world-wide, perpetual, non-exclusive, royalty-free, sublicensable, transferable license to use and prepare derivative works from Your Content for the purposes outlined in this Agreement. You agree that Your Content is not any person’s or entity’s confidential information, including Yours. As between the parties, You retain ownership of your Content. (“Content” means text, images, photos, audio or video files, and other forms of data or communication. “Your Content” means Content submitted or transmitted by You.)
+I. Permission from You
+II. Rights in your content
+You represent and warrant that You own Your Content or have received a valid license to Your Content and that submitting or transmitting Your Content to or through the System will not violate the rights of any third party, including intellectual property, privacy, or publicity rights. Eganow is under no obligation to review or screen Your Content or other System users’ Content.
+III. Privacy policy
+Eganow may manage any of Your Content containing personally identifiable information as set forth in Eganow’s privacy policy. The Privacy Policy applies only to the System and does not apply to any third-party website or service linked to the System or recommended or referred to through the System by Eganow or other System users
+IV. Risk of exposure
+You understand and agree that sharing content online involves risks of unauthorized disclosure or exposure and that, in submitting your content to or transmitting it through the system,you assume these risks. Eganow offers no representation, warranty, or guarantee that Your Content will not be exposed or disclosed through the System or through errors or the actions of third parties.
+IV. Risk of exposure
+V. Accuracy
+Eganow has no responsibility or liability for the accuracy of any Content submitted to or transmitted through the System by You or another user, including without limitation Your Content.
+VI. Right to retain, delete or suspend access
+You agree that You shall not rely on the System for backup or storage of Your Content. Eganow may retain Your Content even if You are no longer using the System but is not required to provide copies of Your Content to You. Eganow may permanently delete or erase Your Content or suspend Your access to Your Content through the System at any time and for any reason.
+VII. Aggregate & anonymized data
+Eganow may use, reproduce, sell, publicize, or otherwise exploit Aggregate Data in any way, in its sole discretion. (“Aggregate Data” refers to Your Content with personally identifiable information removed.)
+4. Your responsibilities & restrictions
+I. Acceptable Use
+- Provide System passwords or other log-in information to any third party;
+- Share non-public System features or Content with any third party;
+- Access the System in order to build a competitive product or service, to build a product using similar ideas, features, functions or graphics of the System, or to copy any ideas, features, functions or graphics of the System;
+- engage in web scraping or data scraping on or related to the System, including without limitation collection of information through any software that simulates human activity or any bot or web crawler
+If Eganow suspects that You have violated the requirements of this Clause 4(i), Eganow may suspend Your access to the System without advanced notice, in addition to other remedies Eganow may have. Eganow is not obligated to take any action against You or any other System user or other third party for violating this Agreement, but Eganow is free to take any such action it sees fit.
+II. Restrictions on software rights
+You agree to take reasonable steps to prevent unauthorized access to the System, including by protecting Your passwords and other log-in information. You shall notify Eganow immediately if You know of or suspect unauthorized use of the System or breach of its security.
+III. Compliance with laws
+In using the System, You shall comply with all applicable laws, including laws governing the protection of personally identifiable information and other laws applicable to the protection of Your Content.
+IV. System access
+You are responsible and liable for: (a) Your use of the System, including unauthorized conduct and conduct that would violate the requirements of this Agreement; and (b) any use of the System through Your account or passwords, whether authorized or not.
+V. Communications from Eganow
+You consent to receive email and/or text messages from Eganow in connection with Your use of the System. Standard text messaging charges required by your mobile carrier will apply to text messages we send You. To opt out, indicate so in your personalized settings.
+5. IP & feedback
+I. IP rights in the system
+Eganow retains all right, title, and interest in and to the System, including without limitation the App and all other all software used to provide the System and all graphics, user interfaces, logos, trademarks reproduced through the System, as well as all Content other than Your Content. This Agreement does not grant You any intellectual property license or rights in or to the System or any of its components, except to the limited extent that this Agreement specifically sets forth Your license rights to the App. You recognize that the System and its components are protected by copyright and other laws.
+II. Feedback
+Eganow has not agreed to and does not agree to treat as confidential any Feedback (as defined below) that You provide to Eganow, and nothing in this Agreement or in the parties’ dealings arising out of or related to this Agreement will restrict Eganow’s right to use, profit from, disclose, publish, keep secret, or otherwise exploit Feedback, without compensating or crediting You. You hereby grant Eganow a perpetual, irrevocable right and license to exploit Feedback in any and every way. (“Feedback” refers to any suggestion or idea for improving or otherwise modifying any of Eganow’s products or services.).
+6. Disclaimers
+I. Warranty disclaimers
+You agree that you accept the system “as is” and as available, with no representation or warranty of any kind, express or implied, including without limitation implied warranties of merchantability, fitness for a particular purpose, or noninfringement of intellectual property rights, or any implied warranty arising from statute, course of dealing, course of performance, or usage of trade. Without limiting the generality of the foregoing: (a) eganow has no obligation to indemnify or defend you against claims related to infringement of intellectual property; (b) eganow does not represent or warrant that the system will perform without interruption or error; (c) eganow does not represent or warrant that the system is secure from hacking or other unauthorized intrusion or that your content will remain private or secure; and (d) eganow disclaims any representation or warranty concerning products or services provided by other users of the system or other third parties
+II. Interactions with other users
+You agree that You are solely responsible for Your transactions or other interactions, either through the System or through other means of communication, with other users of the System. You acknowledge that that Eganow has no liability for any such interactions. Eganow may monitor or become involved in disputes between you and other users of the System but has no obligation to do so.
+III. Third party sites and content.
+You understand that the system may contain or send you links to third party websites, applications or features not owned or controlled by eganow (“third party sites”), and that links to third party sites may also appear in content available to you through the system. The system may also enable interactions between the system and a third-party site through applications that connect the system, or your profile on the system, with a third-party site. Through third party sites you may be able to access content from third parties that eganow does not control and/or share your content with others. You access third party sites entirely at your own risk, and eganow will have no liability for your use of or access to third party sites and/or third-party content.)
+7. Indemnification
+You agree to defend, indemnify, and hold harmless Eganow and the Eganow Associates (as defined below) against any “Indemnified Claim,” meaning any third party claim, suit, or proceeding arising out of, related to, or alleging: (a) infringement or violation of third party intellectual property, privacy or publicity rights by Content submitted to or transmitted through the System from Your account, including without limitation by Your Content; and (b) claims that use of the System through Your account harasses, defames, or defrauds a third party, infringes or misappropriates copyright, trade secret, or other intellectual property rights, or violates the laws of Ghana on electronic advertising. Your obligations set forth in this Clause 7 include retention and payment of attorneys and payment of court costs, as well as settlement at Your expense and payment of judgments. Eganow will have the right, not to be exercised unreasonably, to reject any settlement or compromise that requires that it admit wrongdoing or liability or subjects it to any ongoing affirmative obligations. (The “Eganow Associates” are Eganow’s officers, directors, shareholders, parents, subsidiaries, agents, successors, and assigns.).
+8. Limitation of liability
+I. Excluded damages
+In no event will eganow be liable for lost profits or loss of business or for any consequential, indirect, special, incidental, or punitive damages arising out of or related to this agreement.
+II. Clarifications & disclaimers
+The liabilities limited by this clause 8 apply: (a) to liability for negligence; (b) regardless of the form of action, whether in contract, tort, strict product liability, or otherwise; (c) even if eganow is advised in advance of the possibility of the damages in question and even if such damages were foreseeable; and (d) even if your remedies fail of their essential purpose. If applicable law limits the application of the provisions of this clause 8, eganow’s liability will be limited to the maximum extent permissible. For the avoidance of doubt, eganow’s liability limits and other rights set forth in this clause 8 apply likewise to eganow’s affiliates, licensors, suppliers, advertisers, agents, sponsors, directors, officers, employees, consultants, and other representatives..
+9. Term & termination
+I. Term
+The term of this Agreement (the “Term”) will commence on the Effective Date and continue until terminated by either You or Eganow.
+II. Termination
+Either party may terminate this Agreement for any reason at any time. You may terminate this Agreement by closing Your account. Eganow may terminate by notifying You in writing [including without limitation via text to Your mobile device] and closing Your account.
+III. Effects of termination
+The following provisions will survive termination of this Agreement: Clause 5 (IP & Feedback), 6 (Disclaimers), 7 (Indemnification), 8 (Limitation of Liability), and 10 (Miscellaneous); and any other provision of this Agreement that must survive to fulfill its essential purpose.
+10. Miscellaneous
+I. Independent contractors
+The parties are independent contractors. Neither party is the agent of the other, and neither may make commitments on the other’s behalf.
+II. Notices
+Eganow may send notices to You by email [or by text to Your mobile device] at the email address [or mobile number] provided by You, and such notices will be deemed received 24 hours after they are sent. You may send notices pursuant to this Agreement to Eganow by email to cs@eganow.com, and such notices will be deemed received 72 hours after they are sent.
+III. Assignment & successors
+You may not assign this Agreement or any of Your rights or obligations under this Agreement without Eganow’s express written consent. Except to the extent forbidden in this Clause 10(iii), this Agreement will be binding upon and inure to the benefit of the parties’ respective successors and assigns.
+IV. Severability
+To the extent permitted by applicable law, the parties hereby waive any provision of law that would render any clause of this Agreement invalid or otherwise unenforceable in any respect. In the event that a provision of this Agreement is held to be invalid or otherwise unenforceable, such provision will be interpreted to fulfill its intended purpose to the maximum extent permitted by applicable law, and the remaining provisions of this Agreement will continue in full force and effect.
+V. No waiver
+Neither party will be deemed to have waived any of its rights under this Agreement by lapse of time or by any statement or representation other than by an authorized representative in an explicit written waiver. No waiver of a breach of this Agreement will constitute a waiver of any other breach of this Agreement.
+VI. Choice of law & jurisdiction
+This Agreement will be governed solely the laws of Ghana: (a) any conflicts of law principle that would apply the substantive laws of another jurisdiction to the parties’ rights or duties; or, (b)other international laws.
+VII. Conflicts
+In the event of any conflict between this Agreement and any Eganow policy posted online, including without limitation the Privacy Policy, the terms of this Agreement will govern.
+IX. Amendment
+Your continued use of the System following the effective date of an amendment will confirm Your consent to the Amendment. Eganow may revise the Privacy Policy at any time by posting a new version of either at Eganow’s website, and such new version will become effective on the date it is posted.You acknowledge and agree that you are waiving the right to a trial or to participate as a plaintiff or class member in any purported class action or representative proceeding in any forum.
+Money Transfer
+Bill Payment
+Groups
+Cards
+POS
+BizCollect
+Developer Site
+Company
+About Us
+Contact
+Privacy Policy
+Instagram
+Facebook
+linkedin
+Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank. Eganow is licensed by Bank of Ghana as an Enhanced Payment Service Provider (EPSP) under the Payment Systems and Services ACT, 2019 (ACT 987). TekSol Eganow Ltd. (Registered Number CS129662020) is a fintech company incorporated in Ghana under the new companies Act, 2019 (ACT 992).
+Ghana
+United Kingdom
+United States
+Canada
+Money Transfer
+Bill Payment
+Groups
+Cards
+POS
+BizCollect
+Developer Site
+Company
+About Us
+Contact
+Privacy Policy
+Instagram
+Facebook
+linkedin
+Ghana
+United Kingdom
+United States
+Canada
+Money Transfer
+Bill Payment
+Groups
+Cards
+POS
+BizCollect
+Developer Site
+Company
+About Us
+Contact
+Privacy Policy
+Instagram
+Facebook
+linkedin
+Ghana
+United Kingdom
+United States
+Canada

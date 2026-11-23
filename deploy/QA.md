@@ -56,3 +56,8 @@ Help scores 69 SEO **by design**: it is `noindex` until the draft placeholders a
 python3 eganow-business/build.py && python3 deploy/assemble.py && python3 deploy/serve.py 8095
 ```
 then axe/Lighthouse against `http://localhost:8095`.
+
+
+## Addendum: Blog, Legal and 404 (added after the main QA pass)
+Re-ran the crawl and axe-core on the 12 new pages (desktop + mobile): 0 broken links, 0 axe violations after fixing (a) duplicate section landmarks in the long legal documents (sections no longer expose redundant labelled regions) and (b) a button inside article bodies picking up link colour (contrast). Not yet re-run: Lighthouse on these pages.
+Open items: legal text approval (see Legal findings above), editorial/compliance approval of blog drafts, remove `noindex` when approved.
