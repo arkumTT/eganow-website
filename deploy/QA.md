@@ -68,3 +68,6 @@ Open items: legal text approval (see Legal findings above), editorial/compliance
 - Lighthouse (Home): desktop 100/100/100/100, LCP 0.6 s, CLS 0; mobile (simulated slow 4G) 95/100/100/100, LCP 2.8 s (LCP element is the hero image: discoverable, `fetchpriority=high`, preloaded, 74 KB at 600 w).
 - axe-core: 0 violations on Home, UK, US, Canada, Money Transfer, Cookies at desktop + mobile after adding the images.
 - Open: replace stand-in imagery with real photography; confirm image licence terms; hero image alt is intentionally empty (decorative).
+
+## Addendum: image batch 2
+Added US, Canada, Bill Payment and Cards photos (responsive WebP, 23–59 KB each). axe-core: 0 violations on those four pages (desktop + mobile). On screens ≤700 px the overlay cards stack under the photos so people stay visible. All images remain AI-generated stand-ins (see `asset-pack/REGISTER.md`).
