@@ -29,7 +29,7 @@
 .calc-cta:hover{background:var(--red-dark)}.calc-cta:active{transform:scale(.98)}
 .calc-cta[aria-disabled=true]{background:var(--mist);pointer-events:none}
 .error{display:flex;gap:10px;align-items:center;background:#fff1f3;border:1px solid #f3b3bf;color:#7d0a1d;border-radius:14px;padding:10px 12px;font-size:13.5px;margin:12px 0}
-.error[hidden],.badge[hidden],.retry[hidden]{display:none}
+.error[hidden],.retry[hidden]{display:none}
 .retry{margin-left:auto;border:1px solid var(--red);background:#fff;color:var(--red);border-radius:999px;padding:5px 12px;font-weight:600;cursor:pointer}
 .legal{font-size:11.5px;color:var(--mute);margin:12px 2px 0}
 /* loading skeleton on derived values */
@@ -43,3 +43,7 @@
 .stickybar.is-visible{transform:none}
 .stickybar span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stickybar button{background:var(--red);color:#fff;border:0;border-radius:999px;padding:11px 20px;font:700 14px Manrope,sans-serif;cursor:pointer}
+
+/* QA: reserve space so the card doesn't shift when the quote/payout chips load */
+.expiry{min-height:1.4em}.badge[hidden]{display:inline-block!important;visibility:hidden}.details dd{min-height:1.4em}
+.methods{min-height:62px}@media (max-width:480px){.methods{min-height:132px}}

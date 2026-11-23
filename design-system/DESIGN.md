@@ -36,7 +36,7 @@ Rules: clear space = height of the "e"; min width 96 px (wordmark) / 24 px (icon
 | `--eg-ice` | `#F2F9FE` | Page background, cards on white | — |
 | `--eg-night` | `#0F1B2A` | Developers/dark sections | white on it > 15:1 |
 | `--eg-amber` | `#FFB407` | Boss Card, badges, focus ring (sparingly) | ink on amber 9.2:1 |
-| `--eg-success/-warning/-error` | `#12805C` `#B26A00` `#B3122D` | Status | all ≥ 4.5:1 on white |
+| `--eg-success/-warning/-error` | `#0D6647` `#B26A00` `#B3122D` | Status | all ≥ 4.5:1 on white |
 
 Usage ratio per page ≈ 60 % ice/white, 25 % red/slate sections, 10 % night, 5 % accents. Red text on white is allowed for large headings only (5.8:1 passes, but avoid body copy). Do not put red text on red, or blue text on red.
 Note: the amber in the plan is a suggested accent, not found in the live brand beyond one token; drop it if brand owners disagree. Existing Framer-era tokens (`#F8F9FE`, `#F4F6FA`, `#EEF2F7`) map to `--eg-ice`/white.

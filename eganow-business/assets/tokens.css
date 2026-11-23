@@ -11,7 +11,7 @@
   --eg-night:#0F1B2A;      /* dark sections (Developers) */
   --eg-amber:#FFB407;      /* sparing highlight: Boss Card, badges, focus ring */
   /* Status */
-  --eg-success:#12805C;    --eg-warning:#B26A00;    --eg-error:#B3122D;
+  --eg-success:#0D6647;    --eg-warning:#B26A00;    --eg-error:#B3122D;
   /* Type */
   --eg-font-display:"Manrope","Poppins",system-ui,sans-serif;
   --eg-font-body:"Inter",system-ui,sans-serif;
