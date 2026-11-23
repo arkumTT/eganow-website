@@ -17,6 +17,13 @@
     const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) set([...steps].indexOf(e.target)); }), { rootMargin: "-45% 0px -45% 0px" });
     steps.forEach(s => so.observe(s));
   }
+  // hero -> phone hand-off: ease the hero phone down/away as the page scrolls
+  const hv = document.querySelector(".hhero__vis");
+  if (hv && !reduce) {
+    let tick = false;
+    const upd = () => { tick = false; const h = hv.closest(".hhero").offsetHeight; hv.style.setProperty("--p", Math.min(1, Math.max(0, scrollY / h)).toFixed(3)); };
+    addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
+  }
   // code copy buttons
   document.querySelectorAll("[data-copy]").forEach(b => b.addEventListener("click", async () => {
     const t = document.querySelector(b.dataset.copy)?.textContent || "";

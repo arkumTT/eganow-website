@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generates the Eganow Business hub + service pages. Run: python3 build.py  (outputs business/**/index.html)"""
-import os, html
+import os, html, json
 
 REGISTER = "https://merchant.deveganowapi.com/register"
 LOGIN = "https://merchant.deveganowapi.com/login"
@@ -21,8 +21,15 @@ SERVICES = [  # slug, name, tagline
     ("egahub", "Egahub", "Your business, in your pocket."),
 ]
 e = html.escape
+ORG = '<script type="application/ld+json">{"@context":"https://schema.org","@type":"FinancialService","name":"Eganow","url":"https://eganow.com","logo":"https://eganow.com/brand/eganow-icon.svg","areaServed":"GH"}</script>'
 
 def li(items, cls=""): return f'<ul class="{cls}">' + "".join(f"<li>{x}</li>" for x in items) + "</ul>"
+
+def BC(path, title):
+    if path == "/": return ""
+    items = [{"@type":"ListItem","position":1,"name":"Business","item":SITE+"/business/"}]
+    if path != "/business/": items.append({"@type":"ListItem","position":2,"name":title,"item":SITE+path})
+    return '<script type="application/ld+json">' + json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":items}) + '</script>'
 
 def head(title, desc, path):
     return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -32,11 +39,11 @@ def head(title, desc, path):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/tokens.css"><link rel="stylesheet" href="/assets/business.css">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{{"@type":"ListItem","position":1,"name":"Business","item":"{SITE}/business/"}}{"" if path=="/business/" else f',{{"@type":"ListItem","position":2,"name":"{e(title)}","item":"{SITE}{path}"}}'}]}}</script>
+{BC(path,title)}{ORG if path=="/" else ""}
 </head><body><a class="skip" href="#main">Skip to content</a>'''
 
 def header(active):
-    nav = [("Personal", "https://eganow.com/", None), ("Business", "/business/", "biz"), ("Developers", "/business/developers/", "dev"), ("About", "https://eganow.com/about", None), ("Help", "https://eganow.com/contact", None)]
+    nav = [("Personal", "/", "per"), ("Business", "/business/", "biz"), ("Developers", "/business/developers/", "dev"), ("About", "https://eganow.com/about", None), ("Help", "https://eganow.com/contact", None)]
     links = "".join(f'<a href="{h}"{" aria-current=page" if k and k==active else ""}>{n}</a>' for n, h, k in nav)
     drawer = "".join(f'<a href="{h}">{n}</a>' for n, h, k in nav) + "".join(f'<a href="/business/{s}/">{n}</a>' for s, n, t in SERVICES)
     return f'''<header class="hdr"><a href="/business/" aria-label="Eganow Business home"><img src="/brand/eganow-wordmark-red.svg" alt="eganow" width="98" height="28"></a>
@@ -286,12 +293,49 @@ def page_hub():
     body += final("Ready when you are.", "Open an account in minutes, or talk to our team.", [("Open a business account", REGISTER, "btn--white"), ("Talk to sales", SALES, "btn--line")])
     return "Business, made simple", "Collect, pay out, issue cards and accept at the counter. Eganow Business is one platform for every way you get paid.", "", body
 
-PAGES = {"": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
+def page_home():
+    qa = '<div class="qa"><span>Send</span><span>Pay</span><span>Save</span><span>Cards</span></div>'
+    hero_phone = phone("left:50%", '<b style="font:800 12px var(--eg-font-display);color:var(--eg-slate)">TOTAL BALANCE</b><div class="big">GHS 4,860.50</div>' + qa + row("MTN Mobile Money", "2,100.00") + row("GCB Bank", "2,760.50") + row("Electricity · scheduled", "150.00") + '<span class="pay">Send money</span>')
+    vis = ('<div class="hhero__phone">' + hero_phone.replace("position:absolute", "position:relative").replace('class="phone float"', 'class="phone"') + '</div>' +
+           mk("left:0;top:70px;width:220px", '<h5>Money sent</h5><div class="big">£200 → GH₵3,260</div><span class="pill">✓ Arrived in minutes</span>', "float") +
+           mk("right:0;top:210px;width:210px", '<h5>Bill paid</h5><div class="big">GHS 150.00</div><span class="pill">✓ Electricity</span>', "float b") +
+           '<div class="card3d r float c" style="right:6%;bottom:10px;background:linear-gradient(135deg,#fff,#dfe9f5);color:var(--eg-red)"><span>eganow card</span><b>•••• 4821</b></div>')
+    body = f'''<main id="main"><section class="hhero" aria-labelledby="h1"><div class="wrap hhero__in"><div class="hhero__copy"><p class="over">Personal</p><h1 class="d-xl" id="h1">Your one app for everything money</h1>
+<p class="lead">Send, pay, save and do more—across any account, on a single platform.</p><div class="cta"><a class="btn btn--w" href="https://eganow.com/money-transfer">Get the app</a><a class="btn btn--ghost-w" href="https://eganow.com/money-transfer">Register an account</a></div>
+<p class="pts"><span>Fast</span><span>Transparent</span><span>Secure</span></p></div><div class="hhero__vis" aria-hidden="true">{vis}</div></div></section>'''
+    # partners strip
+    body += section('<div class="rv" style="display:grid;gap:14px"><p class="over">Link every account</p><h2 class="d-lg" style="max-width:20ch">Personal financial services for everyone.</h2><p class="lead">Link multiple bank and mobile money accounts and access a wide range of financial services on eganow.</p><div class="partners"><span>MTN</span><span>Telecel</span><span>AirtelTigo</span><span>Mastercard</span><span>Visa</span><span>Bank accounts</span></div></div>')
+    # pinned phone story
+    stories = [("Send", "Send money home, or across town.", "Local and cross-border transfers with competitive rates and no hidden fees. See the rate before you send.", '<b style="font:800 12px var(--eg-font-display);color:var(--eg-slate)">SEND MONEY</b><div class="big">£200.00</div>' + row("They receive", "GH₵3,260") + row("Rate", "1 GBP = 16.30") + row("Arrives", "Within minutes") + '<span class="pay">Send money</span>', "https://eganow.com/money-transfer"),
+               ("Pay", "Pay bills without the legwork.", "Airtime and data, electricity and water, subscriptions, bookings and fees. Schedule it once and pay from any linked account.", '<b style="font:800 12px var(--eg-font-display);color:var(--eg-slate)">PAY BILLS</b>' + row("Airtime & data", "›") + row("Electricity", "›") + row("Water", "›") + row("Media subscriptions", "›") + '<div class="tabs"><span class="on">Schedule payment</span></div>', "https://eganow.com/bill-payment"),
+               ("Save", "Save together with Groups.", "Private groups for family, friends and Susu savings. Public fundraising when you need more hands, with every contribution visible.", '<b style="font:800 12px var(--eg-font-display);color:var(--eg-slate)">FAMILY SUSU</b><div class="big">GHS 6,400</div><div class="bar"><i style="width:64%"></i></div><small>64% of GHS 10,000 goal</small>' + row("Ama", '<span class="pill">✓ Paid</span>') + row("Kofi", '<span class="pill">✓ Paid</span>') + row("Yaw", '<span class="pill p">Due</span>'), "https://eganow.com/groups"),
+               ("Cards", "Move money from mobile money to card.", "Top up your Mastercard from your mobile wallet and spend online, in store and worldwide.", '<b style="font:800 12px var(--eg-font-display);color:var(--eg-slate)">YOUR CARD</b><div class="card3d r" style="position:relative;width:100%;height:120px"><span>eganow Mastercard</span><b>•••• 4821</b></div>' + row("Top up from MTN MoMo", "GHS 300") + '<span class="pay">Top up</span>', "https://eganow.com/cards")]
+    steps_html = "".join(f'<div class="story__step"><p class="over">0{i+1} · {n}</p><h2 class="d-lg">{t}</h2><p class="lead">{d}</p><a class="btn btn--red" href="{h}" style="justify-self:start">Explore {n}</a></div>' for i, (n, t, d, m, h) in enumerate(stories))
+    panels = "".join(f'<div class="story__panel" aria-hidden="true"><div class="phone" style="position:relative;transform:scale(.92)"><div class="phone__s">{m}</div></div></div>' for n, t, d, m, h in stories)
+    body += f'<section class="sec story" aria-label="What you can do with eganow"><div class="wrap"><div class="story__in"><div class="story__stage">{panels}</div><div class="story__steps">{steps_html}</div></div></div></section>'
+    # bento
+    body += section(sec_head("Everything money", "One app. Four ways to move.") + f'''<div class="bento">
+<a class="bt bt--red b1 rv" href="https://eganow.com/money-transfer"><p class="over" style="color:#fff">Money transfer</p><h3 class="d-lg">Send money across the globe.</h3><p>From the UK, US and Canada to Ghana and beyond, with transparent fees.</p><span class="arrow">Send money →</span><div class="bt__vis">{mk("right:12px;bottom:12px;width:230px", '<h5 style="color:var(--eg-slate)">You send</h5><div class="big" style="color:var(--eg-ink)">£200.00</div><span class="pill">GH₵3,260 · minutes</span>', "float")}</div></a>
+<a class="bt b2 rv" style="--i:1" href="https://eganow.com/bill-payment"><p class="over">Bill payments</p><h3 class="h4" style="font-size:26px">Pay bills in a tap.</h3><p>Airtime, utilities and subscriptions, scheduled.</p><span class="arrow" style="color:var(--eg-red)">Pay bills →</span></a>
+<a class="bt bt--blue b3 rv" href="https://eganow.com/cards"><p class="over">Cards</p><h3 class="h4" style="font-size:26px">Mobile money, now global.</h3><p>Top up a Mastercard from your wallet and spend anywhere.</p><span class="arrow" style="color:var(--eg-red)">Get a card →</span><div class="bt__vis"><div class="card3d d float" style="right:10px;bottom:10px"><span>eganow card</span><b>•••• 7305</b></div></div></a>
+<a class="bt b4 rv" style="--i:1" href="https://eganow.com/groups"><p class="over">Groups</p><h3 class="h4" style="font-size:26px">Contribute together, transparently.</h3><p>Events, alumni, church, Susu and public fundraising.</p><span class="arrow" style="color:var(--eg-red)">Start a group →</span></a>
+<a class="bt bt--night b5 rv" href="/business/"><p class="over" style="color:#fff">Business</p><h3 class="d-lg">Run your business on Eganow.</h3><p>Accept payments, pay out, issue cards, take payments at the counter and message customers, all from one platform.</p>
+<div class="stats"><div class="stat"><b>99.95%</b><span>uptime</span></div><div class="stat"><b>1</b><span>API for every channel</span></div><div class="stat"><b>100+</b><span>features shipped each year</span></div></div><span class="arrow">Explore Business →</span></a></div>''')
+    # diaspora band
+    body += section(split("Send money home", "Closer to the people who matter.", "Expats and migrant workers use eganow to send money to loved ones in Africa, supporting education, healthcare and business growth, without hidden charges.", ["Competitive transfer fees, shown before you send", "Mobile money and bank payouts", "Corridors from the UK, US and Canada"],
+        '<div class="call"><div class="mk float" style="left:2%;top:4%;width:250px;padding:0;overflow:hidden"><div style="background:linear-gradient(135deg,#1c2b3f,#0f1b2a);height:150px;display:flex;gap:10px;align-items:center;justify-content:center"><span class="avatar" style="background:var(--eg-red)">K</span><span class="avatar" style="background:var(--eg-blue)">A</span></div><div style="padding:12px 16px"><h5>Video call · Accra</h5><span class="pill">● Live</span></div></div>' + mk("right:0;top:34%;width:240px", '<h5>Money sent</h5><div class="big">£200 → GH₵3,260</div><span class="pill">✓ Arrived in minutes</span>', "float b") + '</div>', ("See rates and send →", "https://eganow.com/money-transfer"), True), "sec--ice")
+    body += section(sec_head("Why eganow", "Built to be trusted.") + cards([("Licensed", "Licensed by the Bank of Ghana as an Enhanced Payment Service Provider under the Payment Systems and Services Act, 2019 (Act 987)."), ("Transparent", "Fees and rates are shown before you confirm. No hidden charges."), ("Secure", "Encrypted, monitored and built to protect every transaction."), ("Any account", "Link mobile money and bank accounts and use them from one app."), ("Local and global", "Local transfers and cross-border remittance on one platform."), ("Support", "Help when you need it, in the app or by contact.")]))
+    body += faq([("What is Eganow?", "Eganow (TekSol Eganow Ltd) is a financial technology company, not a bank, licensed by the Bank of Ghana as an Enhanced Payment Service Provider. The app lets you link bank and mobile money accounts to send money, pay bills, use cards and contribute to groups."), ("How do I start using Eganow?", "Download the app, register an account and link your mobile money or bank account."), ("What bills can I pay with Eganow?", "Airtime and data, electricity and water, media subscriptions, orders and bookings, and investments, insurance, pension, taxes and other fees."), ("How can Eganow help me run my business?", "Eganow Business lets you accept payments, make payouts, issue cards, run POS devices, serve customers as an agent and send bulk messages, from one platform."), ("What is Eganow Groups?", "A transparent and secure way to make group contributions and donations: private groups for family and friends, and public groups for fundraising.")])
+    body += final("Get the app. Do more with your money.", "Join thousands who send, pay and save with eganow.", [("Get the app", "https://eganow.com/money-transfer", "btn--white"), ("Explore Business", "/business/", "btn--line")])
+    return "Your one app for everything money", "Send, pay, save and do more across any account, on a single platform. Money transfer, bill payments, cards and groups from Eganow.", "", body
+
+PAGES = {"__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
 if __name__ == "__main__":
     for slug, fn in PAGES.items():
         title, desc, s, body = fn()
-        path = "/business/" + (slug + "/" if slug else "")
-        active = "dev" if slug == "developers" else "biz"
+        home = slug == "__home"
+        path = "/" if home else "/business/" + (slug + "/" if slug else "")
+        active = "per" if home else ("dev" if slug == "developers" else "biz")
         out = head(title, desc, path) + header(active) + body + footer()
-        d = os.path.join(os.path.dirname(__file__), "business", slug); os.makedirs(d, exist_ok=True)
+        d = os.path.dirname(os.path.abspath(__file__)) if home else os.path.join(os.path.dirname(os.path.abspath(__file__)), "business", slug); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(out); print(path, len(out))
