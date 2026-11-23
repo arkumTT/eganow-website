@@ -125,3 +125,10 @@ details{border:1px solid var(--eg-mist);border-radius:var(--eg-r-md);background:
 @media(max-width:959px){.hhero__vis{min-height:480px}.hhero__vis .mk:nth-of-type(1){left:0!important}.hhero__vis .mk:nth-of-type(2){right:0!important}}
 @media(min-width:960px){.hhero__phone{left:62%}.hhero__vis .mk:nth-of-type(2){right:-10%!important;top:250px!important}}
 @media(max-width:959px){.hhero__vis .mk:nth-of-type(1){top:330px!important}.hhero__vis .mk:nth-of-type(2){top:400px!important}.hhero__vis .mk .big{font-size:22px}.hhero__vis{min-height:560px}.hhero__vis .card3d{display:none}}
+/* ---------- Money transfer ---------- */
+.mt-calc-slot{display:flex;justify-content:center;position:relative}.mt-calc-slot .calc{box-shadow:var(--eg-shadow-on-red)}
+@media(min-width:960px){.mt-calc-slot{justify-content:flex-end}}
+.chipsx{display:flex;gap:10px;flex-wrap:wrap}.chipx{font:700 15px var(--eg-font-display);text-decoration:none;border:2px solid var(--eg-mist);border-radius:999px;padding:10px 20px;background:#fff}.chipx:hover{border-color:var(--eg-red)}.chipx.on{background:var(--eg-red);border-color:var(--eg-red);color:#fff}
+.steps--3{grid-template-columns:1fr}@media(min-width:900px){.steps--3{grid-template-columns:repeat(3,1fr)}}
+.legalnote{font-size:13px;color:var(--eg-text-muted);max-width:80ch;line-height:1.6}.legalnote a{color:var(--eg-blue-action)}
+.hhero .calc{color:var(--eg-ink)}

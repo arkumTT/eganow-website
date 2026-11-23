@@ -329,13 +329,64 @@ def page_home():
     body += final("Get the app. Do more with your money.", "Join thousands who send, pay and save with eganow.", [("Get the app", "https://eganow.com/money-transfer", "btn--white"), ("Explore Business", "/business/", "btn--line")])
     return "Your one app for everything money", "Send, pay, save and do more across any account, on a single platform. Money transfer, bill payments, cards and groups from Eganow.", "", body
 
-PAGES = {"__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
+CORR = {
+ "money-transfer": dict(cur="", flag="", name="abroad", sym="", intro="Send money from wherever you are to family and friends in Ghana and across Africa, with transparent fees and fast delivery."),
+ "uk": dict(cur="GBP", name="the United Kingdom", demo="£200", get="GH₵3,260", intro="Send money from the UK to loved ones in Ghana. Pay by card or bank, and they receive it in their mobile money wallet or bank account."),
+ "us": dict(cur="USD", name="the United States", demo="$200", get="GH₵2,480", intro="Send money from the US to loved ones in Ghana. Pay in dollars and they receive cedis, with the rate and fee shown first."),
+ "canada": dict(cur="CAD", name="Canada", demo="C$200", get="GH₵1,820", intro="Send money from Canada to loved ones in Ghana. Pay in Canadian dollars and they receive cedis, with no hidden charges."),
+}
+
+def page_transfer(key):
+    c = CORR[key]; cur = c["cur"]; name = c["name"]
+    chips = "".join(f'<a href="/{k}/" class="chipx{" on" if k==key else ""}">{lbl}</a>' for k, lbl in [("uk", "United Kingdom"), ("us", "United States"), ("canada", "Canada")])
+    calc = """<section class="calc" id="mt-calculator" role="region" aria-labelledby="mt-calc-title">
+  <div class="calc__head"><h2 class="calc__title" id="mt-calc-title">Currency exchange calculator</h2><span class="badge" data-sample hidden>Sample rates</span></div>
+  <div class="field"><div class="field__main"><label for="mt-send">You send</label><input id="mt-send" data-send-amount inputmode="decimal" autocomplete="off"></div><select data-send-currency aria-label="Currency you send"></select></div>
+  <div class="swap-row"><button type="button" class="swap" data-swap aria-label="Swap currencies"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v14M3 14l4 4 4-4M17 20V6M13 10l4-4 4 4"/></svg></button></div>
+  <div class="field"><div class="field__main"><label for="mt-recv">They receive</label><input id="mt-recv" data-receive-amount inputmode="decimal" autocomplete="off"></div><select data-receive-currency aria-label="Currency they receive"></select></div>
+  <dl class="details"><div><dt>Rate</dt><dd data-rate>—</dd></div><div><dt>Fee</dt><dd data-fee>—</dd></div><div><dt>Arrives</dt><dd data-eta>—</dd></div></dl>
+  <p class="expiry" data-expiry></p><p class="methods-label" id="mt-ml">Payout method</p><div class="methods" role="radiogroup" aria-labelledby="mt-ml" data-methods></div>
+  <div class="error" data-error role="alert" hidden><span data-error-text></span><button type="button" class="retry" data-retry>Retry</button></div>
+  <a class="calc-cta" data-cta href="https://eganow.com/download">Send money</a>
+  <p class="legal">Indicative rate; the final rate and fee are shown before you confirm. Eganow is a fintech, not a bank, licensed by the Bank of Ghana.</p><p class="sr" data-live aria-live="polite"></p></section>"""
+    body = f"""<link rel="stylesheet" href="/assets/calc.css"><main id="main"><section class="hhero" aria-labelledby="h1"><div class="wrap hhero__in"><div class="hhero__copy"><p class="over">Money transfer{(" · from " + name) if cur else ""}</p>
+<h1 class="d-xl" id="h1" style="max-width:15ch;font-size:clamp(36px,5vw,62px)">Send money now to your loved ones across the globe.</h1><p class="lead">Eganow offers you a secure mobile solution with competitive rates for local and cross-border transfers.</p>
+<div class="cta"><a class="btn btn--w" href="https://eganow.com/download">Download the app</a><a class="btn btn--ghost-w" href="#how">How it works</a></div><p class="pts"><span>Fast</span><span>Transparent</span><span>Secure</span></p></div>
+<div class="mt-calc-slot">{calc}</div></div></section>"""
+    body += section(f'<div class="rv" style="display:grid;gap:14px;justify-items:start"><p class="over">Sending from</p><h2 class="d-lg" style="max-width:20ch">Pick your corridor.</h2><p class="lead">{c["intro"]}</p><div class="chipsx">{chips}</div></div>')
+    body += section(sec_head("How it works", "Download and transfer funds in 3 easy steps.") + steps([("Download and register", "Get the eganow app, create your account and verify your identity."), ("Add your recipient", "Choose a mobile money wallet or bank account in Ghana and save the recipient."), ("Check the rate and send", "See the rate, fee and delivery time first. Confirm and send; track it any time.")]).replace('class="steps"', 'class="steps steps--3" id="how"'), "sec--ice")
+    body += section(split("Seamless transfer from anywhere", "A simple way to send money.", "The eganow remittance app is a fast, secure and user-friendly way to send money to Africa. It addresses the challenges faced by expatriates and migrant workers with a transparent, affordable way to support loved ones: education, healthcare and business growth.",
+        ["Competitive fees shown before you send", "Delivery often within minutes", "Track every transfer"],
+        mk("left:2%;top:4%;width:250px", f'<h5>You send</h5><div class="big">{c.get("demo","£200")}</div><span class="pill">Rate locked</span>', "float") + mk("right:2%;top:42%;width:250px", f'<h5>They receive</h5><div class="big">{c.get("get","GH₵3,260")}</div><span class="pill">✓ Arrived in minutes</span>', "float b"), ("Compare with the calculator ↑", "#mt-calculator")))
+    body += section(sec_head("Why eganow", "Why choose eganow for money transfers.") + cards([("Competitive transfer fees", "Transparent and competitive fees on every transaction, with no hidden charges."), ("Secure and reliable", "Compliant with regulatory standards, so your money is sent securely and can be tracked at any time."), ("Fast delivery", "Transfers to Africa are completed quickly, often within minutes, so your loved ones can access funds when they need them."), ("Multiple currencies", "Send in your currency; recipients receive funds in their local currency without hassle."), ("Dedicated support", "Our customer service team is available to help with any question or issue."), ("Impact", "Remittances support education, healthcare and local investment in communities.")]), "sec--ice")
+    body += section('<div class="split"><div class="split__copy rv"><p class="over">Payout</p><h3 class="d-lg">Where it lands.</h3><p class="lead">Your recipient chooses how to collect.</p>' + li(["Mobile money wallets: MTN, Telecel, AirtelTigo", "Bank accounts in Ghana"], "ticks") + '<div class="partners"><span>MTN</span><span>Telecel</span><span>AirtelTigo</span><span>Bank account</span></div></div><div class="rv"><div class="price" style="background:var(--eg-red);color:#fff"><p class="over" style="color:#fff">Join thousands of satisfied users</p><h3 class="d-lg">Every transaction strengthens connections.</h3><p class="lead" style="color:rgba(255,255,255,.9)">Experience the convenience of remittances at your fingertips with the eganow app.</p><a class="btn btn--w" href="https://eganow.com/download">Download the app</a></div></div></div>')
+    body += faq([("How fast will my money arrive?", "Transfers to Africa are completed quickly, often within minutes. The calculator shows the estimated delivery time for your payout method before you send."), ("What does it cost?", "Eganow shows the fee and the exchange rate before you confirm, with no hidden charges. The calculator on this page gives an indicative figure."), ("Which currencies can I send in?", "You can send in your local currency and your recipient receives funds in their local currency. Available currencies are shown in the calculator."), ("Can I track my transfer?", "Yes. Transfers can be tracked at any time in the app."), ("Is it safe?", "Eganow is licensed by the Bank of Ghana as an Enhanced Payment Service Provider and its services comply with regulatory standards."), ("Where can I read the terms?", "Read the money transfer terms and conditions on our website before you send.")])
+    body += section('<p class="legalnote rv"><b>Regulatory information' + (f' for customers in {name}' if cur else '') + '.</b> Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank, licensed by the Bank of Ghana. <!-- TODO(legal): add the licence / registration statement required for ' + name + ' customers --> Read the <a href="https://eganow.com/money-transfer-terms-and-conditions">Money transfer terms and conditions</a>. Rates shown are indicative.</p>')
+    body += final("Send money home today.", "Download the app and send in 3 easy steps.", [("Download the app", "https://eganow.com/download", "btn--white"), ("Business services", "/business/", "btn--line")])
+    # calculator init + sticky bar
+    body += """<div class="stickybar" id="sticky" aria-hidden="true"><span id="sticky-text">Send money to Ghana</span><button type="button" id="sticky-btn" tabindex="-1">Calculate</button></div>
+<script type="module">
+import { createCalculator } from "/assets/calc/calculator.js";
+import { MockRateProvider } from "/assets/calc/rate-provider.js"; // TODO: swap for EganowRateProvider when the rate-engine API is ready
+const region = (navigator.language||"").split("-")[1];
+const def = "%s" || ({US:"USD",CA:"CAD",GB:"GBP"}[region]) || "GBP";
+const root = document.getElementById("mt-calculator");
+const calc = createCalculator(root, { provider: new MockRateProvider(), defaultFrom: def, appUrl: "https://eganow.com/download" });
+const bar=document.getElementById("sticky"),btn=document.getElementById("sticky-btn"),txt=document.getElementById("sticky-text");
+new IntersectionObserver(([e])=>{const on=!e.isIntersecting;bar.classList.toggle("is-visible",on);bar.setAttribute("aria-hidden",String(!on));btn.tabIndex=on?0:-1}).observe(root);
+setInterval(()=>{const s=calc.state;txt.textContent=s.quote?`1 ${s.from} = ${s.quote.rate.toFixed(2)} ${s.to} · Send money to Ghana`:"Send money to Ghana"},1000);
+btn.addEventListener("click",()=>{scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});setTimeout(()=>root.querySelector("[data-send-amount]").focus({preventScroll:true}),500)});
+</script>""" % cur
+    titles = {"money-transfer": "Money transfer to Ghana and Africa", "uk": "Send money from the UK to Ghana", "us": "Send money from the US to Ghana", "canada": "Send money from Canada to Ghana"}
+    return titles[key], f"{c['intro']} Check the live exchange rate with our calculator and send in 3 easy steps.", key, body
+
+PAGES = {"__t:money-transfer": lambda: page_transfer("money-transfer"), "__t:uk": lambda: page_transfer("uk"), "__t:us": lambda: page_transfer("us"), "__t:canada": lambda: page_transfer("canada"), "__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
 if __name__ == "__main__":
     for slug, fn in PAGES.items():
         title, desc, s, body = fn()
-        home = slug == "__home"
-        path = "/" if home else "/business/" + (slug + "/" if slug else "")
-        active = "per" if home else ("dev" if slug == "developers" else "biz")
+        home = slug == "__home"; tr = slug.startswith("__t:")
+        path = "/" if home else ("/" + slug[4:] + "/" if tr else "/business/" + (slug + "/" if slug else ""))
+        active = "per" if (home or tr) else ("dev" if slug == "developers" else "biz")
         out = head(title, desc, path) + header(active) + body + footer()
-        d = os.path.dirname(os.path.abspath(__file__)) if home else os.path.join(os.path.dirname(os.path.abspath(__file__)), "business", slug); os.makedirs(d, exist_ok=True)
+        base = os.path.dirname(os.path.abspath(__file__)); d = base if home else (os.path.join(base, slug[4:]) if tr else os.path.join(base, "business", slug)); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(out); print(path, len(out))
