@@ -1,0 +1,26 @@
+[
+ [
+  "/pos",
+  "/business/egapos"
+ ],
+ [
+  "/pos.html",
+  "/business/egapos"
+ ],
+ [
+  "/developer",
+  "/business/developers"
+ ],
+ [
+  "/developer.html",
+  "/business/developers"
+ ],
+ [
+  "/bizcollect",
+  "/business/bizcollect"
+ ],
+ [
+  "/index.html",
+  "/"
+ ]
+]
