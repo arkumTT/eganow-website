@@ -25,6 +25,7 @@ ORG = '<script type="application/ld+json">{"@context":"https://schema.org","@typ
 
 def li(items, cls=""): return f'<ul class="{cls}">' + "".join(f"<li>{x}</li>" for x in items) + "</ul>"
 
+NOINDEX = '<meta name="robots" content="noindex">'
 def BC(path, title):
     if path == "/": return ""
     items = [{"@type":"ListItem","position":1,"name":"Business","item":SITE+"/business/"}]
@@ -34,7 +35,7 @@ def BC(path, title):
 def head(title, desc, path):
     return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | Eganow Business</title><meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{SITE}{path}"><link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml"><meta name="theme-color" content="#CC0229">
+<link rel="canonical" href="{SITE}{path}"><link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml"><meta name="theme-color" content="#CC0229">{NOINDEX if path in ("/help/","/security/") else ""}
 <meta property="og:title" content="{e(title)} | Eganow Business"><meta property="og:description" content="{e(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -43,7 +44,7 @@ def head(title, desc, path):
 </head><body><a class="skip" href="#main">Skip to content</a>'''
 
 def header(active):
-    nav = [("Personal", "/", "per"), ("Business", "/business/", "biz"), ("Developers", "/business/developers/", "dev"), ("About", "https://eganow.com/about", None), ("Help", "https://eganow.com/contact", None)]
+    nav = [("Personal", "/", "per"), ("Business", "/business/", "biz"), ("Developers", "/business/developers/", "dev"), ("About", "/about/", "abt"), ("Help", "/help/", "hlp")]
     links = "".join(f'<a href="{h}"{" aria-current=page" if k and k==active else ""}>{n}</a>' for n, h, k in nav)
     drawer = "".join(f'<a href="{h}">{n}</a>' for n, h, k in nav) + "".join(f'<a href="/business/{s}/">{n}</a>' for s, n, t in SERVICES)
     return f'''<header class="hdr"><a href="/business/" aria-label="Eganow Business home"><img src="/brand/eganow-wordmark-red.svg" alt="eganow" width="98" height="28"></a>
@@ -56,7 +57,7 @@ def footer():
     return f'''<footer class="ft"><div class="ft__in"><div class="ft__b"><img src="/brand/eganow-wordmark-white.svg" alt="eganow" width="118" height="34"><p>Simple. Speed. Secure.</p></div>
 <nav aria-label="Personal"><h2>Personal</h2><ul><li><a href="https://eganow.com/money-transfer">Money transfer</a></li><li><a href="https://eganow.com/bill-payment">Bill payments</a></li><li><a href="https://eganow.com/cards">Cards</a></li><li><a href="https://eganow.com/groups">Groups</a></li></ul></nav>
 <nav aria-label="Business"><h2>Business</h2><ul>{biz}</ul></nav>
-<nav aria-label="Company"><h2>Company</h2><ul><li><a href="https://eganow.com/about">About</a></li><li><a href="https://eganow.com/contact">Contact</a></li><li><a href="https://eganow.com/privacy-policy">Privacy policy</a></li><li><a href="https://eganow.com/money-transfer-terms-and-conditions">Terms</a></li></ul></nav>
+<nav aria-label="Company"><h2>Company</h2><ul><li><a href="/about/">About</a></li><li><a href="/security/">Security</a></li><li><a href="/help/">Help</a></li><li><a href="/contact/">Contact</a></li><li><a href="https://eganow.com/privacy-policy">Privacy policy</a></li><li><a href="https://eganow.com/money-transfer-terms-and-conditions">Terms</a></li></ul></nav>
 <nav aria-label="Get started"><h2>Get started</h2><ul><li><a href="{REGISTER}">Open a business account</a></li><li><a href="{LOGIN}">Business sign in</a></li><li><a href="{SALES}">Talk to sales</a></li><li><a href="{SANDBOX}">Get sandbox access</a></li></ul></nav></div>
 <p class="ft__l">{LEGAL} © 2026 Eganow.</p></footer><script src="/assets/business.js"></script></body></html>'''
 
@@ -432,13 +433,147 @@ def page_groups():
     body += pfinal("Do more together.", "Create a group and start collecting in minutes.", "groups", [("Create a group", APP, "btn--white"), ("Business services", "/business/", "btn--line")])
     return "Groups — Group contributions & donations made easier", "Private and public groups for events, Susu savings, alumni, church and fundraising, with group chat, transaction records and real-time monitoring.", "groups", body
 
-PAGES = {"__t:bill-payment": page_bills, "__t:cards": page_cards_p, "__t:groups": page_groups, "__t:money-transfer": lambda: page_transfer("money-transfer"), "__t:uk": lambda: page_transfer("uk"), "__t:us": lambda: page_transfer("us"), "__t:canada": lambda: page_transfer("canada"), "__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
+def T(t): return f'<mark class="todo">{t}</mark>'
+DRAFT = '<div class="draft" role="note"><b>Draft.</b> Items highlighted <mark class="todo">like this</mark> are placeholders that Eganow must confirm or complete before this page is published.</div>'
+def chead(over, title, lead, extra=""):
+    return f'<main id="main"><section class="phead"><div class="wrap"><p class="over">{over}</p><h1 class="d-xl" style="font-size:clamp(34px,5vw,60px);max-width:18ch" id="h1">{title}</h1><p class="lead">{lead}</p>{extra}</div></section>'
+def cend(title, lead, ctas):
+    return final(title, lead, ctas, None, "none") if False else f'<section class="sec sec--red"><div class="wrap final"><h2 class="d-lg rv">{title}</h2><p class="lead rv">{lead}</p><div class="cta rv">' + "".join(f'<a class="btn {c}" href="{h}">{t}</a>' for t, h, c in ctas) + '</div></div></section></main>'
+
+def page_about():
+    team_board = [("Emmanuel Seygbo Goka", "Board Chairman"), ("Louis A. Adanuty", "Executive Board Member"), ("Dr. Daniel Agbeko", "Non-Executive Board Member")]
+    mgmt = [("Senyo Fiati", "Chief Executive Officer"), ("Emmanuel Forffoe", "Chief Operations Officer"), ("Robert Adwini", "Human Resource Manager"), ("Edmond Frimpong", "Chief Technology Officer"), ("Ebenezer Anoful", "Internal Auditor"), ("Christian Agbai", "Risk & Compliance Officer")]
+    def ppl(l): return '<ul class="team">' + "".join(f'<li class="person rv"><span class="av" aria-hidden="true">{"".join(w[0] for w in n.replace("Dr. ","").split()[:2])}</span><div><b>{n}</b><span>{r}</span></div></li>' for n, r in l) + '</ul>'
+    body = chead("About eganow", "We power happiness.", "To become Africa’s leading digital payment and financial services technology platform, empowering individuals, merchants and banks to transact seamlessly across borders.")
+    body += section(split("Who we are", "A licensed fintech built for Africa.", "Eganow (TekSol Eganow Ltd) is a financial technology company, not a Bank. Eganow is licensed by Bank of Ghana as an Enhanced Payment Service Provider (EPSP), which allows it to offer a wide range of financial services including digital wallets and global payment gateway systems.", ["Licensed and compliant", "Built to scale", "Secure by design", "Africa-focused, globally connected"],
+        mk("left:6%;top:8%;width:260px", '<h5>Our mission</h5><p style="font-weight:600">To democratise access to payments and financial services to promote inclusion.</p>', "float") + mk("right:4%;top:46%;width:230px", '<h5>Our vision</h5><p style="font-weight:600">Africa’s leading digital payments platform.</p>', "float b")))
+    body += section(sec_head("We value", "What guides us.") + '<div class="pill-list rv"><span>Innovation</span><span>Integrity</span><span>Inclusion</span><span>Reliability</span><span>Partnership</span><span>Risk advisory</span></div>', "sec--ice")
+    body += section(sec_head("What we do", "A robust suite of financial services for today’s interconnected economy.") + cards([("Payment acceptance & collections", "Mobile money, card payments, bank transfers and alternative payment methods."), ("PayFac & merchant services", "Onboarding, compliance, settlement and transaction management for businesses."), ("Local & cross-border transfers", "Fast, reliable money movement connecting Ghana to global markets."), ("Virtual & physical card services", "Issuing secure virtual and physical cards for local and global payments."), ("Group contribution payments", "Digital solutions for contributions, savings groups, crowdfunding and shared payments."), ("Financial tools & APIs", "Developer-friendly infrastructure for integrating payments and financial services into apps and platforms.")]))
+    body += section(sec_head("Our team", "The people behind eganow.") + '<h3 class="h4 rv" style="margin:0 0 14px">The Board</h3>' + ppl(team_board) + '<h3 class="h4 rv" style="margin:36px 0 14px">Management</h3>' + ppl(mgmt) + '<!-- TODO: add portraits (real staff photography, asset P14) and confirm titles/spellings with HR -->', "sec--ice")
+    body += section(sec_head("Our partners", "Trusted partners powering the eganow ecosystem.", "We collaborate with leading banks, mobile money operators, card schemes, global payment networks and cybersecurity agencies to deliver reliable, interoperable and compliant financial services across markets.") + '<div class="partners rv"><span>Banks</span><span>Mobile money operators</span><span>Card schemes</span><span>Global payment networks</span><span>Cybersecurity agencies</span></div><!-- TODO: add partner logos only where permission is held -->')
+    body += section(split("Security", "We take your security and privacy seriously.", "We take security seriously so every payment made on our platform is secure. The ISO 27001 certification means that we have acceptable business practices and processes, including a robust business continuity plan, and is proof that eganow as a payment gateway processor has satisfied the highest level of security audit.", ["Security audits", "Business continuity planning"], mk("left:8%;top:10%;width:250px", '<h5>Certification</h5><div class="big" style="font-size:24px">ISO 27001</div><span class="pill">As stated by Eganow</span>', "float"), ("How we protect you →", "/security/")), "sec--ice")
+    body += cend("Let’s build a better financial future.", "Talk to our team or get the app.", [("Contact us", "/contact/", "btn--white"), ("Get the app", APP, "btn--line")])
+    return "About Eganow — We power happiness", "Eganow (TekSol Eganow Ltd) is a Bank of Ghana licensed fintech powering payments, transfers, cards and group contributions across Africa.", "about", body
+
+CTOPICS = [("support", "Support"), ("sales", "Sales"), ("complaint", "Complaint"), ("sandbox", "Sandbox access (developers)"), ("agent", "Become an agent"), ("reissuer", "Become a card re-issuer"), ("other", "Something else")]
+def page_contact():
+    opts = "".join(f'<option value="{k}">{v}</option>' for k, v in CTOPICS)
+    ZF = "https://forms.zohopublic.com/egapassdevopsgm1/form/Contactwithphone/formperma/MjIApxhL1f9tmI2slJD96tvzD102v0u811Ft3yjea2k/htmlRecords/submit"
+    form = f"""<form class="form rv" id="cform" action="{ZF}" method="POST" accept-charset="UTF-8" enctype="multipart/form-data" novalidate>
+<input type="hidden" name="zf_referrer_name" value=""><input type="hidden" name="zf_redirect_url" value=""><input type="hidden" name="zc_gad" value="">
+<h2 class="h4">Send a message</h2>
+<div class="f"><label for="topic">Topic</label><select id="topic">{opts}</select></div>
+<div class="row2"><div class="f"><label for="fn">First name <span class="req">*</span></label><input id="fn" name="Name_First" maxlength="255" required autocomplete="given-name"></div><div class="f"><label for="ln">Last name <span class="req">*</span></label><input id="ln" name="Name_Last" maxlength="255" required autocomplete="family-name"></div></div>
+<div class="f"><label for="em">Email <span class="req">*</span></label><input id="em" name="Email" type="email" maxlength="255" required autocomplete="email"></div>
+<div class="f"><label for="ph">Phone</label><input id="ph" name="PhoneNumber_countrycode" type="tel" maxlength="20" autocomplete="tel"></div>
+<div class="f"><label for="msg">Message <span class="req">*</span></label><textarea id="msg" name="MultiLine" maxlength="65535" required></textarea></div>
+<p class="error" id="cerr" role="alert" hidden style="margin:0;display:none;background:#fff1f3;border:1px solid #f3b3bf;color:#7d0a1d;border-radius:12px;padding:10px 14px;font-size:14px">Please complete the required fields.</p>
+<button class="btn btn--red" type="submit">Submit</button><small>Never include your PIN, password or one-time codes. Eganow will never ask for them.</small></form>
+<script>(function(){{var f=document.getElementById('cform'),t=document.getElementById('topic'),q=new URLSearchParams(location.search).get('topic');if(q&&t.querySelector('option[value="'+q+'"]'))t.value=q;
+f.addEventListener('submit',function(e){{var bad=false;f.querySelectorAll('[required]').forEach(function(i){{var v=!i.value.trim()||(i.type==='email'&&!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(i.value));i.setAttribute('aria-invalid',v);if(v)bad=true}});
+var er=document.getElementById('cerr');er.style.display=bad?'block':'none';er.hidden=!bad;if(bad){{e.preventDefault();return}}
+var m=document.getElementById('msg');m.value='[Topic: '+t.options[t.selectedIndex].text+'] '+m.value}})}})();</script>"""
+    info = """<div class="cinfo rv"><div><h3>Location</h3><p>No. 10 Parsnip Street<br>East Legon, Accra<br>Ghana</p></div><div><h3>Phone</h3><p><a href="tel:+233593900239">+233 593 900 239</a><br><a href="tel:+233540102290">+233 540 102 290</a></p></div>
+<div><h3>Email</h3><p><a href="mailto:info@eganow.com">info@eganow.com</a><br><a href="mailto:sales@eganow.com">sales@eganow.com</a></p></div><div><h3>Follow</h3><p><a href="https://www.instagram.com/eganowapp/">Instagram</a> · <a href="https://www.facebook.com/eganowapp">Facebook</a> · <a href="https://www.linkedin.com/company/eganow-holdings-ltd/">LinkedIn</a></p></div>
+<p class="stat-note">Eganow will never ask for your PIN, password or one-time codes.</p></div>"""
+    body = chead("Let’s connect", "We would love to hear from you.", "Have questions or just want to say hi? Send us a message. We value your input; together we can create a better financial future.")
+    body += section(f'<div class="cgrid">{info}{form}</div>')
+    body += faq([("What is Eganow?", "Eganow (TekSol Eganow Ltd) is a financial technology company, not a bank, licensed by the Bank of Ghana as an Enhanced Payment Service Provider."), ("How do I start using Eganow?", "Download the app, register an account and link your mobile money or bank account."), ("What bills can I pay with Eganow?", "Airtime and data, electricity and water, media subscriptions, orders and bookings, and insurance, pension, taxes and other fees."), ("How can Eganow help me run my business?", "Accept payments, make payouts, issue cards, run POS devices, serve customers as an agent and send bulk messages, from one platform."), ("What is Eganow Groups?", "A transparent and secure way to make group contributions and donations, privately or publicly.")])
+    body += cend("Prefer self-service?", "Browse answers in the Help centre.", [("Help centre", "/help/", "btn--white"), ("Get the app", APP, "btn--line")])
+    return "Contact Eganow", "Contact Eganow in East Legon, Accra: phone, email, or send a message to support, sales or developer teams.", "contact", body
+
+HELP = [
+ ("getting-started", "Eganow app", "Getting started", "Download the app and set up your account.", [
+   ("How do I get the Eganow app?", f"Download Eganow from the App Store on iPhone or Google Play on Android, then follow the steps to create your account.", ("Get the app", APP)),
+   ("Why do you need to verify my identity?", "Verifying your identity keeps your money safe and is required by law. The more fully you are verified, the higher your limits can be.", None),
+   ("I can’t sign in. What should I do?", "Check your phone number and PIN, and make sure you have a good connection. If you still can’t sign in, contact us and we’ll help you get back in. " + T("confirm the PIN-reset steps"), ("Contact support", "/contact/?topic=support"))]),
+ ("money-transfer", "Eganow app", "Money transfer", "Send money at home and abroad.", [
+   ("How do I send money?", "Choose Money Transfer in the app, pick or add a recipient, enter the amount and check every detail before you confirm.", ("Money transfer", "/money-transfer/")),
+   ("Can I send money to another country?", "Eganow supports local and cross-border transfers. The countries available, any fees and the exchange rate are shown before you confirm. " + T("confirm supported corridors"), None),
+   ("Can I cancel a transfer?", "Once a transfer is confirmed it may not be possible to cancel it. If you made a mistake, contact us straight away and we will do what we can.", ("Contact support", "/contact/?topic=support"))]),
+ ("bill-payments", "Eganow app", "Bill payments", "Pay utilities, airtime, subscriptions and more.", [
+   ("Which bills can I pay?", "Airtime and data, electricity and water, media subscriptions, orders and bookings, insurance, pension, taxes and other fees, school fees and memberships. " + T("confirm biller list"), ("Bill payments", "/bill-payment/")),
+   ("Where can I find my receipt?", "You get a confirmation after each payment, and you can find past payments in your transaction history.", None),
+   ("I paid a bill but it hasn’t updated. What now?", "Some billers take a little while to update. If it still hasn’t shown after " + T("time") + ", contact us with your payment reference and we’ll look into it.", ("Contact support", "/contact/?topic=support"))]),
+ ("cards", "Eganow app", "Cards", "Virtual and physical Mastercard cards.", [
+   ("What cards can I get?", "A virtual Mastercard card for online spending, and a physical Mastercard card for spending in person. " + T("confirm availability and delivery"), ("Cards", "/cards/")),
+   ("How do I freeze my card?", "Open the Cards section of the app and freeze the card. You can unfreeze it again whenever you are ready. " + T("confirm the steps"), None),
+   ("My card was lost or stolen.", "Freeze it in the app straight away, then contact us so we can help you replace it.", ("Contact support", "/contact/?topic=support"))]),
+ ("groups", "Eganow app", "Groups", "Pool money with family, friends or a community.", [
+   ("What are Groups?", "Groups let you pool money with other people towards a shared goal: a private Group for people you invite, or a public Group for a cause.", ("Groups", "/groups/")),
+   ("What is the difference between private and public Groups?", "A private Group is for the people you invite. A public Group is open to a wider audience. " + T("confirm how public Groups are shared and discovered"), None),
+   ("Can I see who has contributed?", "Members can follow a Group’s progress. What each person can see depends on the Group’s settings. " + T("confirm"), None)]),
+ ("account-security", "Eganow app", "Account and security", "Keep your money and details safe.", [
+   ("How do I keep my account safe?", "Never share your PIN, password or one-time codes with anyone. Eganow will never ask for them. Use a phone you control and keep it secure.", ("Security", "/security/")),
+   ("I think someone used my account without my permission.", "Contact us immediately. Freeze your card in the app, change your PIN, and keep any messages as evidence.", ("Report fraud or make a complaint", "/contact/?topic=complaint")),
+   ("How do I report a scam?", "Tell us what happened through the contact form and include any messages or numbers involved. Never reply to a message that asks for your PIN or codes.", ("Contact support", "/contact/?topic=support"))]),
+ ("bizcollect", "Eganow Business", "BizCollect", "Collections, payouts and your dashboard.", [
+   ("How do I start collecting payments?", "Open a business account, then choose how to collect: the API, Hosted Checkout, a Payment Link or USSD.", ("About BizCollect", "/business/bizcollect/")),
+   ("Where can I see my transactions?", "Your BizCollect dashboard lists every transaction, so you can follow each payment from start to finish.", None),
+   ("How do payouts work?", "You can pay out to one recipient or many from your dashboard. Check the total before you send. " + T("confirm payout limits and timing"), None)]),
+ ("egapos", "Eganow Business", "EgaPOS", "POS devices and the management platform.", [
+   ("How do I get a POS device?", "Apply for a business account and tell us what you need. Once you are verified, Eganow issues and sets up your device. " + T("confirm lead time"), ("About EgaPOS", "/business/egapos/")),
+   ("How do I see all my terminals?", "The POS management platform lists every device with its status and what it has sold.", None),
+   ("My terminal is offline or faulty.", "Check the power and the connection first. If it still isn’t working, contact us and we’ll help you get back to selling.", ("Contact support", "/contact/?topic=support"))]),
+ ("card-issuing", "Eganow Business", "Card Issuing", "Mastercard cards for your team or customers.", [
+   ("Can I issue cards for my team?", "Yes. You can issue virtual and physical Mastercard cards for your organisation’s expenses.", ("About Card Issuing", "/business/card-issuing/")),
+   ("How do I become a re-issuer?", "Apply through the contact form and choose “Become a card re-issuer”. Our team will guide you through eligibility and onboarding.", ("Apply as a re-issuer", "/contact/?topic=reissuer")),
+   ("Can I set a limit on a card?", "You can set how much each card can spend and freeze or unfreeze a card from your dashboard. " + T("confirm"), None)]),
+ ("agency-banking", "Eganow Business", "Agency Banking", "Cash in and cash out for your customers.", [
+   ("How do I become an agent?", "Apply through the contact form and choose “Become an agent”. We’ll verify your business and set you up.", ("Become an agent", "/contact/?topic=agent")),
+   ("What can customers do at my agent point?", "They can put cash into their mobile wallet or bank account (cash in) and take cash out of them (cash out).", ("About Agency Banking", "/business/agency-banking/")),
+   ("A customer’s cash out is still pending. What should I do?", "Check the status in your dashboard and wait for confirmation before handing over any cash. If it stays pending, contact us.", ("Contact support", "/contact/?topic=support"))]),
+ ("bulk-messaging", "Eganow Business", "Bulk Messaging", "Bulk SMS and email for your business.", [
+   ("Can I send both SMS and email?", "Yes. Bulk Messaging covers bulk SMS and bulk email from one account.", ("About Bulk Messaging", "/business/bulk-messaging/")),
+   ("Do I need permission to message people?", "Yes. Only message people who have agreed to hear from you, and always honour opt-out requests.", None),
+   ("How do I see whether my messages were delivered?", "Your delivery report shows how many messages were sent, delivered and not delivered. " + T("confirm report detail"), None)]),
+ ("egahub", "Eganow Business", "Egahub", "The Eganow Business mobile app.", [
+   ("What is Egahub?", "Egahub is the Eganow Business app. It puts the merchant portal on your phone so you can run your business from anywhere.", ("About Egahub", "/business/egahub/")),
+   ("Do I use the same login as the portal?", "Egahub uses your Eganow business account. " + T("confirm shared login"), None),
+   ("Where do I download Egahub?", "Get Egahub from the App Store or Google Play. " + T("confirm store links"), None)]),
+]
+def page_help():
+    cats = ""
+    for cid, over, name, sub, qs in HELP:
+        items = ""
+        for q, a, l in qs:
+            link = f'<a class="link" href="{l[1]}">{l[0]} →</a>' if l else ""
+            items += f'<details data-q><summary>{q}</summary><div class="a"><p>{a}</p>{link}</div></details>'
+        cats += f'<section class="cat" id="{cid}" data-cat aria-labelledby="{cid}-h"><div class="wrap cat__in"><header><p class="over">{over}</p><h2 id="{cid}-h">{name}</h2><p>{sub}</p></header><div class="qs">{items}</div></div></section>'
+    jp = "".join(f'<a href="#{c}">{n}</a>' for c, o, n, s, q in HELP if o == "Eganow app"); jb = "".join(f'<a href="#{c}">{n}</a>' for c, o, n, s, q in HELP if o != "Eganow app")
+    extra = f'<form class="hs" id="hs" role="search" onsubmit="return false"><label for="hq" style="font:700 14px var(--eg-font-display)">Search the Help centre</label><input id="hq" type="search" placeholder="Try “freeze card” or “payment link”" autocomplete="off"><p class="stat-note" id="hstatus" role="status" aria-live="polite"></p></form><div class="jumps" id="jumps"><div><h3>Eganow app</h3><div class="jump">{jp}</div></div><div><h3>Eganow Business</h3><div class="jump">{jb}</div></div></div>{DRAFT}'
+    body = chead("Help centre", "How can we help?", "Find answers about the Eganow app and Eganow Business, or get in touch with our team. Eganow will never ask for your PIN, password or one-time codes.", extra)
+    body += f'<div id="hlist">{cats}</div><section class="sec" id="hnone" hidden><div class="wrap" style="text-align:center;display:grid;gap:12px;justify-items:center"><h2 class="d-lg">We couldn’t find that.</h2><p class="lead">Try different words, or ask our team directly.</p><a class="btn btn--red" href="/contact/?topic=support">Contact support</a></div></section>'
+    body += cend("Still need help?", "Choose a topic and we’ll send your message to the right place.", [("Contact support", "/contact/?topic=support", "btn--white"), ("Make a complaint", "/contact/?topic=complaint", "btn--line")])
+    body += """<script>(function(){var q=document.getElementById('hq'),st=document.getElementById('hstatus'),none=document.getElementById('hnone'),jumps=document.getElementById('jumps'),cats=[].slice.call(document.querySelectorAll('[data-cat]')),qs=[].slice.call(document.querySelectorAll('[data-q]')),tx=qs.map(function(e){return e.textContent.toLowerCase()});
+function run(){var v=q.value.trim().toLowerCase(),w=v.split(/\\s+/).filter(Boolean),n=0;qs.forEach(function(e,i){var ok=!w.length||w.every(function(k){return tx[i].indexOf(k)>-1});e.hidden=!ok;if(ok)n++;if(w.length&&ok)e.open=true;else if(!w.length)e.open=false});
+cats.forEach(function(c){c.hidden=!c.querySelector('[data-q]:not([hidden])')});jumps.hidden=!!v;none.hidden=!v||n>0;st.textContent=v?(n?n+' answer'+(n==1?'':'s')+' found':'No answers found for “'+q.value.trim()+'”.'):''}
+q.addEventListener('input',run);var p=new URLSearchParams(location.search).get('q');if(p){q.value=p;run()}})();</script>"""
+    return "Help centre", "Find answers about the Eganow app and Eganow Business, or get in touch with our team.", "help", body
+
+def page_security():
+    pillars = [("Licensed and regulated", "Eganow is licensed by the Bank of Ghana as an Enhanced Payment Service Provider (EPSP) under the Payment Systems and Services Act, 2019 (Act 987), so we operate under the rules that protect customers."), ("Verified customers", "We check who our customers are, which helps keep fraudsters out."), ("Protected sign-in", "Open your account with your PIN " + T("and fingerprint or face unlock — confirm") + ". We will never ask you for it."), ("Encrypted data", "Your information is encrypted " + T("confirm: in transit and at rest, and the standards used") + "."), ("Watching for fraud", "We monitor transactions for unusual activity and may pause a payment to check with you " + T("confirm monitoring approach and hours") + "."), ("Control of your cards", "Freeze and unfreeze your card in the app, and set limits " + T("confirm") + ".")]
+    never = ["ask for your PIN, password or one-time codes", "ask you to send money to “unlock”, “verify” or “protect” your account", "ask you to install software or share your screen", "ask for your full card number or card security code in a call or message"]
+    always = ["hang up and contact us through our official channels if you are unsure", "check who a message is from before you tap any link", "download the app only from the App Store or Google Play", "keep your phone locked and its software up to date", "check every detail of a payment before you confirm it"]
+    scams = [("Someone pretending to be Eganow", "They may call, text or message you, often saying there is a problem with your account."), ("A friend or relative in urgent need", "A hijacked account or new number asks you to send money fast. Call them on a number you know."), ("Prizes, refunds and “fees”", "If you have to pay to receive money, it is a scam."), ("Fake agents and fake payment links", "Check you are at a real agent point, and that a payment link comes from someone you trust.")]
+    biz = [("Protect your API keys", "Keep keys secret. Never put them in public code or in an app that customers can open."), ("Control who has access", "Give each team member their own login with only the access they need, and remove it when they leave."), ("Secure your devices", "Keep POS devices and phones with Egahub safe, and tell us straight away if one is lost."), ("Message responsibly", "Only send bulk messages to people who agreed, and honour every opt-out.")]
+    body = chead("Security", "Your money. Protected.", "Secure is the third S in everything we build. Here is how we protect you, and how you can help keep your money safe.", f'<div class="cta"><a class="btn btn--red" href="#stay-safe">Stay safe</a><a class="btn btn--line" href="#problem">I have a problem</a></div>{DRAFT}')
+    body += section(sec_head("How we protect you", "Built to keep your money safe.") + cards(pillars, 3))
+    body += f'<section class="sec sec--ice" id="stay-safe"><div class="wrap">{sec_head("Stay safe", "A few habits keep you safe.")}<div class="two"><div class="box box--no rv"><h3 class="d-lg" style="font-size:26px">Eganow will never…</h3>{li(never)}</div><div class="box box--yes rv"><h3 class="d-lg" style="font-size:26px">You can always…</h3>{li(always)}</div></div><h3 class="h4 rv" style="margin:40px 0 14px">Scams to watch for</h3><ul class="scams">' + "".join(f'<li class="rv"><b>{a}</b><span>{b}</span></li>' for a, b in scams) + '</ul></div></section>'
+    body += section(sec_head("For businesses", "Keep your business safe too.") + cards(biz, 2))
+    body += f'<section class="sec sec--night" id="problem"><div class="wrap"><div class="split"><div class="split__copy rv"><p class="over">If something goes wrong</p><h2 class="d-lg">Act fast. We’re here to help.</h2><p class="lead" style="color:rgba(255,255,255,.8)">If you think someone has used your account, or you have been tricked, do these four things.</p><div class="cta"><a class="btn btn--red" href="/contact/?topic=support">Contact support</a><a class="btn btn--white" href="/contact/?topic=complaint">Make a complaint</a></div></div><ol class="steps--dark rv"><li>Freeze your card in the app and change your PIN.</li><li>Contact us straight away so we can help.</li><li>Keep evidence: messages, receipts and numbers involved.</li><li>If you are not happy with how it was handled, make a complaint.</li></ol></div></div></section>'
+    body += section('<div class="two"><div class="card rv"><span class="ico" aria-hidden="true">!</span><h2 class="h4">Found a security issue?</h2><p>If you are a security researcher and you have found a vulnerability, please tell us privately at ' + T("security contact email") + '. Please do not share details publicly until we have had a chance to fix it. ' + T("link to the responsible-disclosure policy") + '</p></div><div class="card rv" style="--i:1"><span class="ico" aria-hidden="true">✓</span><h2 class="h4">Standards and certifications</h2><p>The About page states ISO 27001 certification. ' + T("Confirm the certificate is current and list any others held (for example PCI DSS). Do not list any that are not held.") + '</p></div></div>')
+    body += faq([("Will Eganow ever ask for my PIN or password?", "No. We will never ask for your PIN, password or one-time codes, by phone, message or in person."), ("What should I do with a suspicious message?", "Do not click links or reply. Contact us through our official channels and tell us what you received."), ("What if I lose my phone?", "Contact us straight away. If you can, freeze your cards from another device and change your PIN."), ("How do I know a call or message is really from Eganow?", "If you are not sure, end the call and contact us yourself using the official details on this website or in the app.")])
+    body += cend("Questions about security?", "Our team is happy to help.", [("Contact us", "/contact/", "btn--white"), ("Help centre", "/help/", "btn--line")])
+    return "Security — Your money. Protected.", "How Eganow protects your money and information, and how you can stay safe from fraud and scams.", "security", body
+
+PAGES = {"__t:about": page_about, "__t:contact": page_contact, "__t:help": page_help, "__t:security": page_security, "__t:bill-payment": page_bills, "__t:cards": page_cards_p, "__t:groups": page_groups, "__t:money-transfer": lambda: page_transfer("money-transfer"), "__t:uk": lambda: page_transfer("uk"), "__t:us": lambda: page_transfer("us"), "__t:canada": lambda: page_transfer("canada"), "__home": page_home, "": page_hub, "bizcollect": page_bizcollect, "egapos": page_egapos, "card-issuing": page_cards, "agency-banking": page_agency, "bulk-messaging": page_bulk, "egahub": page_egahub, "developers": page_dev}
 if __name__ == "__main__":
     for slug, fn in PAGES.items():
         title, desc, s, body = fn()
         home = slug == "__home"; tr = slug.startswith("__t:")
         path = "/" if home else ("/" + slug[4:] + "/" if tr else "/business/" + (slug + "/" if slug else ""))
-        active = "per" if (home or tr) else ("dev" if slug == "developers" else "biz")
+        active = {"__t:about": "abt", "__t:help": "hlp"}.get(slug, "per") if (home or tr) else ("dev" if slug == "developers" else "biz")
         out = head(title, desc, path) + header(active) + body + footer()
         base = os.path.dirname(os.path.abspath(__file__)); d = base if home else (os.path.join(base, slug[4:]) if tr else os.path.join(base, "business", slug)); os.makedirs(d, exist_ok=True)
         open(os.path.join(d, "index.html"), "w").write(out); print(path, len(out))
