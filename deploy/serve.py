@@ -2,9 +2,13 @@
 """Local test server for deploy/dist: clean URLs (/x -> x.html or x/index.html) + the redirects from redirects.json. Usage: python3 deploy/serve.py [port]"""
 import http.server, os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "dist")
+import json as _j
+CSP = [h["value"] for r in _j.load(open(os.path.join(ROOT, "vercel.json")))["headers"] for h in r["headers"] if h["key"] == "Content-Security-Policy"][0]
 RED = {s: d for s, d in json.load(open(os.path.join(HERE, "redirects.json")))}
 class H(http.server.SimpleHTTPRequestHandler):
     extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map, ".mjs": "text/javascript", ".js": "text/javascript", ".webp": "image/webp"}
+    def end_headers(self):
+        self.send_header("Content-Security-Policy", CSP); super().end_headers()
     def do_GET(self):
         p = self.path.split("?")[0].split("#")[0]; q = self.path[len(p):]
         if p in RED: self.send_response(301); self.send_header("Location", RED[p] + q); self.end_headers(); return

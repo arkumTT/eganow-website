@@ -12,6 +12,8 @@ SKIP_FRAMER = {"preview.py", "set-domain.sh", "mt-calculator", "README.md"}
 
 # ---- legacy redirects (source, target); clean-URL hosts serve /x and /x.html, so list both where it matters
 OLD_BLOG = ["a-guide-to-mastering-investment-tracking", "diversify-and-prosper-with-portfolio-management", "optimizing-strategies-for-financial-growth", "regain-control-with-debt-management", "start-planning-for-retirement-today", "stay-informed-with-real-time-updates"]
+CSP = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; form-action 'self' https://forms.zohopublic.com; base-uri 'self'; frame-ancestors 'none'; object-src 'none'"
+PERMS = "camera=(), microphone=(), geolocation=(), payment=()"
 REDIRECTS = [("/pos", "/business/egapos"), ("/pos.html", "/business/egapos"), ("/developer", "/business/developers"), ("/developer.html", "/business/developers"),
              ("/bizcollect", "/business/bizcollect"), ("/index.html", "/"),
              ("/privacy-policy", "/legal/terms"), ("/privacy-policy.html", "/legal/terms"),
@@ -51,9 +53,9 @@ open(os.path.join(DIST, "sitemap.xml"), "w").write('<?xml version="1.0" encoding
 json.dump(REDIRECTS, open(os.path.join(HERE, "redirects.json"), "w"), indent=1)
 vercel = {"cleanUrls": True, "trailingSlash": False, "headers": []}
 vercel["redirects"] = [{"source": s, "destination": d, "permanent": True} for s, d in REDIRECTS if s != "/index.html"]
-vercel["headers"] = vercel["headers"] + [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=86400, must-revalidate"}]}]
+vercel["headers"] = vercel["headers"] + [{"source": "/(.*)", "headers": [{"key": "Content-Security-Policy", "value": CSP}, {"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}, {"key": "Permissions-Policy", "value": PERMS}, {"key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains"}]}, {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=86400, must-revalidate"}]}]
 json.dump(vercel, open(os.path.join(DIST, "vercel.json"), "w"), indent=2)
-hdr = "# Netlify / Cloudflare Pages\n/assets/*\n  Cache-Control: public, max-age=86400, must-revalidate\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin"
+hdr = "# Netlify / Cloudflare Pages\n/assets/*\n  Cache-Control: public, max-age=86400, must-revalidate\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: " + PERMS + "\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Content-Security-Policy: " + CSP
 open(os.path.join(DIST, "_headers"), "w").write(hdr + "\n")
 open(os.path.join(DIST, "_redirects"), "w").write("# Netlify / Cloudflare Pages (pretty URLs must be on)\n" + "".join(f"{s} {d} 301\n" for s, d in REDIRECTS if s != "/index.html"))
 rules = "# Legacy routes -> new site\n" + "".join(f"RewriteRule ^{re.escape(s_.lstrip('/'))}/?$ {d_} [R=301,L]\n" for s_, d_ in REDIRECTS if s_ != "/index.html")
@@ -84,6 +86,9 @@ AddType image/webp .webp
   </FilesMatch>
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "{PERMS}"
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header set Content-Security-Policy "{CSP}"
 </IfModule>
 """
 open(os.path.join(DIST, ".htaccess"), "w").write(ht)
