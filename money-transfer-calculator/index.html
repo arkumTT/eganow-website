@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eganow – Money Transfer (calculator demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="calculator.css">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:#F2F9FE;color:#14202e}
+.hero{background:#CC0229;color:#fff;padding:72px 24px 96px}
+.hero__in{max-width:1120px;margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font:800 clamp(34px,5vw,60px)/1.05 Manrope,sans-serif;margin:0 0 16px}
+.hero__in>div>p{font-size:18px;opacity:.92;max-width:520px}
+.hero ul{list-style:none;padding:0;display:flex;gap:18px;flex-wrap:wrap;font-weight:600}
+.hero .app{display:inline-block;margin-top:12px;border:2px solid #fff;color:#fff;border-radius:999px;padding:12px 24px;text-decoration:none;font-weight:700}
+.next{max-width:900px;margin:0 auto;padding:80px 24px;min-height:120vh}
+.hero__in>*{min-width:0}
+@media(max-width:860px){.hero__in{grid-template-columns:minmax(0,1fr)}.hero{padding:48px 16px 56px}}
+</style></head><body>
+<header class="hero"><div class="hero__in">
+  <div>
+    <h1>Send money now to your loved ones across the globe.</h1>
+    <p>Competitive rates, no hidden fees. Local and cross-border transfers from your phone.</p>
+    <ul><li>✓ Fast</li><li>✓ Transparent</li><li>✓ Secure</li></ul>
+    <a class="app" href="https://eganow.com/download">Download the app</a>
+  </div>
+  <section class="calc" id="calculator" aria-labelledby="calc-title" data-calculator>
+    <div class="calc__head"><h2 class="calc__title" id="calc-title">Currency exchange calculator</h2><span class="badge" data-sample hidden>Sample rates</span></div>
+    <div class="field"><div class="field__main"><label for="send-amt">You send</label>
+      <input id="send-amt" data-send-amount inputmode="decimal" autocomplete="off" aria-describedby="live-msg"></div>
+      <select data-send-currency aria-label="Currency you send"></select></div>
+    <div class="swap-row"><button type="button" class="swap" data-swap aria-label="Swap currencies">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v14M3 14l4 4 4-4M17 20V6M13 10l4-4 4 4"/></svg></button></div>
+    <div class="field"><div class="field__main"><label for="recv-amt">They receive</label>
+      <input id="recv-amt" data-receive-amount inputmode="decimal" autocomplete="off"></div>
+      <select data-receive-currency aria-label="Currency they receive"></select></div>
+    <dl class="details"><div><dt>Rate</dt><dd data-rate>—</dd></div><div><dt>Fee</dt><dd data-fee>—</dd></div><div><dt>Arrives</dt><dd data-eta>—</dd></div></dl>
+    <p class="expiry" data-expiry></p>
+    <p class="methods-label" id="ml">Payout method</p>
+    <div class="methods" role="radiogroup" aria-labelledby="ml" data-methods></div>
+    <div class="error" data-error role="alert" hidden><span data-error-text></span><button type="button" class="retry" data-retry>Retry</button></div>
+    <a class="cta" data-cta href="https://eganow.com/download">Send money</a>
+    <p class="legal">Indicative rate; the final rate and fee are shown before you confirm. Eganow is a fintech, not a bank, licensed by the Bank of Ghana.</p>
+    <p class="sr" id="live-msg" data-live aria-live="polite"></p>
+  </section>
+</div></header>
+<main class="next"><h2>3 easy steps · Why Eganow · FAQ (rest of page goes here)</h2></main>
+<div class="stickybar" id="sticky" aria-hidden="true"><span id="sticky-text">Send money to Ghana</span><button type="button" id="sticky-btn" tabindex="-1">Calculate</button></div>
+<script type="module">
+import { createCalculator } from "./calculator.js";
+import { MockRateProvider } from "./rate-provider.js";
+const q = new URLSearchParams(location.search);
+// Dev toggles: ?corridor=USD  ?latency=1200  ?fail=1 (30% failures)  ?offline=1
+const provider = new MockRateProvider({ latency: +(q.get("latency")||450), failRate: q.get("fail") ? .3 : 0, offline: !!q.get("offline") });
+const root = document.getElementById("calculator");
+const calc = createCalculator(root, { provider, defaultFrom: (q.get("corridor")||"GBP").toUpperCase(), appUrl: "https://eganow.com/download" });
+
+// sticky compact bar: visible once the calculator leaves the viewport
+const bar = document.getElementById("sticky"), btn = document.getElementById("sticky-btn"), txt = document.getElementById("sticky-text");
+new IntersectionObserver(([e]) => { const on = !e.isIntersecting; bar.classList.toggle("is-visible", on); bar.setAttribute("aria-hidden", String(!on)); btn.tabIndex = on ? 0 : -1; })
+  .observe(root);
+const updateTxt = () => { const s = calc.state; txt.textContent = s.quote ? `1 ${s.from} = ${s.quote.rate.toFixed(2)} ${s.to} · Send money to Ghana` : "Send money to Ghana"; };
+root.addEventListener("calculator:change", updateTxt); setInterval(updateTxt, 1000);
+btn.addEventListener("click", () => { root.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "auto" : "smooth", block: "center" }); setTimeout(() => root.querySelector("[data-send-amount]").focus({preventScroll:true}), 400); });
+</script></body></html>
