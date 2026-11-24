@@ -216,3 +216,8 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
 .hhero__in{flex:1;width:100%;align-content:stretch}
 @media(min-width:960px){.hhero__in{align-items:end}.hhero__copy{align-self:center;padding-bottom:clamp(24px,5vh,72px)}}
 @media(max-width:959px){.hhero__in{grid-template-rows:auto 1fr}.hhero__vis{align-self:end}}
+/* Larger hero animation: scene fills the hero's right column and its full height */
+.hhero__scene{width:100%;max-width:760px}
+@media(min-width:960px){.hhero__in{grid-template-columns:.95fr 1.05fr}.hhero__scene{max-width:none}}
+@media(max-width:959px){.hhero__scene{width:min(112%,720px);margin-inline:auto;transform:translateX(0)}}
+@media(min-width:960px){.hhero__scene{max-width:calc((100svh - 68px) * 1.02)}}
