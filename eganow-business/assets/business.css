@@ -253,3 +253,6 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
  .hhero__scene{height:100%;width:auto;max-width:112%;max-height:100%;margin:0;aspect-ratio:1184/1145}
 }
 .hhero h1{text-wrap:balance}
+/* Home hero: scene lines up (vertically centred) with the copy on the left */
+@media(min-width:960px){.hhero__in{align-items:center;padding-block:clamp(24px,5vh,56px)!important}.hhero__copy{align-self:center;padding-bottom:0}.hhero__vis{align-self:center}.hhero__scene{margin-block:0}}
+@media(min-width:720px) and (max-width:959px) and (orientation:landscape){.hhero__in{align-items:center;padding-block:24px!important}.hhero__vis{align-self:center}}
