@@ -2,7 +2,7 @@
 
 Scope: Home (Personal sections), Money Transfer (+ UK/US/Canada share its copy), Bill Payment, Cards, Groups.
 Frame: **Simple. Speed. Secure.** Every headline should lead with one of the three and name the benefit, then the proof sits underneath.
-Status: recommendations only. Nothing here is applied to the site yet.
+Status: the recommended picks (sections 3 and 4, plus the Simple / Speed / Secure hero strip and call-to-action labels in section 5) are applied to the site. Not applied: the live-amount calculator CTA, and the claims in section 6 still need confirmation.
 
 ## 1. What the current copy does (review)
 
