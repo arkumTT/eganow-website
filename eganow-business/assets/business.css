@@ -205,3 +205,9 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
  .hero__vis:has(.hero-photo) .mk .big{font-size:24px}
 }
 .mk .tabs{flex-wrap:wrap}
+
+.hhero__scene{position:relative;width:min(100%,560px);margin:0 auto;aspect-ratio:1184/1145}
+.hhero__scene>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hhero__scene .hhero__model{width:100%;height:100%;transition:opacity .3s}
+.hhero__scene.is-live .hhero__model{opacity:0}
+@media(min-width:960px){.hhero__scene{margin-right:0;margin-left:auto}}

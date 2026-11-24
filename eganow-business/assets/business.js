@@ -30,4 +30,14 @@
     try { await navigator.clipboard.writeText(t); b.textContent = "Copied"; } catch { b.textContent = "Press Ctrl/Cmd+C"; }
     setTimeout(() => (b.textContent = "Copy"), 1800);
   }));
+  // Lottie hero scene (self-hosted light player; poster stays for reduced-motion or failure)
+  const sc = document.querySelector("[data-lottie]");
+  if (sc && !reduce) {
+    const sj = document.createElement("script"); sj.src = "/assets/vendor/lottie_light.min.js";
+    sj.onload = () => fetch(sc.dataset.lottie).then(r => { if (!r.ok) throw 0; return r.json(); }).then(data => {
+      const a = window.lottie.loadAnimation({ container: sc, renderer: "svg", loop: false, autoplay: true, animationData: data, rendererSettings: { preserveAspectRatio: "xMidYMax meet" } });
+      a.addEventListener("DOMLoaded", () => sc.classList.add("is-live"));
+    }).catch(() => {});
+    document.head.appendChild(sj);
+  }
 })();

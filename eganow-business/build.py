@@ -34,7 +34,7 @@ def BC(path, title):
     return '<script type="application/ld+json">' + json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":items}) + '</script>'
 
 def head(title, desc, path):
-    pre = '<link rel="preload" as="image" href="/assets/img/p01-home-hero-model_cutout_1000.webp" imagesrcset="/assets/img/p01-home-hero-model_cutout_600.webp 600w, /assets/img/p01-home-hero-model_cutout_1000.webp 1000w" imagesizes="(max-width:959px) 80vw, 520px" fetchpriority="high">' if path == "/" else ""
+    pre = '<link rel="preload" as="image" href="/assets/img/hero-scene-poster.webp" fetchpriority="high">' if path == "/" else ""
     return f'''<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {SUF(path)}</title><meta name="description" content="{e(desc)}">
 <link rel="canonical" href="{SITE}{path}"><link rel="icon" href="/brand/eganow-icon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icon-192.png" sizes="192x192" type="image/png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png"><link rel="manifest" href="/assets/site.webmanifest"><meta name="theme-color" content="#CC0229">{NOINDEX if (path in ("/help/","/security/","/blog/") or path.startswith("/blog/") or path in ("/legal/privacy/","/legal/cookies/","/legal/aml-policy/","/legal/complaints/")) else ""}
@@ -314,7 +314,7 @@ PHOTO_UK = photo("p02-uk-to-ghana-video-call", "A man in a London living room vi
 
 def page_home():
     qa = '<div class="qa"><span>Send</span><span>Pay</span><span>Save</span><span>Cards</span></div>'
-    vis = ('<picture><img class="hhero__model" src="/assets/img/p01-home-hero-model_cutout_1000.webp" srcset="/assets/img/p01-home-hero-model_cutout_600.webp 600w, /assets/img/p01-home-hero-model_cutout_1000.webp 1000w" sizes="(max-width:959px) 80vw, 520px" width="1000" height="1309" alt="" fetchpriority="high" decoding="async"></picture>' +
+    vis = ('<div class="hhero__scene" data-lottie="/assets/lottie/hero-scene.json"><img class="hhero__model" src="/assets/img/hero-scene-poster.webp" width="1184" height="1145" alt="A smiling woman taking a selfie with her red phone in front of the Accra skyline, with the words Welcome Home" fetchpriority="high" decoding="async"></div>'+
            mk("left:-4%;top:110px;width:232px", '<p class="mk-h">Money sent</p><div class="big" style="font-size:19px">£200 → GH₵3,227.56</div><span class="pill">✓ Arrived in minutes</span>', "float") +
            mk("right:-6%;top:330px;width:210px", '<p class="mk-h">Bill paid</p><div class="big">GHS 150.00</div><span class="pill">✓ Electricity</span>', "float b"))
     body = f'''<main id="main"><section class="hhero" aria-labelledby="h1"><div class="wrap hhero__in"><div class="hhero__copy"><p class="over">Personal</p><h1 class="d-xl" id="h1">Your one app for everything money</h1>
