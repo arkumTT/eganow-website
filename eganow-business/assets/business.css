@@ -273,3 +273,12 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
  .hhero--bg .hhero__in{position:relative;z-index:1}
 }
 @media(min-width:960px) and (max-width:1150px){.hhero--bg{background-position:right -14vw center}.hhero--bg .pts{gap:12px}}
+/* Home hero: keep the whole scene group inside the red area of the artwork */
+@media(min-width:960px){
+ .hhero--bg{background-position:right 1.5vw center}
+ .hhero--bg .hhero__vis{transform:translateX(clamp(0px,2.4vw,50px))}
+ .hhero--bg .hhero__vis .mk:nth-of-type(1){left:6%!important}
+}
+@media(min-width:960px) and (max-width:1150px){.hhero--bg{background-position:right -9vw center}.hhero--bg .hhero__vis{transform:none}.hhero--bg .hhero__vis .mk:nth-of-type(2){right:-2%!important}}
+@media(min-width:960px){.hhero--bg .hhero__vis .mk:nth-of-type(2){right:-1%!important}}
+@media(min-width:960px) and (max-width:1250px){.hhero--bg .hhero__vis{transform:none}}
