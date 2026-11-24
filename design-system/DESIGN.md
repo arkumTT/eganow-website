@@ -61,14 +61,14 @@ Max 2 weights per view; measure 60–75 characters; sentence case everywhere (no
 ## 5. Spacing, layout, shape
 - 8-pt scale: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128. Section padding 96–128 desktop, 64 mobile.
 - Container 1200 px, gutter 24 (16 on ≤ 480). 12-col grid; breakpoints **≥1200 desktop, 810–1199 tablet, ≤809 mobile** (matches the Framer pages).
-- Radius: 8 (buttons, `--eg-r-btn`), 12 (inputs, selects, chips), 18 (fields), 28 (cards, calculator), 999 (only status labels/tags/badges, never buttons).
+- Radius: 12 (buttons, `--eg-r-btn`), 8 (labels, tags, badges and chips, `--eg-r-tag`), 14 (inputs, selects), 18 (fields), 28 (cards, calculator). Fully round (999/50 %) is reserved for avatars, step numbers and check/progress dots; never buttons or tags.
 - Elevation: card `0 8px 30px /10%`, floating `0 24px 60px /22%`; no hard borders on cards, mist 1.5 px borders for inputs and chips.
 
 ## 6. Components
-- **Buttons:** rectangular with slightly rounded corners (`--eg-r-btn` 8 px; 6 px on small inline buttons), Manrope 700 16 px, 14×28 padding. Primary = red; secondary = blue-action outline; on-red = white fill/red text; ghost-on-red = white outline. Min target 44 px. Focus: 3 px amber ring.
+- **Buttons:** rectangular with slightly rounded corners (`--eg-r-btn` 12 px; 8 px on small inline buttons), Manrope 700 16 px, 14×28 padding. Primary = red; secondary = blue-action outline; on-red = white fill/red text; ghost-on-red = white outline. Min target 44 px. Focus: 3 px amber ring.
 - **Cards / bento tiles:** white or ice, radius 28, 32 px padding, UI mock + one-line benefit + "Explore →".
 - **Inputs:** ice fill, 2 px transparent border, red border on focus, 18 radius, big 28 px numerals for money inputs (see `money-transfer-calculator`).
-- **Chips/badges:** 12 px uppercase, mist border (e.g., "Sample rates", status).
+- **Chips/badges/tags:** rectangular, 8 px corners, 12 px uppercase, mist border (e.g., "Sample rates", status).
 - **Navigation:** sticky glass bar (Personal ▾, Business, Developer | Register Business, Sign In); on red hero uses white wordmark and white text; collapses to hamburger ≤ 809.
 - **Footer:** ice or night; links grouped (Personal, Business, Developer, Company, Legal) plus the verbatim regulatory paragraph and region switch (Ghana, UK, US, Canada).
 - **Calculator:** see `money-transfer-calculator/` (built; uses these tokens' values).
