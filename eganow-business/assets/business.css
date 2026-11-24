@@ -22,7 +22,8 @@ img,svg{display:block;max-width:100%}a{color:inherit}h1,h2,h3,h4,p,ul,ol{margin:
 @media(min-width:960px){.nav{display:flex}.menu-btn{display:none}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px/1 var(--eg-font-display);min-height:46px;padding:0 24px;border-radius:var(--eg-r-btn);border:2px solid transparent;text-decoration:none;cursor:pointer;transition:background .2s,transform .2s,box-shadow .2s;white-space:nowrap}
 .btn:hover{transform:translateY(-2px)}.btn--red{background:var(--eg-red);color:#fff}.btn--red:hover{background:var(--eg-red-hover);box-shadow:0 10px 24px rgba(204,2,41,.3)}
-.btn--line{border-color:var(--eg-ink);color:var(--eg-ink);background:transparent}.btn--line:hover{background:var(--eg-ink);color:#fff}
+.btn--line{border-width:1.5px;border-color:var(--eg-blue-action);color:var(--eg-blue-action);background:transparent}.btn--line:hover{background:var(--eg-blue-action);color:#fff}
+.sec--red .btn--line,.sec--night .btn--line{border-color:#fff;color:#fff}.sec--red .btn--line:hover,.sec--night .btn--line:hover{background:#fff;color:var(--eg-red)}
 .btn--white{background:#fff;color:var(--eg-ink)}.btn--sm{min-height:40px;padding:0 18px;font-size:14px}
 .hide-s{display:none}@media(min-width:700px){.hide-s{display:inline-flex}}
 /* hero */
@@ -101,7 +102,7 @@ details{border:1px solid var(--eg-mist);border-radius:var(--eg-r-md);background:
 .hhero__in{position:relative;display:grid;gap:32px;align-items:center;padding-block:clamp(40px,6vw,96px) clamp(48px,6vw,88px)}
 .hhero h1{max-width:12ch}.hhero .lead{color:rgba(255,255,255,.9)}.hhero .over{color:#fff}.hhero .over::before{background:#fff}
 .hhero__copy{display:grid;gap:20px;justify-items:start}
-.btn--ghost-w{border-color:#fff;color:#fff}.btn--ghost-w:hover{background:#fff;color:var(--eg-red)}.btn--w{background:#fff;color:var(--eg-red)}.btn--w:hover{box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.btn--ghost-w{border-width:1.5px;border-color:#fff;color:#fff}.btn--ghost-w:hover{background:#fff;color:var(--eg-red)}.btn--w{background:#fff;color:var(--eg-red)}.btn--w:hover{box-shadow:0 10px 24px rgba(0,0,0,.2)}
 .hhero__vis{position:relative;min-height:520px;--p:0}
 .hhero__phone{position:absolute;left:50%;top:0;margin-left:-118px;transform:translateY(calc(var(--p)*80px)) scale(calc(1 - var(--p)*.1)) rotate(calc(var(--p)*-3deg));will-change:transform}
 .hhero__vis .mk{will-change:transform;background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
