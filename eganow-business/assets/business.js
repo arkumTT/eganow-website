@@ -35,8 +35,13 @@
   if (sc && !reduce) {
     const sj = document.createElement("script"); sj.src = "/assets/vendor/lottie_light.min.js";
     sj.onload = () => fetch(sc.dataset.lottie).then(r => { if (!r.ok) throw 0; return r.json(); }).then(data => {
-      const a = window.lottie.loadAnimation({ container: sc, renderer: "svg", loop: false, autoplay: true, animationData: data, rendererSettings: { preserveAspectRatio: "xMidYMax meet" } });
-      a.addEventListener("DOMLoaded", () => sc.classList.add("is-live"));
+      const a = window.lottie.loadAnimation({ container: sc, renderer: "svg", loop: false, autoplay: false, animationData: data, rendererSettings: { preserveAspectRatio: "xMidYMax meet" } });
+      let ready = false, vis = false;
+      const sync = () => { if (!ready) return; if (vis) a.goToAndPlay(0, true); else a.goToAndStop(0, true); };
+      a.addEventListener("DOMLoaded", () => { ready = true; sc.classList.add("is-live"); sync(); });
+      // replay every time the scene scrolls into view (and on every page load)
+      if ("IntersectionObserver" in window) new IntersectionObserver(es => { const v = es[0].intersectionRatio >= 0.35; if (v !== vis) { vis = v; sync(); } }, { threshold: [0, 0.35] }).observe(sc);
+      else { vis = true; }
     }).catch(() => {});
     document.head.appendChild(sj);
   }
