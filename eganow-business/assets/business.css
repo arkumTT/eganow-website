@@ -243,3 +243,12 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
  .hhero__vis{overflow:hidden}
  .hhero__scene{max-height:100%}
 }
+/* Phone: stacked, hero = first screen, scene fills the space under the copy */
+@media(max-width:719px){
+ .hhero{height:calc(100vh - 68px);height:calc(100svh - 68px);min-height:600px}
+ .hhero__in{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-items:start;min-height:0;height:100%;padding-top:24px;gap:8px}
+ .hhero__copy{gap:14px}
+ .hhero .d-xl{font-size:clamp(32px,9vw,40px)}
+ .hhero__vis{align-self:stretch;display:flex;justify-content:center;align-items:flex-end;min-height:0!important;margin-top:0;overflow:hidden}
+ .hhero__scene{height:100%;width:auto;max-width:112%;max-height:100%;margin:0;aspect-ratio:1184/1145}
+}
