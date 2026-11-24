@@ -221,3 +221,25 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
 @media(min-width:960px){.hhero__in{grid-template-columns:.95fr 1.05fr}.hhero__scene{max-width:none}}
 @media(max-width:959px){.hhero__scene{width:min(112%,720px);margin-inline:auto;transform:translateX(0)}}
 @media(min-width:960px){.hhero__scene{max-width:calc((100svh - 68px) * 1.02)}}
+/* Tablet (720-959px): two-column hero so it fits the fold */
+@media(min-width:720px) and (max-width:959px){
+ .hhero__in{grid-template-columns:1fr 1fr;grid-template-rows:none;align-items:end}
+ .hhero__copy{align-self:center;padding-bottom:clamp(24px,5vh,72px)}
+ .hhero__vis{align-self:end}
+ .hhero__scene{width:100%;max-width:calc((100svh - 68px) * 1.02);margin:0 -4% 0 auto}
+ .hhero .d-xl{font-size:clamp(34px,5.4vw,48px)}
+}
+/* Portrait tablet: stacked, scene fills the space under the copy */
+@media(min-width:720px) and (max-width:959px) and (orientation:portrait){
+ .hhero__in{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-items:start}
+ .hhero__copy{align-self:start;padding-bottom:0}
+ .hhero__vis{align-self:stretch;display:flex;justify-content:center;align-items:flex-end;min-height:0!important;margin-top:0}
+ .hhero__scene{height:100%;width:auto;max-width:112%;margin:0;aspect-ratio:1184/1145}
+ .hhero .d-xl{font-size:clamp(40px,6vw,56px)}
+}
+@media(min-width:720px) and (max-width:959px) and (orientation:portrait){
+ .hhero{height:calc(100vh - 68px);height:calc(100svh - 68px);min-height:0}
+ .hhero__in{min-height:0;height:100%}
+ .hhero__vis{overflow:hidden}
+ .hhero__scene{max-height:100%}
+}
