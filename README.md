@@ -66,7 +66,7 @@ When a provider is on, the build adds the banner to every page, a "Cookie settin
 
 ## Hero animation (Personal page)
 
-The first screen plays a Lottie scene: `public/lottie/hero-scene.json` plus its image `public/lottie/hero-woman.webp`, drawn by `lottie-web` (light build, loaded on the Personal page only). `src/assets/hero-scene-poster.webp` is the still shown when scripts, motion or the animation file are unavailable. To swap the scene: export a new Lottie JSON (remove any editor watermark layer), put its images in `public/lottie/` (reference them by path, not embedded base64, to keep the JSON small), and regenerate the poster from its last frame.
+The first screen plays a Lottie scene: `public/lottie/hero-scene.json` plus its image `public/lottie/hero-woman.webp`, drawn by `lottie-web` (light build, loaded on the Personal page only). `src/assets/hero-scene-poster.webp` is the still shown when scripts, motion or the animation file are unavailable. The untouched original export (with the editor watermark layer and its embedded 1.6 MB image) is kept in `design-source/lottie/Welcome_Home_Animation.json`; it is a source file only and is not served by the site. To swap the scene: export a new Lottie JSON (remove any editor watermark layer), put its images in `public/lottie/` (reference them by path, not embedded base64, to keep the JSON small), and regenerate the poster from its last frame.
 
 ## Known gaps
 
