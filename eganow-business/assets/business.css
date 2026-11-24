@@ -252,3 +252,4 @@ mark.todo{background:#fde68a;color:#422d00;border-radius:4px;padding:0 4px;font-
  .hhero__vis{align-self:stretch;display:flex;justify-content:center;align-items:flex-end;min-height:0!important;margin-top:0;overflow:hidden}
  .hhero__scene{height:100%;width:auto;max-width:112%;max-height:100%;margin:0;aspect-ratio:1184/1145}
 }
+.hhero h1{text-wrap:balance}

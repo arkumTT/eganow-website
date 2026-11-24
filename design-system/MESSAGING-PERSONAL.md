@@ -138,3 +138,10 @@ These are worth getting right because they are the strongest "sell" lines and th
 - Numbers beat adjectives: "fee shown first" beats "competitive fees".
 - One Simple/Speed/Secure pillar per section so the three build up across the page instead of repeating.
 - Keep the warm, Africa-first voice already in the brand ("No contribution, no chop"). Avoid slang that a compliance reviewer can't defend.
+
+## 8. Update: the app has no saving features
+The Home hero and story no longer promise saving. Core functions now shown: **send** money, **pay** bills, **spend** with the Mastercard, and **collect** group contributions.
+- Hero: "Send. Pay. Spend. All in one app." / "Send money home, pay bills and spend worldwide with your mobile money. Simple to use, quick to arrive, safe to trust."
+- Story step 03 is now **Groups**: "Collect together, in the open."
+- Groups page: Susu wording changed from "save together / Susu savings" to "collect regular Susu contributions". Confirm with product that Groups supports regular Susu collection before keeping this.
+- Still mentions saving (draft blog, `noindex`): the "Susu savings, explained" article and the blog index line. Decide whether to keep or reframe them.
