@@ -93,3 +93,6 @@ AA contrast per table; focus ring on every interactive element; targets ≥ 44 p
 - Import `tokens.css`; build with `.eg-*` primitives or map tokens into the framework (Astro/Tailwind `theme.extend`).
 - Site today is a Framer export with its own tokens; keep new components additive (like `mt-calculator`) until pages are rebuilt.
 - Keep this file and `tokens.css` in sync; changes go through a PR. Open decisions: confirm brand-owner approval of the muted-text/amber additions and the official logo master files (these SVGs come from session 2's build).
+
+## Home hero background (artwork)
+`design-source/Eganow_WebBackground.ai` (PDF-compatible, 1920×1080) is the source of the Home hero background: white left, slanted pink band, red studio gradient right. Web exports: `assets/img/hero-bg.webp` (desktop) and `hero-bg-m.webp` (mobile red area). On this hero the copy sits on white (ink headline, red primary button, blue outline secondary); the animated scene and floating cards sit on the red area. Other page heroes still use the flat red background.
