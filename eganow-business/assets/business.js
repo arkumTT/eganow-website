@@ -40,7 +40,9 @@
       const sync = () => { if (!ready) return; if (vis) a.goToAndPlay(0, true); else a.goToAndStop(0, true); };
       a.addEventListener("DOMLoaded", () => { ready = true; sc.classList.add("is-live"); sync(); });
       // replay every time the scene scrolls into view (and on every page load)
-      if ("IntersectionObserver" in window) new IntersectionObserver(es => { const v = es[0].intersectionRatio >= 0.35; if (v !== vis) { vis = v; sync(); } }, { threshold: [0, 0.35] }).observe(sc);
+      // start once the scene is mostly on screen (a bit more on mobile, where it sits below the copy); reset only when fully off screen
+      const on = innerWidth < 960 ? 0.6 : 0.35;
+      if ("IntersectionObserver" in window) new IntersectionObserver(es => { const r = es[0].intersectionRatio; const v = r >= on ? true : r < 0.02 ? false : vis; if (v !== vis) { vis = v; sync(); } }, { threshold: [0, 0.02, 0.35, 0.6] }).observe(sc);
       else { vis = true; }
     }).catch(() => {});
     document.head.appendChild(sj);
